@@ -5,12 +5,13 @@ const passport = require('passport');
 const logger = require('morgan');
 
 require('dotenv').config();
-require('./config/database').connect();
+require('./config/database');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
+const port = process.env.PORT || 3000;
 
 app.use(logger('dev'));
 app.use(cors());
@@ -21,5 +22,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-console.log(`Server listening: http://localhost:${process.env.PORT}`);
+app.listen(port, () => console.log(`Server listening: http://localhost:${port}`));
 module.exports = app;
