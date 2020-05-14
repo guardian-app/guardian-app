@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { insertUser, getUserByEmailAddress } = require('../services/users');
+const { insertUser, selectUserByEmailAddress } = require('../services/users');
 const { jwtSecret } = require('../config/jwt');
 
 const createUser = async (req, res) => {
@@ -25,7 +25,7 @@ const createUser = async (req, res) => {
 const authenticateUser = async (req, res) => {
     const { email_address, password } = req.body;
 
-    getUserByEmailAddress(email_address, async (err, results, fields) => {
+    selectUserByEmailAddress(email_address, async (err, results, fields) => {
         if (err) throw err;
         if (!results.length) return res.status(404).send('E-mail address is not registered!');
 
@@ -40,4 +40,8 @@ const authenticateUser = async (req, res) => {
 
 }
 
-module.exports = { createUser, authenticateUser }
+const getProfile = (req, res) => {
+    res.json({ ...req.user });
+}
+
+module.exports = { createUser, authenticateUser, getProfile }

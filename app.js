@@ -1,8 +1,8 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const passport = require('passport');
 const logger = require('morgan');
+const bearerToken = require('express-bearer-token');
 
 require('dotenv').config();
 require('./config/database');
@@ -15,6 +15,7 @@ const port = process.env.PORT || 3000;
 
 app.use(logger('dev'));
 app.use(cors());
+app.use(bearerToken());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));

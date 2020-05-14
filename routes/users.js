@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { createUser, authenticateUser } = require('../controllers/users');
-const { checkDuplicateEmailAddress } = require('../middleware/users');
+const { createUser, authenticateUser, getProfile } = require('../controllers/users');
+const { checkDuplicateEmailAddress, validateToken } = require('../middleware/users');
 
+router.get('/profile', validateToken, getProfile);
 router.post('/create', checkDuplicateEmailAddress, createUser);
 router.post('/authenticate', authenticateUser);
 

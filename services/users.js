@@ -8,12 +8,12 @@ const insertUser = (user, done) => {
     );
 };
 
-const getUserByEmailAddress = (email_address, done) => {
+const selectUserByEmailAddress = (email_address, done) => {
     database.execute('SELECT * FROM `user` WHERE `email_address` = ? LIMIT 1', [email_address], done)
 }
 
-const getUserById = (user_id, done) => {
+const selectUserById = (user_id, done) => {
     database.execute('SELECT * FROM `user` WHERE `user_id` = ? LIMIT 1', [user_id], done)
 }
 
-module.exports = { insertUser, getUserByEmailAddress, getUserById }
+module.exports = { insertUser, selectUserByEmailAddress, selectUserById }
