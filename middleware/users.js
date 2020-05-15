@@ -21,6 +21,7 @@ const validateToken = (req, res, next) => {
 
         selectUserById(dec.user_id, (err, results, fields) => {
             if (err) throw err;
+            if (!results.length) return res.status(401).send('Unauthorized');
 
             const { user_id, email_address, first_name, last_name, address, phone_number } = results[0];
             req.user = { user_id, email_address, first_name, last_name, address, phone_number };

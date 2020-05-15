@@ -18,7 +18,7 @@ const createUser = async (req, res) => {
 
     insertUser(user, (err, results, fields) => {
         if (err) throw err;
-        res.status(200).send('Success');
+        res.status(201).send('Success');
     });
 }
 
@@ -36,7 +36,7 @@ const authenticateUser = async (req, res) => {
 
         const token = jwt.sign({ user_id: user.user_id }, jwtSecret, { expiresIn: 86400 /* 24 hours */ });
         res.json({ token });
-    })
+    });
 
 }
 
