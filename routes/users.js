@@ -3,7 +3,7 @@ const router = express.Router();
 const { createUser, authenticateUser, getProfile } = require('../controllers/users');
 const { checkDuplicateEmailAddress, validateToken } = require('../middleware/users');
 
-router.get('/profile', validateToken, getProfile);
+router.get('/me', validateToken, getProfile);
 router.post('/create', checkDuplicateEmailAddress, createUser);
 router.post('/authenticate', authenticateUser);
 

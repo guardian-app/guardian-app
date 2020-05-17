@@ -16,4 +16,8 @@ const selectUserById = (user_id, done) => {
     database.execute('SELECT * FROM `user` WHERE `user_id` = ? LIMIT 1', [user_id], done)
 }
 
-module.exports = { insertUser, selectUserByEmailAddress, selectUserById }
+const selectUserRoleById = (user_id, done) => {
+    database.execute('SELECT `role` FROM `user` WHERE user.user_id = ? LIMIT 1', [user_id], done)
+}
+
+module.exports = { insertUser, selectUserByEmailAddress, selectUserById, selectUserRoleById }

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.render('index', { title: 'Express' });
-});
+router.get('/');
+router.get('/:child_id/parent');
+router.get('/:child_id');
 
 module.exports = router;
