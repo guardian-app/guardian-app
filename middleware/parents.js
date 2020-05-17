@@ -3,7 +3,7 @@ const isOwner = (req, res, next) => {
     const { user_id, role } = req.user;
 
     if (user_id === parent_id) next();
-    else if (role === `admin`) next();
+    if (role === `admin`) next();
     else return res.status(403).send('Forbidden');
 }
 

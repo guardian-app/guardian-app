@@ -38,6 +38,7 @@ const isAdmin = (req, res, next) => {
         if (!results.length) return res.status(500).send();
 
         const { role } = results[0];
+
         if (role === 'admin') next();
         else return res.status(403).send('Forbidden');
     })

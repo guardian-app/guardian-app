@@ -9,7 +9,7 @@ const selectParents = (done) => {
 
 const selectParentById = (parent_id, done) => {
     database.execute(
-        "SELECT `user_id`, `email_address`, `first_name`, `last_name`, `address`, `phone_number` FROM `user` WHERE user_id=? AND user.role='parent'",
+        "SELECT `user_id`, `email_address`, `first_name`, `last_name`, `address`, `phone_number` FROM `user` WHERE user_id=? AND user.role='parent' LIMIT 1",
         [parent_id],
         done
     );
