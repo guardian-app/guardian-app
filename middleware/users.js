@@ -39,7 +39,7 @@ const isAdmin = (req, res, next) => {
 
         const { role } = results[0];
         if (role === 'admin') next();
-        else res.status(403).send('Forbidden');
+        else return res.status(403).send('Forbidden');
     })
 }
 
