@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import {Actions, ActionConst} from 'react-native-router-flux';
+import {Button,ThemeProvider} from 'react-native-elements';
 
 import UserInput from './UserInput';
 import usernameImg from '../../image/username.png';
@@ -25,7 +26,7 @@ import spinner from '../../image/loading.gif';
 // const DEVICE_HEIGHT = Dimensions.get('window').height;
 const MARGIN = 40;
 
-export default class ButtonSubmit extends Component {
+export default class Temp extends Component {
   constructor() {
     super();
 
@@ -40,6 +41,8 @@ export default class ButtonSubmit extends Component {
     this.buttonAnimated = new Animated.Value(0);
     this.growAnimated = new Animated.Value(0);
     this._onPress = this._onPress.bind(this);
+    this._forgot = this._forgot.bind(this);
+    
     this.showPass = this.showPass.bind(this);
   }
 
@@ -59,46 +62,96 @@ export default class ButtonSubmit extends Component {
       : this.setState({showPass: true, press: false});
   }
 
+  _forgot() {
+    console.log('call')
+    const {Username} = this.state
+    //var email_address = this.state.Username;
+    console.log(Username)
+      console.log('pppppppp');
+      // sendEmail(
+      //     'pramithvidusara@gmail.com',
+      //     'Greeting!',
+      //     'I think you are fucked up how many letters you get.',
+      //     { cc: 'elon@tesla.com; elon@solarcity.com; elon@stanford.edu' }
+      // ).then(() => {
+      //     console.log('Our email successful provided to device mail ');
+      // });
+  }
+
   _onPress() {
 
-    // const {username} = this.state;
-    // const {password} = this.state;
     console.log('fuck');
     console.log("username: ",this.state.Username);
     console.log("password: ",this.state.Password);
 
-
     if (this.state.isLoading) return;
 
-    console.log(this.state);
-    console.log(this.growAnimated);
-    this.setState({isLoading: true});
-    Animated.timing(this.buttonAnimated, {
-      toValue: 1,
-      duration: 200,
-      easing: Easing.linear,
-    }).start();
+    var email_address = this.state.Username;
+    var password = this.state.Password;
 
-    setTimeout(() => {
-      this._onGrow();
-    }, 2000);
+    const {Username} = this.state;
+    const {Password} = this.state;
+    //const {Time} = this.state;
 
-    setTimeout(() => {
-        console.log(this.buttonAnimated.setValue(0))
-      Actions.HomeScreen();
-      this.setState({isLoading: false});
-      this.buttonAnimated.setValue(0);
-      this.growAnimated.setValue(0);
-    }, 2300);
+    fetch("http://192.168.43.133:3000/users/authenticate",{
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password: Password,
+        email_address: Username,
+      })
+
+    })
+
+    .then(function(response) {
+      
+      console.log("ttttttttttttttttttt")
+      console.log(response.status);
+      if(response.token){
+        console.log('done')
+        // Alert.alert(
+        //   "Registration Success",
+        //   "You are now member of guardian",
+        //   [
+        //     { text: "OK", onPress: _onLogin() }
+        //   ]
+        // )
+      }
+      else if(response.status == 404){
+        console.log('comeeeeeee')
+        Alert.alert(
+          "Login Failed",
+          "E-mail address is not registered!",
+          [
+            { text: "OK", onPress: ()=> {Actions.LoginScreen();}  }
+          ]
+        )
+      } 
+      if(response.status == 401){
+        console.log('failed2')
+        Alert.alert(
+          "Login Failed",
+          "Incorrect password!",
+          [
+            { text: "OK", onPress: ()=> {Actions.LoginScreen();} }
+          ]
+        )
+      }
+      else{
+        return response;
+      }
+    }).then(function(response) {
+      return response.json();
+    }).then(function(json) {
+      console.log('Request succeeded with JSON response:', json);
+    }).catch(function(error) {
+      console.log('Request failed:', error);
+    });
   }
 
-  _onGrow() {
-    Animated.timing(this.growAnimated, {
-      toValue: 1,
-      duration: 200,
-      easing: Easing.linear,
-    }).start();
-  }
 
   render() {
     const changeWidth = this.buttonAnimated.interpolate({
@@ -156,10 +209,24 @@ export default class ButtonSubmit extends Component {
             />
             </Animated.View>
         </View>
+        <View style={styles.forgot}>
+          <ThemeProvider theme={theme}>
+          <Button  type="clear" title="Forgot Password?"
+            onPress={this._forgot}/>
+          </ThemeProvider>
+        </View>
       </View>
     );
   }
 }
+
+const theme = {
+  Button: {
+    titleStyle: {
+      color: 'white',
+    },
+  },
+};
 
 const styles = StyleSheet.create({
   container1: {
@@ -210,4 +277,7 @@ const styles = StyleSheet.create({
     height: 25,
     tintColor: 'rgba(0,0,0,0.2)',
   },
+  forgot: {
+    paddingTop: 80,
+  }
 });

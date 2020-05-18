@@ -16,6 +16,7 @@ import {Button,ThemeProvider} from 'react-native-elements';
 import {Actions, ActionConst} from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {sendEmail} from '../forgotPassword/sendEmail';
+import Temp from './temp';
 
 export default class SignupSection extends Component {
 
@@ -31,17 +32,28 @@ export default class SignupSection extends Component {
     this._onPress = this._onPress.bind(this);
   }
 
-  _mail(){
-    console.log('pppppppp');
-    sendEmail(
-        'pramithvidusara@gmail.com',
-        'Greeting!',
-        'I think you are fucked up how many letters you get.',
-        { cc: 'elon@tesla.com; elon@solarcity.com; elon@stanford.edu' }
-    ).then(() => {
-        console.log('Our email successful provided to device mail ');
-    });
-  }
+  
+
+  // _mail(){
+  //   console.log('pppppppp');
+  //   // sendEmail(
+  //   //     'pramithvidusara@gmail.com',
+  //   //     'Greeting!',
+  //   //     'I think you are fucked up how many letters you get.',
+  //   //     { cc: 'elon@tesla.com; elon@solarcity.com; elon@stanford.edu' }
+  //   // ).then(() => {
+  //   //     console.log('Our email successful provided to device mail ');
+  //   // });
+
+
+  //   const callFun = new Temp();
+
+  //   const email = callFun._forgot();
+  //   console.log('email')
+  //   console.log(email);
+  //   console.log('mvskdlnvlk')
+
+  // }
 
   // sendEmail('pramithvidusara@gmail.com','Greeting!','I think you are fucked up how many letters you get.').then(() => {
   //   console.log('Our email successful provided to device mail ');
@@ -89,8 +101,8 @@ export default class SignupSection extends Component {
         <Button type="clear" title="Create Account"
             onPress={this._onPress}
             />
-            <Button  type="clear" title="Forgot Password?"
-            onPress={this._mail}/>
+            {/* <Button  type="clear" title="Forgot Password?"
+            onPress={this._mail}/> */}
         </ThemeProvider>
         {/* <Text style={styles.text}>Forgot Password?</Text> */}
       </View>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet, Button,Alert,Animated,Easing } from 'react-native';
+import {Actions, ActionConst} from 'react-native-router-flux';
 
 import t from 'tcomb-form-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -13,26 +14,11 @@ const Email = t.refinement(t.String, email => {
 
 const Password = t.refinement(t.String, (password) => {
     const reg = /^(?=\S+$).{8,}$/;
+    console.log(reg.test(password))
     return reg.test(password);
-});
-
-const confPassword = t.refinement(t.String, (confpassword,password) => {
-    if(confpassword === password){
-        return true;
-    }
-    else{
-        return false
-    }
-    //return reg.test(confpassword);
-});  
+}); 
 
 const Mobile = t.refinement(t.String, (mobile)=>{
-    // if(mobile.length != 10){
-    //     return false;
-    // }
-    // else{
-    //     return true;
-    // }
     const reg = /^\d{10}$/;
     return reg.test(mobile);
 });
@@ -47,14 +33,12 @@ const nic = t.refinement(t.String, (NIC)=>{
 })
 
 const User = t.struct({
-  "First Name": t.String,
-  "Last Name": t.String,
-  username: t.maybe(t.String),
+  FirstName: t.String,
+  LastName: t.String,
   username: Email,
   password: Password,
-  "Confirm Password":confPassword ,
   mobile: Mobile,
-  NIC: nic,
+  address: t.String,
   terms: t.Boolean
 });
 
@@ -84,10 +68,10 @@ const formStyles = {
 
 const options = {
   fields: {
-    "First Name" : {
+    FirstName : {
         error: 'provide your first name'
     }  ,
-    "Last Name" : {
+    LastName : {
         error: 'provide your last name'
     }  ,
     username: {
@@ -110,15 +94,92 @@ const options = {
     mobile: {
         keyboardType:'numeric',
         error: 'Please, provide correct phone number',
+    },
+    address: {
+      error: 'Please provide Address'
     }
   },
   stylesheet: formStyles,
 };
 
+const _onLogin = () =>{
+
+  setTimeout(() => {
+    Actions.LoginScreen();
+  }, 2300);
+}
+
+const _onAlert=()=> {
+  setTimeout(() => {
+    Actions.RegistrationScreen();
+  }, 2300);
+}
+
 export default class App extends Component {
+
   handleSubmit = () => {
     const value = this._form.getValue();
     console.log('value: ', value);
+    
+    ///fetch eka
+
+    fetch("http://192.168.43.133:3000/users/create",{
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email_address : value.username,
+        first_name: value.FirstName,
+        last_name: value.LastName,
+        address: value.address,
+        phone_number: value.mobile,
+        password: value.password
+      })
+
+    })
+    .then(function(response) {
+      
+      console.log("ttttttttttttttttttt")
+      console.log(response.status);
+      if(response.status == 201){
+        console.log('done')
+        Alert.alert(
+          "Registration Success",
+          "You are now member of guardian",
+          [
+            { text: "OK", onPress: _onLogin() }
+          ]
+        )
+      }
+      else if(response.status == 409){
+        Alert.alert(
+          "Registration Failed!",
+          "Email is already used",
+          [
+            { text: "OK",onPress: _onAlert()  }
+          ]
+        )
+      } 
+      else{
+        return response;
+      }
+
+      // if (response.ok) {
+      //   console.log("ok",response.ok,"ok")
+      //   return response;
+      // }
+      
+      // throw Error(response.statusText);
+    }).then(function(response) {
+      return response.json();
+    }).then(function(json) {
+      console.log('Request succeeded with JSON response:', json);
+    }).catch(function(error) {
+      console.log('Request failed:', error);
+    });
+
   }
   
   render() {

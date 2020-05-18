@@ -167,9 +167,9 @@ class RegBack extends Component {
             <Container>
                 {this.renderToolbar()}
                 <ScrollView
-                    keyboardShouldPersistTaps="always"
-                    keyboardDismissMode="interactive"
-                    onScroll={this.onScroll}
+                    //keyboardShouldPersistTaps="always"
+                    //keyboardDismissMode="interactive"
+                    //onScroll={this.onScroll}
                 >
                     <ParentReg/>
                 </ScrollView>
