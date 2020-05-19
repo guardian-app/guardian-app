@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {Actions, ActionConst} from 'react-native-router-flux';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import 'localstorage-polyfill';
 
 import spinner from '../../image/loading.gif';
 import App from '../../App';
@@ -84,13 +85,26 @@ export default class ButtonSubmit extends Component {
       this._onGrow();
     }, 2000);
 
-    setTimeout(() => {
-        console.log(this.buttonAnimated.setValue(0))
-      Actions.LoginScreen();
-      this.setState({isLoading: false});
-      this.buttonAnimated.setValue(0);
-      this.growAnimated.setValue(0);
-    }, 2300);
+    if(localStorage.getItem("key")){
+      setTimeout(() => {
+          console.log(this.buttonAnimated.setValue(0))
+        Actions.HomeScreen();
+        this.setState({isLoading: false});
+        this.buttonAnimated.setValue(0);
+        this.growAnimated.setValue(0);
+      }, 2300);
+    }
+    else{
+      setTimeout(() => {
+          console.log(this.buttonAnimated.setValue(0))
+        Actions.LoginScreen();
+        this.setState({isLoading: false});
+        this.buttonAnimated.setValue(0);
+        this.growAnimated.setValue(0);
+      }, 2300);
+    }
+
+    
   }
 
   _onGrow() {

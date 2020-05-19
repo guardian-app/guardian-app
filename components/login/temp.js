@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import {Actions, ActionConst} from 'react-native-router-flux';
 import {Button,ThemeProvider} from 'react-native-elements';
+import { connect } from "react-redux";
+import 'localstorage-polyfill';
 
 import UserInput from './UserInput';
 import usernameImg from '../../image/username.png';
@@ -110,17 +112,23 @@ export default class Temp extends Component {
       
       console.log("ttttttttttttttttttt")
       console.log(response.status);
-      if(response.token){
-        console.log('done')
-        // Alert.alert(
+      // if(response.status == 200){
+      //   console.log('done')
+      //   console.log(response.json())
+        // let key;
+        // localStorage.setItem("list", JSON.stringify(response.token))
+        // let value = localStorage.getItem(key);
+        // console.log('key');
+        // console.log(value);
+        // Alert.alert(xam
         //   "Registration Success",
         //   "You are now member of guardian",
         //   [
         //     { text: "OK", onPress: _onLogin() }
         //   ]
         // )
-      }
-      else if(response.status == 404){
+     // }
+       if(response.status == 404){
         console.log('comeeeeeee')
         Alert.alert(
           "Login Failed",
@@ -146,11 +154,37 @@ export default class Temp extends Component {
     }).then(function(response) {
       return response.json();
     }).then(function(json) {
-      console.log('Request succeeded with JSON response:', json);
+      console.log('Request succeeded with JSON response:', json.token);
+        
+        localStorage.setItem("key", JSON.stringify(json.token))
+        let value = localStorage.getItem("key");
+        console.log(value);
+        try {
+          value = JSON.parse(value);
+          //this.setState({ [key]: value });
+          console.log(value);
+        } catch (e) {
+          // handle empty string
+          //this.setState({ [key]: value });
+          console.log(value);
+        }
+        console.log('key');
+        console.log(value);
+
+        Alert.alert(
+          "Login Successful",
+          "",
+          [
+            { text: "OK", onPress: ()=> {Actions.HomeScreen();}  }
+          ]
+        )
+
     }).catch(function(error) {
       console.log('Request failed:', error);
     });
   }
+
+  
 
 
   render() {

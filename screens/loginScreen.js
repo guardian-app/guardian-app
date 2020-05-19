@@ -6,7 +6,8 @@ import Wallpaper from '../components/login/Wallpaper';
 import ButtonSubmit from '../components/login/ButtonSubmit';
 import SignupSection from '../components/login/SignupSection';
 import Temp from '../components/login/temp';
-
+import { connect } from "redux";
+ 
 export default class LoginScreen extends Component {
   render() {
     return (

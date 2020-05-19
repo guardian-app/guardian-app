@@ -1,61 +1,9 @@
-// import React from 'react';
-// import {View,Text,StyleSheet,Image} from 'react-native';
-// import {Button} from 'react-native-elements';
-// import {NavigationContainer} from '@react-navigation/native';
-
-// import Footer from '../components/footer';
-
-// const HomeScreen = ({navigation}) => {
-
-    
-
-
-//     return(
-//         <View style= {styles.screen}>
-            
-//         </View>
-//     )
-
-// };
-
-// const styles = StyleSheet.create({
-//     screen: {
-//         flex: 1,
-//         padding: 10,
-//         alignItems: 'center',
-//         justifyContent: 'flex-start',
-//         backgroundColor: "white",
-//         //margin: 40,
-//         width: "100%",
-//         height: 300,
-//     },
-//     buttonContainer: {
-//         //flexDirection: 'row',
-//         width: '50%',
-//         justifyContent: 'space-around',
-//         paddingHorizontal: 15,
-//         //padding: 20,
-//         margin: 10,
-//         height: "30%"
-//     },
-//     title: {
-//         color: 'brown',
-//         fontSize: 20,
-//         marginVertical: 10,
-//     },
-//     button1: {
-//         color: 'yellow'
-//     }
-// });
-
-// export default HomeScreen;
-
-
-
-
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { ToastAndroid, ScrollView, Platform, Animated, Easing } from 'react-native';
+import { connect } from 'react-redux';
+import 'localstorage-polyfill';
+import {Actions, ActionConst} from 'react-native-router-flux';
 
 import routes from '../routes';
 
@@ -94,6 +42,16 @@ class Home extends Component {
             moveAnimated: new Animated.Value(0),
         };
     }
+
+    componentDidMount(){
+        console.log('eeeeeeeeeeeeeeeeee');
+        console.log(localStorage.getItem("key"));
+
+        if(!localStorage.getItem("key")){
+            Actions.LoginScreen();
+        }
+    }
+
     onAvatarPressed = (value) => {
         const { selected } = this.state;
 
@@ -207,7 +165,7 @@ class Home extends Component {
                     keyboardDismissMode="interactive"
                     onScroll={this.onScroll}
                 >
-                    {/* {this.renderItem('Action buttons', 'actionButton')}
+                    {this.renderItem('Action buttons', 'actionButton')}
                     {this.renderItem('Avatars', 'avatar')}
                     {this.renderItem('Badge', 'badge')}
                     {this.renderItem('Bottom navigation', 'bottomNavigation')}
@@ -217,9 +175,7 @@ class Home extends Component {
                     {this.renderItem('Dialog', 'dialog')}
                     {this.renderItem('Drawer', 'drawer')}
                     {this.renderItem('Icon toggles', 'iconToggle')}
-                    {this.renderItem('List items', 'list')} */}
-                    {/* {this.renderItem('Radio buttons', 'radioButton')}
-                    {this.renderItem('Toolbars', 'toolbar')} */}
+                    {this.renderItem('List items', 'list')}
                 </ScrollView>
                 <ActionButton
                     actions={[
