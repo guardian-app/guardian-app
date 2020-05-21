@@ -20,4 +20,19 @@ const selectUserRoleById = (user_id, done) => {
     database.execute('SELECT `role` FROM `user` WHERE user.user_id = ? LIMIT 1', [user_id], done)
 }
 
-module.exports = { insertUser, selectUserByEmailAddress, selectUserById, selectUserRoleById }
+const updateUser = (user, done) => {
+    database.execute(
+        'UPDATE `user` SET email_address=?, first_name=?, last_name=?, address=?, phone_number=? WHERE user_id=?',
+        [user.email_address, user.first_name, user.last_name, user.address, user.phone_number, user.user_id],
+        (err1, results1, fields1) => {
+            if (user.password == null) return done(err1, results1, fields1);
+            database.execute(
+                'UPDATE `user` SET password=? WHERE user_id=?',
+                [user.password, user.user_id],
+                (err2, results2, fields2) => done(err1 || err2, results1, fields1)
+            );
+        }
+    );
+}
+
+module.exports = { insertUser, selectUserByEmailAddress, selectUserById, selectUserRoleById, updateUser }

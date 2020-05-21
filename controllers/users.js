@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { insertUser, selectUserByEmailAddress } = require('../services/users');
+const { insertUser, selectUserByEmailAddress, updateUser } = require('../services/users');
 const { jwtSecret } = require('../config/jwt');
 
 const createUser = async (req, res) => {
@@ -44,4 +44,26 @@ const getProfile = (req, res) => {
     res.json({ ...req.user });
 }
 
-module.exports = { createUser, authenticateUser, getProfile }
+const updateProfile = async (req, res) => {
+    const oldUser = req.user;
+    const newUser = req.body;
+    
+    const user = {
+        user_id: oldUser.user_id,
+        email_address: newUser.email_address || oldUser.email_address,
+        first_name: newUser.first_name || oldUser.first_name,
+        last_name: newUser.last_name || oldUser.last_name,
+        address: newUser.address || oldUser.address,
+        phone_number: newUser.phone_number || oldUser.phone_number,
+        password: newUser.password != null ? await bcrypt.hash(newUser.password, await bcrypt.genSalt(10)) : undefined
+    }
+
+    updateUser(user, (err, results, fields) => {
+        if (err) throw err;
+
+        const { email_address, first_name, last_name, address, phone_number } = user;
+        res.json({ email_address, first_name, last_name, address, phone_number });
+    });
+}
+
+module.exports = { createUser, authenticateUser, getProfile, updateProfile }
