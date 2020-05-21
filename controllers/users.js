@@ -41,7 +41,7 @@ const authenticateUser = async (req, res) => {
 }
 
 const getProfile = (req, res) => {
-    res.json({ ...req.user });
+    res.json(req.user);
 }
 
 const updateProfile = async (req, res) => {
