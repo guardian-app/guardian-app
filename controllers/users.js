@@ -1,12 +1,14 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { insertUser, selectUserByEmailAddress, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress } = require('../services/users');
+const { insertUser, selectUserByEmailAddress, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress, selectUserByVerificationKey, activateUser } = require('../services/users');
 const { jwtSecret } = require('../config/jwt');
 const { sendVerificationEmail } = require('../config/nodemailer');
+const nanoid = require('nanoid');
 
 const createUser = async (req, res) => {
     const { email_address, password, first_name, last_name, address, phone_number } = req.body;
-    const password_hash = await bcrypt.hash(password, await bcrypt.genSalt(10));
+    const password = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
+    const key = nanoid();
 
     const user = {
         email_address,
@@ -14,16 +16,13 @@ const createUser = async (req, res) => {
         last_name,
         address,
         phone_number,
-        password: password_hash,
+        password
     };
 
     insertUser(user, async (err, results, fields) => {
         if (err) throw err;
-
-        const key = await bcrypt.hash(email_address, await bcrypt.genSalt(2));
         insertVerificationKey(email_address, key, (err, results, fields) => {
             if (err) throw err;
-
             sendVerificationEmail(email_address, key, (err, info) => {
                 res.status(201).send('Success');
             });
@@ -42,6 +41,8 @@ const authenticateUser = async (req, res) => {
 
         const match = await bcrypt.compare(password, user.password);
         if (!match) return res.status(401).send('Incorrect password!');
+
+        if (!user.active) return res.status(401).send('E-mail address is not verified!');
 
         const token = jwt.sign({ user_id: user.user_id }, jwtSecret, { expiresIn: 86400 /* 24 hours */ });
         res.json({ token });
@@ -76,7 +77,7 @@ const updateProfile = async (req, res) => {
 
 const resendVerificationKey = async (req, res) => {
     const { email_address } = req.body;
-    const key = await bcrypt.hash(email_address, await bcrypt.genSalt(2));
+    const key = nanoid();
 
     selectVerificationKeyByEmailAddress(email_address, (err, results, fields) => {
         if (err) throw err;
@@ -94,4 +95,25 @@ const resendVerificationKey = async (req, res) => {
     });
 };
 
-module.exports = { createUser, authenticateUser, getProfile, updateProfile, resendVerificationKey };
+const verifyUser = async (req, res) => {
+    const { key } = req.params;
+
+    selectUserByVerificationKey(key, (err, results, fields) => {
+        if (err) throw err;
+        if (!results.length) return res.status(404).send('Verification key is invalid!');
+
+        const { user_id, email_address, expires_on } = results[0];
+
+        if (expires_on <= new Date()) return res.status(404).send('Verification key is expired!');
+
+        activateUser(user_id, (err, results, fields) => {
+            if (err) throw err;
+            deleteVerificationKey(email_address, (err, results, fields) => {
+                if (err) throw err;
+                res.status(200).send('Success');
+            });
+        });
+    });
+};
+
+module.exports = { createUser, authenticateUser, getProfile, updateProfile, resendVerificationKey, verifyUser };

@@ -31,13 +31,13 @@ const getChildParentById = (req, res) => {
 };
 
 const createChild = async (req, res) => {
-    const { email_address, password, first_name, last_name, address, phone_number } = req.body;
-    const password_hash = await bcrypt.hash(password, await bcrypt.genSalt(10));
+    const { email_address, first_name, last_name, address, phone_number } = req.body;
+    const password = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
     const parent_id = req.user.user_id;
 
     const child = {
         email_address,
-        password: password_hash,
+        password,
         first_name,
         last_name,
         address,

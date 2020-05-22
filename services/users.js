@@ -28,6 +28,14 @@ const selectVerificationKeyByEmailAddress = (email_address, done) => {
     database.execute('SELECT * FROM `email_verification` WHERE `email_address` = ? LIMIT 1', [email_address], done)
 };
 
+const selectUserByVerificationKey = (key, done) => {
+    database.execute('SELECT * FROM `email_verification` WHERE `verification_key` = ? LIMIT 1', [key], done)
+};
+
+const activateUser = (user_id, done) => {
+    database.execute('UPDATE `user` SET `active`=TRUE WHERE user.user_id=?', [user_id], done);
+}
+
 const selectUserByEmailAddress = (email_address, done) => {
     database.execute('SELECT * FROM `user` WHERE `email_address` = ? LIMIT 1', [email_address], done)
 };
@@ -55,4 +63,4 @@ const updateUser = (user, done) => {
     );
 };
 
-module.exports = { insertUser, selectUserByEmailAddress, selectUserById, selectUserRoleById, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress };
+module.exports = { insertUser, selectUserByEmailAddress, selectUserById, selectUserRoleById, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress, selectUserByVerificationKey, activateUser };
