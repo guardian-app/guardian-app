@@ -4,8 +4,8 @@ const getParents = (req, res) => {
     selectParents((err, results, fields) => {
         if (err) throw err;
         res.json(results);
-    })
-}
+    });
+};
 
 const getParent = (req, res) => {
     const { parent_id } = req.params;
@@ -15,8 +15,8 @@ const getParent = (req, res) => {
         if (!results.length) return res.status(404).send('Parent Not Found');
 
         res.json(results[0]);
-    })
-}
+    });
+};
 
 const getParentChildren = (req, res) => {
     const { parent_id } = req.params;
@@ -29,8 +29,8 @@ const getParentChildren = (req, res) => {
             if (err) throw err;
             if (!results.length) return res.status(404).send('Parent Not Found');
             res.json({});
-        })
-    })
-}
+        });
+    });
+};
 
-module.exports = { getParents, getParent, getParentChildren }
+module.exports = { getParents, getParent, getParentChildren };

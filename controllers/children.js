@@ -5,8 +5,8 @@ const getChildren = (req, res) => {
     selectChildren((err, results, fields) => {
         if (err) throw err;
         res.json(results);
-    })
-}
+    });
+};
 
 const getChildById = (req, res) => {
     const { child_id } = req.params;
@@ -16,8 +16,8 @@ const getChildById = (req, res) => {
         if (!results.length) return res.status(404).send('Child Not Found');
 
         res.json(results[0]);
-    })
-}
+    });
+};
 
 const getChildParentById = (req, res) => {
     const { child_id } = req.params;
@@ -27,8 +27,8 @@ const getChildParentById = (req, res) => {
         if (!results.length) return res.status(404).send('Parent Not Found');
 
         res.json(results[0]);
-    })
-}
+    });
+};
 
 const createChild = async (req, res) => {
     const { email_address, password, first_name, last_name, address, phone_number } = req.body;
@@ -43,13 +43,12 @@ const createChild = async (req, res) => {
         address,
         phone_number,
         parent_id
-    }
+    };
 
     insertChild(child, (err, results, fields) => {
         if (err) throw err;
         res.status(201).send('Success');
-    })
+    });
+};
 
-}
-
-module.exports = { getChildren, getChildById, getChildParentById, createChild }
+module.exports = { getChildren, getChildById, getChildParentById, createChild };

@@ -15,6 +15,6 @@ const isChildParent = (req, res, next) => {
 
         return res.status(403).send('Forbidden');
     });
-}
+};
 
-module.exports = { isChildParent }
+module.exports = { isChildParent };

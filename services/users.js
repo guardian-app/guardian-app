@@ -8,17 +8,37 @@ const insertUser = (user, done) => {
     );
 };
 
+const insertVerificationKey = (email_address, verification_key, done) => {
+    database.execute(
+        'INSERT INTO `email_verification` (`user_id`, `verification_key`, `email_address`)  VALUES ((SELECT `user_id` FROM `user` WHERE user.email_address=?), ?, ?)',
+        [email_address, verification_key, email_address],
+        done
+    );
+};
+
+const deleteVerificationKey = (email_address, done) => {
+    database.execute(
+        'DELETE FROM `email_verification` WHERE email_address=?',
+        [email_address],
+        done
+    );
+};
+
+const selectVerificationKeyByEmailAddress = (email_address, done) => {
+    database.execute('SELECT * FROM `email_verification` WHERE `email_address` = ? LIMIT 1', [email_address], done)
+};
+
 const selectUserByEmailAddress = (email_address, done) => {
     database.execute('SELECT * FROM `user` WHERE `email_address` = ? LIMIT 1', [email_address], done)
-}
+};
 
 const selectUserById = (user_id, done) => {
     database.execute('SELECT * FROM `user` WHERE `user_id` = ? LIMIT 1', [user_id], done)
-}
+};
 
 const selectUserRoleById = (user_id, done) => {
     database.execute('SELECT `role` FROM `user` WHERE user.user_id = ? LIMIT 1', [user_id], done)
-}
+};
 
 const updateUser = (user, done) => {
     database.execute(
@@ -33,6 +53,6 @@ const updateUser = (user, done) => {
             );
         }
     );
-}
+};
 
-module.exports = { insertUser, selectUserByEmailAddress, selectUserById, selectUserRoleById, updateUser }
+module.exports = { insertUser, selectUserByEmailAddress, selectUserById, selectUserRoleById, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress };

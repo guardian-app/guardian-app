@@ -10,7 +10,7 @@ const checkDuplicateEmailAddress = (req, res, next) => {
         if (results.length) return res.status(409).send('E-mail address is already registered!');
         next();
     });
-}
+};
 
 const validateToken = (req, res, next) => {
     const { token } = req;
@@ -26,9 +26,9 @@ const validateToken = (req, res, next) => {
             const { user_id, email_address, first_name, last_name, address, phone_number, role } = results[0];
             req.user = { user_id, email_address, first_name, last_name, address, phone_number, role };
             next();
-        })
-    })
-}
+        });
+    });
+};
 
 const isAdmin = (req, res, next) => {
     const { user_id } = req.user;
@@ -41,7 +41,7 @@ const isAdmin = (req, res, next) => {
 
         if (role === 'admin') next();
         else return res.status(403).send('Forbidden');
-    })
-}
+    });
+};
 
-module.exports = { checkDuplicateEmailAddress, validateToken, isAdmin }
+module.exports = { checkDuplicateEmailAddress, validateToken, isAdmin };

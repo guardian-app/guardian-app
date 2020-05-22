@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { insertUser, selectUserByEmailAddress, updateUser } = require('../services/users');
+const { insertUser, selectUserByEmailAddress, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress } = require('../services/users');
 const { jwtSecret } = require('../config/jwt');
+const { sendVerificationEmail } = require('../config/nodemailer');
 
 const createUser = async (req, res) => {
     const { email_address, password, first_name, last_name, address, phone_number } = req.body;
@@ -9,16 +10,24 @@ const createUser = async (req, res) => {
 
     const user = {
         email_address,
-        password: password_hash,
         first_name,
         last_name,
         address,
-        phone_number
-    }
+        phone_number,
+        password: password_hash,
+    };
 
-    insertUser(user, (err, results, fields) => {
+    insertUser(user, async (err, results, fields) => {
         if (err) throw err;
-        res.status(201).send('Success');
+
+        const key = await bcrypt.hash(email_address, await bcrypt.genSalt(2));
+        insertVerificationKey(email_address, key, (err, results, fields) => {
+            if (err) throw err;
+
+            sendVerificationEmail(email_address, key, (err, info) => {
+                res.status(201).send('Success');
+            });
+        });
     });
 }
 
@@ -37,17 +46,16 @@ const authenticateUser = async (req, res) => {
         const token = jwt.sign({ user_id: user.user_id }, jwtSecret, { expiresIn: 86400 /* 24 hours */ });
         res.json({ token });
     });
-
-}
+};
 
 const getProfile = (req, res) => {
     res.json(req.user);
-}
+};
 
 const updateProfile = async (req, res) => {
     const oldUser = req.user;
     const newUser = req.body;
-    
+
     const user = {
         user_id: oldUser.user_id,
         email_address: newUser.email_address || oldUser.email_address,
@@ -56,7 +64,7 @@ const updateProfile = async (req, res) => {
         address: newUser.address || oldUser.address,
         phone_number: newUser.phone_number || oldUser.phone_number,
         password: newUser.password != null ? await bcrypt.hash(newUser.password, await bcrypt.genSalt(10)) : undefined
-    }
+    };
 
     updateUser(user, (err, results, fields) => {
         if (err) throw err;
@@ -64,6 +72,26 @@ const updateProfile = async (req, res) => {
         const { email_address, first_name, last_name, address, phone_number } = user;
         res.json({ email_address, first_name, last_name, address, phone_number });
     });
-}
+};
 
-module.exports = { createUser, authenticateUser, getProfile, updateProfile }
+const resendVerificationKey = async (req, res) => {
+    const { email_address } = req.body;
+    const key = await bcrypt.hash(email_address, await bcrypt.genSalt(2));
+
+    selectVerificationKeyByEmailAddress(email_address, (err, results, fields) => {
+        if (err) throw err;
+        if (!results.length) return res.status(404).send('Not Found');
+
+        deleteVerificationKey(email_address, async (err, results, fields) => {
+            if (err) throw err;
+            insertVerificationKey(email_address, key, (err, results, fields) => {
+                if (err) throw err;
+                sendVerificationEmail(email_address, key, (err, info) => {
+                    res.status(201).send('Success');
+                });
+            });
+        });
+    });
+};
+
+module.exports = { createUser, authenticateUser, getProfile, updateProfile, resendVerificationKey };

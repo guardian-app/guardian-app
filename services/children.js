@@ -5,7 +5,7 @@ const selectChildren = (done) => {
         "SELECT `user_id`, `email_address`, `first_name`, `last_name`, `address`, `phone_number` FROM `user` WHERE user.role='child'",
         done
     );
-}
+};
 
 const selectChildById = (child_id, done) => {
     database.execute(
@@ -13,7 +13,7 @@ const selectChildById = (child_id, done) => {
         [child_id],
         done
     );
-}
+};
 
 const selectChildParentById = (child_id, done) => {
     database.execute(
@@ -21,7 +21,7 @@ const selectChildParentById = (child_id, done) => {
         [child_id],
         done
     );
-}
+};
 
 const insertChild = (child, done) => {
     database.execute(
@@ -29,6 +29,6 @@ const insertChild = (child, done) => {
         [child.email_address, child.password, child.first_name, child.last_name, child.address, child.phone_number, child.parent_id, `child`],
         done
     );
-}
+};
 
 module.exports = { selectChildren, selectChildById, selectChildParentById, insertChild };

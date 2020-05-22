@@ -21,6 +21,6 @@ const selectParentChildrenById = (parent_id, done) => {
         [parent_id],
         done
     );
-}
+};
 
-module.exports = { selectParents, selectParentById, selectParentChildrenById }
+module.exports = { selectParents, selectParentById, selectParentChildrenById };
