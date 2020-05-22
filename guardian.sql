@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 15, 2020 at 03:48 PM
+-- Generation Time: May 22, 2020 at 01:44 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -21,6 +21,30 @@ SET time_zone = "+00:00";
 --
 -- Database: `guardian`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email_verification`
+--
+
+CREATE TABLE `email_verification` (
+  `email_verification_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `verification_key` varchar(2048) NOT NULL,
+  `email_address` varchar(255) NOT NULL,
+  `expires_on` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Triggers `email_verification`
+--
+DELIMITER $$
+CREATE TRIGGER `generate_expires_on_date` BEFORE INSERT ON `email_verification` FOR EACH ROW BEGIN
+  SET NEW.expires_on = DATE_ADD(CURDATE(), INTERVAL 14 DAY);
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -68,12 +92,20 @@ CREATE TABLE `user` (
   `last_name` varchar(63) NOT NULL,
   `address` varchar(255) NOT NULL,
   `phone_number` varchar(15) NOT NULL,
-  `parent_id` int(11) DEFAULT NULL
+  `parent_id` int(11) DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `email_verification`
+--
+ALTER TABLE `email_verification`
+  ADD PRIMARY KEY (`email_verification_id`),
+  ADD KEY `FK_email_verification_user_id` (`user_id`);
 
 --
 -- Indexes for table `location_record`
@@ -100,6 +132,12 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `email_verification`
+--
+ALTER TABLE `email_verification`
+  MODIFY `email_verification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `location_record`
 --
 ALTER TABLE `location_record`
@@ -115,11 +153,17 @@ ALTER TABLE `trusted_contact`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `email_verification`
+--
+ALTER TABLE `email_verification`
+  ADD CONSTRAINT `FK_email_verification_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `location_record`
