@@ -25,4 +25,20 @@ const sendVerificationEmail = (to, key, done) => {
     transporter.sendMail({ from, to, subject, text, html }, done);
 };
 
-module.exports = { transporter, sendVerificationEmail };
+const sendPasswordResetEmail = (to, key, done) => {
+    const from = `"Guardian" <${process.env.GMAIL_USER}>`;
+    const subject = `Reset your password`;
+
+    const text =
+        `Reset your Guardian password 
+        Please use the code ${key} to reset your password.`;
+
+    const html =
+        `<h2>Reset your Guardian password</h2>
+        </br>
+        Please use the code <code>${key}</code> to reset your password.`;
+
+    transporter.sendMail({ from, to, subject, text, html }, done);
+};
+
+module.exports = { transporter, sendVerificationEmail, sendPasswordResetEmail };

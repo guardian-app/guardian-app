@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 22, 2020 at 01:44 PM
+-- Generation Time: May 26, 2020 at 08:04 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -63,6 +63,30 @@ CREATE TABLE `location_record` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `password_reset`
+--
+
+CREATE TABLE `password_reset` (
+  `password_reset_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `email_address` varchar(255) NOT NULL,
+  `reset_key` varchar(255) NOT NULL,
+  `expires_on` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Triggers `password_reset`
+--
+DELIMITER $$
+CREATE TRIGGER `generate_password_reset_expires_on_date` BEFORE INSERT ON `password_reset` FOR EACH ROW BEGIN
+  SET NEW.expires_on = DATE_ADD(CURDATE(), INTERVAL 14 DAY);
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `trusted_contact`
 --
 
@@ -115,6 +139,13 @@ ALTER TABLE `location_record`
   ADD KEY `FK_location_record_child_id` (`child_id`);
 
 --
+-- Indexes for table `password_reset`
+--
+ALTER TABLE `password_reset`
+  ADD PRIMARY KEY (`password_reset_id`),
+  ADD KEY `FK_password_reset_user_id` (`user_id`);
+
+--
 -- Indexes for table `trusted_contact`
 --
 ALTER TABLE `trusted_contact`
@@ -135,13 +166,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `email_verification`
 --
 ALTER TABLE `email_verification`
-  MODIFY `email_verification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `email_verification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `location_record`
 --
 ALTER TABLE `location_record`
   MODIFY `location_record_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `password_reset`
+--
+ALTER TABLE `password_reset`
+  MODIFY `password_reset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `trusted_contact`
@@ -153,7 +190,7 @@ ALTER TABLE `trusted_contact`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Constraints for dumped tables
@@ -170,6 +207,12 @@ ALTER TABLE `email_verification`
 --
 ALTER TABLE `location_record`
   ADD CONSTRAINT `FK_location_record_child_id` FOREIGN KEY (`child_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `password_reset`
+--
+ALTER TABLE `password_reset`
+  ADD CONSTRAINT `FK_password_reset_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`);
 
 --
 -- Constraints for table `trusted_contact`

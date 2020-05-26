@@ -1,12 +1,12 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { insertUser, selectUserByEmailAddress, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress, selectUserByVerificationKey, activateUser } = require('../services/users');
+const { nanoid } = require('nanoid');
+const { insertUser, selectUserByEmailAddress, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress, selectUserByVerificationKey, activateUser, deletePasswordResetKey, insertPasswordResetKey, updateUserPassword, selectUserByPasswordResetKey } = require('../services/users');
 const { jwtSecret } = require('../config/jwt');
-const { sendVerificationEmail } = require('../config/nodemailer');
-const nanoid = require('nanoid');
+const { sendVerificationEmail, sendPasswordResetEmail } = require('../config/nodemailer');
 
 const createUser = async (req, res) => {
-    const { email_address, password, first_name, last_name, address, phone_number } = req.body;
+    const { email_address, first_name, last_name, address, phone_number } = req.body;
     const password = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
     const key = nanoid();
 
@@ -23,9 +23,9 @@ const createUser = async (req, res) => {
         if (err) throw err;
         insertVerificationKey(email_address, key, (err, results, fields) => {
             if (err) throw err;
-            sendVerificationEmail(email_address, key, (err, info) => {
-                res.status(201).send('Success');
-            });
+            res.status(201).send('Success');
+
+            sendVerificationEmail(email_address, key, (err, info) => { if (err) throw err });
         });
     });
 }
@@ -87,9 +87,9 @@ const resendVerificationKey = async (req, res) => {
             if (err) throw err;
             insertVerificationKey(email_address, key, (err, results, fields) => {
                 if (err) throw err;
-                sendVerificationEmail(email_address, key, (err, info) => {
-                    res.status(201).send('Success');
-                });
+                res.status(201).send('Success');
+
+                sendVerificationEmail(email_address, key, (err, info) => { if (err) throw err });
             });
         });
     });
@@ -116,4 +116,57 @@ const verifyUser = async (req, res) => {
     });
 };
 
-module.exports = { createUser, authenticateUser, getProfile, updateProfile, resendVerificationKey, verifyUser };
+const sendPasswordResetKey = (req, res) => {
+    const { email_address } = req.body;
+    const key = nanoid();
+
+    selectUserByEmailAddress(email_address, (err, results, fields) => {
+        if (err) throw err;
+
+        // We shouldn't show an error if the e-mail address is non-existent
+        // It exposes a potential security risk
+        if (!results.length) return res.status(200).send('Success');
+
+        const { user_id } = results[0];
+
+        deletePasswordResetKey(email_address, (err, results, fields) => {
+            if (err) throw err;
+            insertPasswordResetKey(user_id, email_address, key, (err, results, fields) => {
+                if (err) throw err;
+                res.status(200).send('Success');
+
+                sendPasswordResetEmail(email_address, key, (err, info) => { if (err) throw err });
+            });
+        });
+    });
+};
+
+const updatePassword = async (req, res) => {
+    const { email_address, reset_key } = req.body;
+    const password = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
+
+    selectUserByPasswordResetKey(reset_key, (err, results, fields) => {
+        if (err) throw err;
+
+        // We shouldn't show an error if the key is non-existent
+        // It exposes a potential security risk
+        if (!results.length) return res.status(200).send('Success');
+
+        const user = results[0];
+        const { user_id, expires_on } = user;
+
+        // Check e-mail address to prevent brute-forcing password reset keys
+        if (user.email_address !== email_address) return res.status(200).send('Success'); // Same security risk here
+        if (expires_on <= new Date()) return res.status(404).send('Verification key is expired!');
+
+        updateUserPassword(user_id, password, (err, results, fields) => {
+            if (err) throw err;
+            deletePasswordResetKey(email_address, (err, results, fields) => {
+                if (err) throw err;
+                res.status(200).send('Success');
+            });
+        });
+    });
+};
+
+module.exports = { createUser, authenticateUser, getProfile, updateProfile, resendVerificationKey, verifyUser, sendPasswordResetKey, updatePassword };
