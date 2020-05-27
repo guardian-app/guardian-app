@@ -3,17 +3,24 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 
 import { Button, Subheader, Toolbar } from 'react-native-material-ui';
-import Container from '../Container';
+import Container from '../../Container';
 
 const styles = StyleSheet.create({
     rowContainer: {
-        margin: 8,
+        paddingTop: 100,
+        margin: 10,
         flexDirection: 'row',
         justifyContent: 'center',
     },
     button: {
         marginHorizontal: 8,
     },
+    container: {
+        
+        //flex:1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });
 
 const propTypes = {
@@ -25,13 +32,13 @@ const propTypes = {
 class ButtonPage extends Component {
     render() {
         return (
-            <Container>
-                <Toolbar
+            <Container style={styles.container}>
+                {/* <Toolbar
                     leftElement="arrow-back"
                     onLeftElementPress={() => this.props.navigation.goBack()}
                     centerElement="Button"
-                />
-                <Subheader text="Flat buttons" />
+                /> */}
+                {/* <Subheader text="Flat buttons" />
                 <View style={styles.rowContainer}>
                     <View style={styles.button}>
                         <Button primary text="Primary" />
@@ -47,27 +54,27 @@ class ButtonPage extends Component {
                     <View style={styles.button}>
                         <Button disabled text="Disabled" />
                     </View>
-                </View>
+                </View> */}
 
-                <Subheader text="Raised buttons" />
+                <Subheader text="Your children" />
                 <View style={styles.rowContainer}>
                     <View style={styles.button}>
-                        <Button raised primary text="Primary" />
+                        <Button raised primary text="Children" />
                     </View>
                     <View style={styles.button}>
                         <Button raised accent text="Accent" />
                     </View>
                 </View>
-                <View style={styles.rowContainer}>
+                {/* <View style={styles.rowContainer}>
                     <View style={styles.button}>
                         <Button raised text="Default" />
                     </View>
                     <View style={styles.button}>
                         <Button raised disabled text="Disabled" />
                     </View>
-                </View>
+                </View> */}
 
-                <Subheader text="With icons" />
+                {/* <Subheader text="With icons" />
                 <View style={styles.rowContainer}>
                     <View style={styles.button}>
                         <Button primary text="Accept" icon="done" />
@@ -83,7 +90,7 @@ class ButtonPage extends Component {
                     <View style={styles.button}>
                         <Button raised accent text="Clear" icon="clear" />
                     </View>
-                </View>
+                </View> */}
             </Container>
         );
     }

@@ -3,19 +3,12 @@ import { PropTypes } from 'prop-types';
 import { ToastAndroid, ScrollView, Platform, Animated, Easing } from 'react-native';
 import { connect } from 'react-redux';
 import 'localstorage-polyfill';
-
+import {Actions, ActionConst} from 'react-native-router-flux';
 
 import routes from '../routes';
 
 import Container from '../Container';
 import List from "../List/index";
-import Tool from '../Toolbars/index';
-import Draw from '../Drawer/index';
-//import Dialog from '../Dialog/index';
-import Radio from '../RadioButton/index';
-import ButtonPress from '../components/home/index';
-import Dialog from '../components/home/dialog';
-
 // components
 import {
     ActionButton,
@@ -24,10 +17,8 @@ import {
     Toolbar,
     BottomNavigation,
     Icon,
-    Subheader, 
 } from 'react-native-material-ui/src';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
-import {Actions, ActionConst} from 'react-native-router-flux';
 
 const UP = 1;
 const DOWN = -1;
@@ -57,10 +48,66 @@ class Home extends Component {
     componentDidMount(){
         console.log('eeeeeeeeeeeeeeeeee');
         console.log(localStorage.getItem("key"));
+        
 
         if(!localStorage.getItem("key")){
             Actions.LoginScreen();
         }
+
+        
+        var url = 'http://192.168.43.133:3000/users/me';
+        var token = localStorage.getItem("key");
+        console.log('nnn');
+        console.log(token);
+        console.log('mmm')
+
+
+        fetch(url,{
+            method: "GET",
+            headers: {
+                // "Accept": "application/json",
+                // "Content-Type": "application/json",
+                "Authorization": "Bearer "+token,
+                
+            },
+            })
+            .then(function(response) {
+            
+            console.log("ttttttttttttttttttt")
+            console.log(response.status);
+            if(response.status == 409){
+                Alert.alert(
+                "Registration Failed!",
+                "Email is already used",
+                [
+                    { text: "OK",onPress: _onAlert()  }
+                ]
+                )
+            } 
+            else if(response.status == 401){
+
+            }
+            else if(response.status == 403){
+
+            }
+            else{
+                return response;
+            }
+
+            // if (response.ok) {
+            //   console.log("ok",response.ok,"ok")
+            //   return response;
+            // }
+            
+            // throw Error(response.statusText);
+            }).then(function(response) {
+            return response.json();
+            }).then(function(json) {
+            console.log('Request succeeded with JSON response:', json);
+            }).catch(function(error) {
+            console.log('Request failed:', error);
+            });
+
     }
 
     
@@ -138,14 +185,12 @@ class Home extends Component {
                 />
             );
         }
-
         return (
             <Toolbar
                 key="toolbar"
-                leftElement="arrow-back"
-                onLeftElementPress={() => {Actions.FrontScreen()}}
-                //onLeftElementPress={() => {}}
-                centerElement="Parent"
+                leftElement="menu"
+                onLeftElementPress={() => this.props.navigation.FrontScreen()}
+                centerElement="Home"
                 searchable={{
                     autoFocus: true,
                     placeholder: 'Search',
@@ -179,103 +224,75 @@ class Home extends Component {
             console.log("run")
         }
 
-        const onPressProfile = () => {
-            this.setState({ active: 'profile' })
-            var id = localStorage.getItem("key");
-            console.log("FUCK ID",id);
-
-            Actions.All();
-        }
-
-        const onPressLogout =() => {
-            this.setState({ active: 'Logout' })
-            localStorage.setItem("key", "");
-            console.log(localStorage.getItem("key"));
-            Actions.LoginScreen();
-        } 
-
-        const onPressEmergency = () => {
-            this.setState({ active: 'emergency' });
-        }
-
-        const  onPressLocation = () => {
-            this.setState({ active: 'location' })
-            Actions.Location1();
-        }
-
-        const childAdd =(action) => {
-            console.log('fuck');
-            if (Platform.OS === 'android') {
-                    ToastAndroid.show(action, ToastAndroid.SHORT);
-                }
-            Actions.ChildRegScreen();
-        }
-
         return (
-            <Container >
+            <Container>
                 {this.renderToolbar()}
                 <ScrollView
                     keyboardShouldPersistTaps="always"
                     keyboardDismissMode="interactive"
                     onScroll={this.onScroll}
-                    //onPress={run()}
+                    onPress={run()}
                 >
-                    {/* <Tool/>
-                    <Draw/>
-                    <Dial/> */}
-                    {/* <Radio/> */}
-                    <Dialog/>
-                    <ButtonPress/>
-
+                    {this.renderItem('Action button', 'actionButton') }
+                    {this.renderItem('Avatars', 'avatar')}
+                    {this.renderItem('Badge', 'badge')}
+                    {this.renderItem('Bottom navigation', 'bottomNavigation')}
+                    {this.renderItem('Buttons', 'button')}
+                    {this.renderItem('Cards', 'card')}
+                    {this.renderItem('Checkbox', 'checkbox')}
+                    {this.renderItem('Dialog', 'dialog')}
+                    {this.renderItem('Drawer', 'drawer')}
+                    {this.renderItem('Icon toggles', 'iconToggle')}
+                    {this.renderItem('List items', 'list')}
+                    
                 </ScrollView>
                 <ActionButton
                     actions={[
-                        //{ icon: 'email', label: 'Email' },
+                        { icon: 'email', label: 'Email' },
+                        { icon: 'phone', label: 'Phone' },
+                        { icon: 'sms', label: 'Text' },
+                        { icon: 'favorite', label: 'Favorite' },
                     ]}
-                    //hidden={this.state.bottomHidden}
-                    icon="add"
+                    hidden={this.state.bottomHidden}
+                    icon="share"
                     transition="speedDial"
-                    onPress={childAdd}
-                    // onPress={() => {
-                    //     // if (Platform.OS === 'android') {
-                    //     //     ToastAndroid.show(action, ToastAndroid.SHORT);
-                    //     // }
-                    //     //Actions.ChildRegScreen();
-                    // }}
+                    onPress={(action) => {
+                        if (Platform.OS === 'android') {
+                            ToastAndroid.show(action, ToastAndroid.SHORT);
+                        }
+                    }}
                     style={{
                         positionContainer: { bottom: 76 },
                     }}
                 />
-
                 <BottomNavigation
                     active={this.state.active}
                     hidden={this.state.bottomHidden}
                     style={{ container: { position: 'absolute', bottom: 0, left: 0, right: 0 } }}
                 >
                     <BottomNavigation.Action
-                        key="location"
-                        //icon={<Icon name="today" />}
-                        icon="place"
-                        label="My Location"
-                        onPress={onPressLocation}
+                        key="today"
+                        icon={<Icon name="today" />}
+                        label="Today"
+                        onPress={() => this.setState({ active: 'today' })}
                     />
                     <BottomNavigation.Action
                         key="profile"
-                        icon="people"
+                        icon="profile"
                         label="Profile"
-                        onPress={onPressProfile}
+                        onPress={() => this.setState({ active: 'profile' })}
                     />
                     <BottomNavigation.Action
-                        key="emergency"
-                        icon="call"
-                        label="Emergency Contact"
-                        onPress={onPressEmergency}
+                        key="bookmark-border"
+                        icon="bookmark-border"
+                        label="Bookmark"
+                        onPress={() => this.setState({ active: 'bookmark-border' })}
                     />
                     <BottomNavigation.Action
-                        key="Logout"
-                        icon="stop"
-                        label="Logout"
-                        onPress={onPressLogout}
+                        key="settings"
+                        icon="settings"
+                        label="Settings"
+                        onPress={() => this.setState({ active: 'settings' })}
                     />
                 </BottomNavigation>
             </Container>

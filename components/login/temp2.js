@@ -49,8 +49,8 @@ export default class Temp extends Component {
   }
 
   componentDidMount() {
-    if(localStorage.getItem("key")){
-      Actions.HomeScreen();
+    if(localStorage.getItem("key2")){
+      Actions.Location2();
     }
   }
 
@@ -148,8 +148,8 @@ export default class Temp extends Component {
       console.log('Request succeeded with JSON response:', json.token);
         
         // localStorage.setItem("key", JSON.stringify(json.token))
-        localStorage.setItem("key",(json.token))
-        let value = localStorage.getItem("key");
+        localStorage.setItem("key2",(json.token))
+        let value = localStorage.getItem("key2");
         console.log(value);
         try {
           value = JSON.parse(value);
@@ -167,7 +167,7 @@ export default class Temp extends Component {
           "Login Successful",
           "",
           [
-            { text: "OK", onPress: ()=> {Actions.HomeScreen();}  }
+            { text: "OK", onPress: ()=> {Actions.Location2();}  }
           ]
         )
 
@@ -193,7 +193,7 @@ export default class Temp extends Component {
       <View style={styles.container}>
         <KeyboardAvoidingView behavior="padding" >
         <UserInput
-        style={{padding: 100, margin: 10}}
+        style={{paddingTop: 1, margin: 1}}
           source={usernameImg}
           placeholder="Username"
           autoCapitalize={'none'}
@@ -256,7 +256,7 @@ const theme = {
 
 const styles = StyleSheet.create({
   container1: {
-    flex: 2,
+    flex: 1,
     top: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -289,9 +289,11 @@ const styles = StyleSheet.create({
     height: 24,
   },
   container: {
-    flex: 0.5,
+    flex: 1,
     alignItems: 'center',
     margin: 0,
+    paddingBottom:180,
+    paddingTop:50,
   },
   btnEye: {
     position: 'absolute',
@@ -304,6 +306,6 @@ const styles = StyleSheet.create({
     tintColor: 'rgba(0,0,0,0.2)',
   },
   forgot: {
-    paddingTop: 80,
+    paddingTop: 40,
   }
 });

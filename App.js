@@ -12,9 +12,13 @@ import LoginScreen from './screens/loginScreen';
 import SecondScreen from './screens/secondScreen';
 import FrontScreen from './screens/frontScreen';
 import RegistrationScreen from './screens/registrationScreen';
+import ChildRegScreen from './screens/childRegisterScreen';
+import ChildLogScreen from './screens/ChildLogScreen';
+
 
 import Location1 from './screens/location1';
-//import Location1 from './screens/location2';
+import Location2 from './screens/location2';
+import All from './screens/all';
 
 const Stack = createStackNavigator();
 
@@ -95,6 +99,32 @@ export default function App() {
 	          animation='fade'
 	          hideNavBar={true}
 	        />
+          
+          <Scene key="Location2"
+	          component={Location2}
+	          animation='fade'
+	          hideNavBar={true}
+	        />
+
+          <Scene key="All"
+	          component={All}
+	          animation='fade'
+	          hideNavBar={true}
+	        />
+
+          <Scene key="ChildRegScreen"
+	          component={ChildRegScreen}
+	        	animation='fade'
+	          hideNavBar={true}
+	          
+	        />
+
+          <Scene key="ChildLogScreen"
+	          component={ChildLogScreen}
+	        	animation='fade'
+	          hideNavBar={true}
+	        />
+
 	      </Scene>
 	    </Router>
     

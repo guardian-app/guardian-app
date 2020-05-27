@@ -42,6 +42,10 @@ export default class ButtonSubmit extends Component {
 
   child() {
 
+    if(localStorage.getItem("key2")){
+      Actions.Location2();
+    }
+
     console.log('fuck');
     if (this.state.isLoading) return;
 
@@ -61,7 +65,7 @@ export default class ButtonSubmit extends Component {
 
     setTimeout(() => {
         console.log(this.buttonAnimated.setValue(0))
-      Actions.Location1();
+      Actions.ChildLogScreen();
       this.setState({isLoading: false});
       this.buttonAnimated.setValue(0);
       this.growAnimated.setValue(0);
