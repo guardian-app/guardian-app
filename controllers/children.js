@@ -1,8 +1,18 @@
 const { selectChildren, selectChildById, selectChildParentById, insertChild } = require('../services/children');
+const { selectParentChildrenById } = require('../services/parents');
 const bcrypt = require('bcrypt');
 
 const getChildren = (req, res) => {
     selectChildren((err, results, fields) => {
+        if (err) throw err;
+        res.json(results);
+    });
+};
+
+const getMyChildren = (req, res) => {
+    const parent_id = req.user.user_id;
+
+    selectParentChildrenById(parent_id, (err, results, fields) => {
         if (err) throw err;
         res.json(results);
     });
@@ -51,4 +61,4 @@ const createChild = async (req, res) => {
     });
 };
 
-module.exports = { getChildren, getChildById, getChildParentById, createChild };
+module.exports = { getChildren, getChildById, getChildParentById, createChild, getMyChildren };

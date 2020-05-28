@@ -44,8 +44,10 @@ const authenticateUser = async (req, res) => {
 
         if (!user.active) return res.status(401).send('E-mail address is not verified!');
 
-        const token = jwt.sign({ user_id: user.user_id }, jwtSecret, { expiresIn: 86400 /* 24 hours */ });
-        res.json({ token });
+        const { user_id, email_address, role, first_name, last_name, address, phone_number } = user;
+
+        const token = jwt.sign({ user_id: user.user_id }, jwtSecret, { expiresIn: 259200 /* 72 hours */ });
+        res.json({ token, user: { user_id, email_address, role, first_name, last_name, address, phone_number } });
     });
 };
 
