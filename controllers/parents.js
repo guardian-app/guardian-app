@@ -1,7 +1,7 @@
 const { selectParents, selectParentById, selectParentChildrenById } = require('../services/parents');
 
 const getParents = (req, res) => {
-    selectParents((err, results, fields) => {
+    selectParents((err, results) => {
         if (err) throw err;
         res.json(results);
     });
@@ -10,7 +10,7 @@ const getParents = (req, res) => {
 const getParent = (req, res) => {
     const { parent_id } = req.params;
 
-    selectParentById(parent_id, (err, results, fields) => {
+    selectParentById(parent_id, (err, results) => {
         if (err) throw err;
         if (!results.length) return res.status(404).send('Parent Not Found');
 
@@ -21,11 +21,11 @@ const getParent = (req, res) => {
 const getParentChildren = (req, res) => {
     const { parent_id } = req.params;
 
-    selectParentChildrenById(parent_id, (err, results, fields) => {
+    selectParentChildrenById(parent_id, (err, results) => {
         if (err) throw err;
         if (results.length) return res.json(results);
 
-        selectParentById(parent_id, (err, results, fields) => {
+        selectParentById(parent_id, (err, results) => {
             if (err) throw err;
             if (!results.length) return res.status(404).send('Parent Not Found');
             res.json({});

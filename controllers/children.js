@@ -3,7 +3,7 @@ const { selectParentChildrenById } = require('../services/parents');
 const bcrypt = require('bcrypt');
 
 const getChildren = (req, res) => {
-    selectChildren((err, results, fields) => {
+    selectChildren((err, results) => {
         if (err) throw err;
         res.json(results);
     });
@@ -12,7 +12,7 @@ const getChildren = (req, res) => {
 const getMyChildren = (req, res) => {
     const parent_id = req.user.user_id;
 
-    selectParentChildrenById(parent_id, (err, results, fields) => {
+    selectParentChildrenById(parent_id, (err, results) => {
         if (err) throw err;
         res.json(results);
     });
@@ -21,7 +21,7 @@ const getMyChildren = (req, res) => {
 const getChildById = (req, res) => {
     const { child_id } = req.params;
 
-    selectChildById(child_id, (err, results, fields) => {
+    selectChildById(child_id, (err, results) => {
         if (err) throw err;
         if (!results.length) return res.status(404).send('Child Not Found');
 
@@ -32,7 +32,7 @@ const getChildById = (req, res) => {
 const getChildParentById = (req, res) => {
     const { child_id } = req.params;
 
-    selectChildParentById(child_id, (err, results, fields) => {
+    selectChildParentById(child_id, (err, results) => {
         if (err) throw err;
         if (!results.length) return res.status(404).send('Parent Not Found');
 
@@ -55,7 +55,7 @@ const createChild = async (req, res) => {
         parent_id
     };
 
-    insertChild(child, (err, results, fields) => {
+    insertChild(child, (err) => {
         if (err) throw err;
         res.status(201).send('Success');
     });

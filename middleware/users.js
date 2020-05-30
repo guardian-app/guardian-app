@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
-const { selectUserByEmailAddress, selectUserById, selectUserRoleById } = require('../services/users');
+const { selectUserByEmailAddress, selectUserById } = require('../services/users');
 const { jwtSecret } = require('../config/jwt');
 
 const checkDuplicateEmailAddress = (req, res, next) => {
     const { email_address } = req.body;
 
-    selectUserByEmailAddress(email_address, (err, results, fields) => {
+    selectUserByEmailAddress(email_address, (err, results) => {
         if (err) throw err;
         if (results.length) return res.status(409).send('E-mail address is already registered!');
         next();
@@ -19,7 +19,7 @@ const validateToken = (req, res, next) => {
     jwt.verify(token, jwtSecret, (err, dec) => {
         if (err) return res.status(401).send('Unauthorized');
 
-        selectUserById(dec.user_id, (err, results, fields) => {
+        selectUserById(dec.user_id, (err, results) => {
             if (err) throw err;
             if (!results.length) return res.status(401).send('Unauthorized');
 
@@ -33,7 +33,7 @@ const validateToken = (req, res, next) => {
 const isAdmin = (req, res, next) => {
     const { user_id } = req.user;
 
-    selectUserById(user_id, (err, results, fields) => {
+    selectUserById(user_id, (err, results) => {
         if (err) throw err;
         if (!results.length) return res.status(500).send();
 

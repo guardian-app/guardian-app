@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 26, 2020 at 08:04 PM
+-- Generation Time: May 30, 2020 at 12:33 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -54,9 +54,9 @@ DELIMITER ;
 
 CREATE TABLE `location_record` (
   `location_record_id` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `longitude` double NOT NULL,
-  `latitude` double NOT NULL,
+  `timestamp` datetime NOT NULL DEFAULT current_timestamp(),
+  `longitude` decimal(10,6) NOT NULL,
+  `latitude` decimal(10,6) NOT NULL,
   `child_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -166,13 +166,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `email_verification`
 --
 ALTER TABLE `email_verification`
-  MODIFY `email_verification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `email_verification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `location_record`
 --
 ALTER TABLE `location_record`
-  MODIFY `location_record_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `location_record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `password_reset`
@@ -190,7 +190,7 @@ ALTER TABLE `trusted_contact`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Constraints for dumped tables

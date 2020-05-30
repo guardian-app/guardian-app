@@ -19,9 +19,9 @@ const createUser = async (req, res) => {
         password
     };
 
-    insertUser(user, async (err, results, fields) => {
+    insertUser(user, async (err) => {
         if (err) throw err;
-        insertVerificationKey(email_address, key, (err, results, fields) => {
+        insertVerificationKey(email_address, key, (err) => {
             if (err) throw err;
             res.status(201).send('Success');
 
@@ -33,7 +33,7 @@ const createUser = async (req, res) => {
 const authenticateUser = async (req, res) => {
     const { email_address, password } = req.body;
 
-    selectUserByEmailAddress(email_address, async (err, results, fields) => {
+    selectUserByEmailAddress(email_address, async (err, results) => {
         if (err) throw err;
         if (!results.length) return res.status(404).send('E-mail address is not registered!');
 
@@ -69,7 +69,7 @@ const updateProfile = async (req, res) => {
         password: newUser.password != null ? await bcrypt.hash(newUser.password, await bcrypt.genSalt(10)) : undefined
     };
 
-    updateUser(user, (err, results, fields) => {
+    updateUser(user, (err) => {
         if (err) throw err;
 
         const { email_address, first_name, last_name, address, phone_number } = user;
@@ -81,13 +81,13 @@ const resendVerificationKey = async (req, res) => {
     const { email_address } = req.body;
     const key = nanoid();
 
-    selectVerificationKeyByEmailAddress(email_address, (err, results, fields) => {
+    selectVerificationKeyByEmailAddress(email_address, (err, results) => {
         if (err) throw err;
         if (!results.length) return res.status(404).send('Not Found');
 
-        deleteVerificationKey(email_address, async (err, results, fields) => {
+        deleteVerificationKey(email_address, async (err) => {
             if (err) throw err;
-            insertVerificationKey(email_address, key, (err, results, fields) => {
+            insertVerificationKey(email_address, key, (err) => {
                 if (err) throw err;
                 res.status(201).send('Success');
 
@@ -100,7 +100,7 @@ const resendVerificationKey = async (req, res) => {
 const verifyUser = async (req, res) => {
     const { key } = req.params;
 
-    selectUserByVerificationKey(key, (err, results, fields) => {
+    selectUserByVerificationKey(key, (err, results) => {
         if (err) throw err;
         if (!results.length) return res.status(404).send('Verification key is invalid!');
 
@@ -108,9 +108,9 @@ const verifyUser = async (req, res) => {
 
         if (expires_on <= new Date()) return res.status(404).send('Verification key is expired!');
 
-        activateUser(user_id, (err, results, fields) => {
+        activateUser(user_id, (err) => {
             if (err) throw err;
-            deleteVerificationKey(email_address, (err, results, fields) => {
+            deleteVerificationKey(email_address, (err) => {
                 if (err) throw err;
                 res.status(200).send('Success');
             });
@@ -122,7 +122,7 @@ const sendPasswordResetKey = (req, res) => {
     const { email_address } = req.body;
     const key = nanoid();
 
-    selectUserByEmailAddress(email_address, (err, results, fields) => {
+    selectUserByEmailAddress(email_address, (err, results) => {
         if (err) throw err;
 
         // We shouldn't show an error if the e-mail address is non-existent
@@ -131,9 +131,9 @@ const sendPasswordResetKey = (req, res) => {
 
         const { user_id } = results[0];
 
-        deletePasswordResetKey(email_address, (err, results, fields) => {
+        deletePasswordResetKey(email_address, (err) => {
             if (err) throw err;
-            insertPasswordResetKey(user_id, email_address, key, (err, results, fields) => {
+            insertPasswordResetKey(user_id, email_address, key, (err) => {
                 if (err) throw err;
                 res.status(200).send('Success');
 
@@ -147,7 +147,7 @@ const updatePassword = async (req, res) => {
     const { email_address, reset_key } = req.body;
     const password = await bcrypt.hash(req.body.password, await bcrypt.genSalt(10));
 
-    selectUserByPasswordResetKey(reset_key, (err, results, fields) => {
+    selectUserByPasswordResetKey(reset_key, (err, results) => {
         if (err) throw err;
 
         // We shouldn't show an error if the key is non-existent
@@ -161,9 +161,9 @@ const updatePassword = async (req, res) => {
         if (user.email_address !== email_address) return res.status(200).send('Success'); // Same security risk here
         if (expires_on <= new Date()) return res.status(404).send('Verification key is expired!');
 
-        updateUserPassword(user_id, password, (err, results, fields) => {
+        updateUserPassword(user_id, password, (err) => {
             if (err) throw err;
-            deletePasswordResetKey(email_address, (err, results, fields) => {
+            deletePasswordResetKey(email_address, (err) => {
                 if (err) throw err;
                 res.status(200).send('Success');
             });

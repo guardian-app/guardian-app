@@ -11,6 +11,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const parentsRouter = require('./routes/parents');
 const childrenRouter = require('./routes/children');
+const locationRouter = require('./routes/location');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/parents', parentsRouter);
 app.use('/children', childrenRouter);
+app.use('/location', locationRouter);
 
 app.listen(port, () => console.log(`Server listening: http://localhost:${port}`));
 module.exports = app;
