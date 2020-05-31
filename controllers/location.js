@@ -1,4 +1,4 @@
-const { insertLocationRecord, insertLocationRecordBatch } = require('../services/location');
+const { insertLocationRecord, insertLocationRecordBatch, selectLatestLocation } = require('../services/location');
 
 const createLocationRecord = (req, res) => {
     const { child_id } = req.params;
@@ -33,7 +33,7 @@ const getLocation = (req, res) => {
 
         const data = results[0];
         res.json(data);
-    })
+    });
 };
 
 const getLocationHistory = (req, res) => {

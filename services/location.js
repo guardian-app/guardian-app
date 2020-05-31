@@ -14,4 +14,11 @@ const insertLocationRecordBatch = (records_array, done) => {
     );
 };
 
-module.exports = { insertLocationRecord, insertLocationRecordBatch }
+const selectLatestLocation = (child_id, done) => {
+    database.execute(
+        "SELECT `longitude`, `latitude`, `timestamp` FROM `location_record` WHERE `timestamp`=(SELECT MAX(`timestamp`) FROM `location_record` WHERE `child_id`=?) LIMIT 1",
+        [child_id], done
+    );
+};
+
+module.exports = { insertLocationRecord, insertLocationRecordBatch, selectLatestLocation }
