@@ -25,8 +25,8 @@ const selectChildParentById = (child_id, done) => {
 
 const insertChild = (child, done) => {
     database.execute(
-        'INSERT INTO `user` (`email_address`, `password`, `first_name`, `last_name`, `address`, `phone_number`, `parent_id`, `role`)  VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [child.email_address, child.password, child.first_name, child.last_name, child.address, child.phone_number, child.parent_id, `child`],
+        'INSERT INTO `user` (`email_address`, `password`, `first_name`, `last_name`, `address`, `phone_number`, `parent_id`, `role`, `active`)  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [child.email_address, child.password, child.first_name, child.last_name, child.address, child.phone_number, child.parent_id, `child`, 1],
         done
     );
 };

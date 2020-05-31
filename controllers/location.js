@@ -16,10 +16,7 @@ const createLocationRecordBatch = (req, res) => {
 
     // We should convert the JSON array to regular array
     // Because mysql2 Prepared Statements doesn't support JSON arrays 
-    const data_array = [];
-    data.forEach(({ longitude, latitude, timestamp }) => {
-        data_array.push([longitude, latitude, timestamp, child_id]);
-    });
+    const data_array = data.map(({ longitude, latitude, timestamp }) => [longitude, latitude, timestamp, child_id]);
 
     insertLocationRecordBatch(data_array, (err) => {
         if (err) throw err;
@@ -30,6 +27,13 @@ const createLocationRecordBatch = (req, res) => {
 const getLocation = (req, res) => {
     const { child_id } = req.params;
 
+    selectLatestLocation(child_id, (err, results) => {
+        if (err) throw err;
+        if (!results.length) res.status(404).send('Data Not Found');
+
+        const data = results[0];
+        res.json(data);
+    })
 };
 
 const getLocationHistory = (req, res) => {
