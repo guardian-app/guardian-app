@@ -37,44 +37,43 @@ export default class ButtonSubmit extends Component {
     this.buttonAnimated = new Animated.Value(0);
     this.growAnimated = new Animated.Value(0);
     this._onPress = this._onPress.bind(this);
-    this.child = this.child.bind(this);
+    //this.child = this.child.bind(this);
   }
 
-  child() {
+  // child() {
 
-    if(localStorage.getItem("key2")){
-      Actions.Location2();
-    }
+  //   if(localStorage.getItem("key2")){
+  //     Actions.Location2();
+  //   }
 
-    console.log('fuck');
-    if (this.state.isLoading) return;
+  //   console.log('fuck');
+  //   if (this.state.isLoading) return;
 
 
-    console.log(this.state);
-    console.log(this.growAnimated);
-    this.setState({isLoading: true});
-    Animated.timing(this.buttonAnimated, {
-      toValue: 1,
-      duration: 200,
-      easing: Easing.linear,
-    }).start();
+  //   console.log(this.state);
+  //   console.log(this.growAnimated);
+  //   this.setState({isLoading: true});
+  //   Animated.timing(this.buttonAnimated, {
+  //     toValue: 1,
+  //     duration: 200,
+  //     easing: Easing.linear,
+  //   }).start();
 
-    setTimeout(() => {
-      this._onGrow();
-    }, 2000);
+  //   setTimeout(() => {
+  //     this._onGrow();
+  //   }, 2000);
 
-    setTimeout(() => {
-        console.log(this.buttonAnimated.setValue(0))
-      Actions.ChildLogScreen();
-      this.setState({isLoading: false});
-      this.buttonAnimated.setValue(0);
-      this.growAnimated.setValue(0);
-    }, 2300);
-  }
+  //   setTimeout(() => {
+  //       console.log(this.buttonAnimated.setValue(0))
+  //     Actions.ChildLogScreen();
+  //     this.setState({isLoading: false});
+  //     this.buttonAnimated.setValue(0);
+  //     this.growAnimated.setValue(0);
+  //   }, 2300);
+  // }
 
   _onPress() {
     if (this.state.isLoading) return;
-
 
     console.log(this.state);
     console.log(this.growAnimated);
@@ -97,6 +96,15 @@ export default class ButtonSubmit extends Component {
         this.buttonAnimated.setValue(0);
         this.growAnimated.setValue(0);
       }, 2300);
+    }
+    else if(localStorage.getItem("key2")){
+      setTimeout(() => {
+        console.log(this.buttonAnimated.setValue(0))
+      Actions.Location2();
+      this.setState({isLoading: false});
+      this.buttonAnimated.setValue(0);
+      this.growAnimated.setValue(0);
+    }, 2300);
     }
     else{
       setTimeout(() => {
@@ -156,14 +164,14 @@ export default class ButtonSubmit extends Component {
             {this.state.isLoading ? (
               <Image source={spinner} style={styles.image} />
             ) : (
-              <Text style={styles.text}>PARENT</Text>
+              <Text style={styles.text}>ENTER</Text>
             )}
           </TouchableOpacity>
           <Animated.View
             style={[styles.circle, {transform: [{scale: changeScale}]}]}
           />
         </Animated.View>
-        <Animated.View style={{width: changeWidth}}>
+        {/* <Animated.View style={{width: changeWidth}}>
           <TouchableOpacity
             style={styles.button}
             //onPress={this._onPress}
@@ -178,7 +186,7 @@ export default class ButtonSubmit extends Component {
           <Animated.View
             style={[styles.circle, {transform: [{scale: changeScale}]}]}
           />
-        </Animated.View>
+        </Animated.View> */}
       </View>
     );
   }

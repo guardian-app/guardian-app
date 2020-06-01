@@ -23,6 +23,7 @@ import passwordImg from '../../image/password.png';
 import eyeImg from '../../image/eye_black.png';
 
 import spinner from '../../image/loading.gif';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 
 // const DEVICE_WIDTH = Dimensions.get('window').width;
 // const DEVICE_HEIGHT = Dimensions.get('window').height;
@@ -50,7 +51,22 @@ export default class Temp extends Component {
 
   componentDidMount() {
     if(localStorage.getItem("key")){
-      Actions.HomeScreen();
+      setTimeout(() => {
+          console.log(this.buttonAnimated.setValue(0))
+        Actions.HomeScreen();
+        this.setState({isLoading: false});
+        this.buttonAnimated.setValue(0);
+        this.growAnimated.setValue(0);
+      }, 2300);
+    }
+    else if(localStorage.getItem("key2")){
+      setTimeout(() => {
+        console.log(this.buttonAnimated.setValue(0))
+      Actions.Location2();
+      this.setState({isLoading: false});
+      this.buttonAnimated.setValue(0);
+      this.growAnimated.setValue(0);
+    }, 2300);
     }
   }
 
@@ -146,9 +162,31 @@ export default class Temp extends Component {
       return response.json();
     }).then(function(json) {
       console.log('Request succeeded with JSON response:', json.token);
-        
+      console.log('Request succeeded with JSON response:', json.user);
+
+      if(json.user.role == "parent"){
+        console.log('pppppppppppppppppppppppppppp')
+        localStorage.setItem("key", json.token);
+        localStorage.setItem("user_id", json.user.user_id);
+        localStorage.setItem("role", json.user.role);
+        localStorage.setItem("first_name", json.user.first_name);
+        localStorage.setItem("last_name", json.user.last_name);
+        localStorage.setItem("username", json.user.email_address);
+        localStorage.setItem("address", json.user.address);
+        localStorage.setItem("phone_number", json.user.phone_number);
+      }
+      else{
+        localStorage.setItem("key2", json.token);
+        localStorage.setItem("user_id", json.user.user_id);
+        localStorage.setItem("role", json.user.role);
+        localStorage.setItem("first_name", json.user.first_name);
+        localStorage.setItem("last_name", json.user.last_name);
+        localStorage.setItem("username", json.user.email_address);
+        localStorage.setItem("address", json.user.address);
+        localStorage.setItem("phone_number", json.user.phone_number);
+      }
+        //console.log(localStorage.getItem("user"));
         // localStorage.setItem("key", JSON.stringify(json.token))
-        localStorage.setItem("key",(json.token))
         let value = localStorage.getItem("key");
         console.log(value);
         try {
@@ -167,7 +205,11 @@ export default class Temp extends Component {
           "Login Successful",
           "",
           [
-            { text: "OK", onPress: ()=> {Actions.HomeScreen();}  }
+            { text: "OK", onPress: ()=> {if(localStorage.getItem("key")){
+              Actions.HomeScreen();
+            }else{
+              Actions.Location2();
+            }}  }
           ]
         )
 

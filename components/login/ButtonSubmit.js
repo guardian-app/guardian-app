@@ -32,6 +32,27 @@ export default class ButtonSubmit extends Component {
     this._onPress = this._onPress.bind(this);
   }
 
+  componentDidMount(){
+    if(localStorage.getItem("key")){
+      setTimeout(() => {
+          console.log(this.buttonAnimated.setValue(0))
+        Actions.HomeScreen();
+        this.setState({isLoading: false});
+        this.buttonAnimated.setValue(0);
+        this.growAnimated.setValue(0);
+      }, 2300);
+    }
+    else if(localStorage.getItem("key2")){
+      setTimeout(() => {
+        console.log(this.buttonAnimated.setValue(0))
+      Actions.Location2();
+      this.setState({isLoading: false});
+      this.buttonAnimated.setValue(0);
+      this.growAnimated.setValue(0);
+    }, 2300);
+    }
+  }
+
   _onPress() {
     if (this.state.isLoading) return;
 

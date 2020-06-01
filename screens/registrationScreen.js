@@ -1,18 +1,3 @@
-// import React, {Component} from 'react';
-// import PropTypes from 'prop-types';
-// import Back from '../components/registration/regback';
-// import Form from '../components/registration/parentreg';
-
-
-// export default class RegistrationScreen extends Component {
-//   render() {
-//     return (
-//       <Back>
-//       </Back>
-//     );
-//   }
-// }
-
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { ToastAndroid, ScrollView, Platform, Animated, Easing } from 'react-native';
@@ -171,7 +156,7 @@ class RegBack extends Component {
                     //keyboardDismissMode="interactive"
                     //onScroll={this.onScroll}
                 >
-                    <ParentReg/>
+                    {/* <ParentReg/> */}
                 </ScrollView>
                 
             </Container>

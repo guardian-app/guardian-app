@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { ToastAndroid, ScrollView, Platform, Animated, Easing } from 'react-native';
-import { connect } from 'react-redux';
+import { ToastAndroid, StyleSheet, ScrollView, Platform, Animated, Easing, Text, View, TouchableOpacity, Button } from 'react-native';
 import 'localstorage-polyfill';
-
+import Axios from 'axios';
 
 import routes from '../routes';
 
@@ -24,7 +23,8 @@ import {
     Toolbar,
     BottomNavigation,
     Icon,
-    Subheader, 
+    Subheader,
+    // Button, 
 } from 'react-native-material-ui/src';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
 import {Actions, ActionConst} from 'react-native-router-flux';
@@ -48,22 +48,47 @@ class Home extends Component {
 
         this.state = {
             selected: [],
+            children: [],
             searchText: '',
             active: 'people',
             moveAnimated: new Animated.Value(0),
+            loading: false,
+            
         };
     }
+    
+    async componentDidMount(){
 
-    componentDidMount(){
-        console.log('eeeeeeeeeeeeeeeeee');
-        console.log(localStorage.getItem("key"));
-
+        let token = localStorage.getItem("key");
+        
         if(!localStorage.getItem("key")){
             Actions.LoginScreen();
         }
-    }
 
-    
+       let parent_id = localStorage.getItem("user_id");
+
+        console.log('mount');
+        Axios.get('http://192.168.43.133:3000/parents/'+parent_id+'/children',{
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+token,
+            },
+        })
+        .then(res => {
+            this.setState({loading: true});
+            const data = res.data;
+
+            setTimeout(()=> this.setState({
+                loading: false,
+                children: data
+            }), 10000)
+
+            console.log(this.state.children);
+        }).catch = (e) => {
+            console.error('error ',e)
+        }
+    }
 
     onAvatarPressed = (value) => {
         console.log('Avatar');
@@ -164,13 +189,12 @@ class Home extends Component {
 
         return (
             <ListItem
-                divider
-                leftElement={<Avatar text={title[0]} />}
-                onLeftElementPress={() => this.onAvatarPressed(title)}
-                centerElement={title}
-                onPress={() => this.props.navigation.navigate(route)}
+                // divider
+                // leftElement={<Avatar text={title[0]} />}
+                // onLeftElementPress={() => this.onAvatarPressed(title)}
+                // centerElement={title}
+                // onPress={() => this.props.navigation.navigate(route)}
             />
-
         );
     }
     render() {
@@ -190,6 +214,8 @@ class Home extends Component {
         const onPressLogout =() => {
             this.setState({ active: 'Logout' })
             localStorage.setItem("key", "");
+            localStorage.setItem("role","")
+            localStorage.setItem("id","");
             console.log(localStorage.getItem("key"));
             Actions.LoginScreen();
         } 
@@ -205,14 +231,12 @@ class Home extends Component {
 
         const childAdd =(action) => {
             console.log('fuck');
-            if (Platform.OS === 'android') {
-                    ToastAndroid.show(action, ToastAndroid.SHORT);
-                }
             Actions.ChildRegScreen();
         }
 
         return (
             <Container >
+                
                 {this.renderToolbar()}
                 <ScrollView
                     keyboardShouldPersistTaps="always"
@@ -220,28 +244,29 @@ class Home extends Component {
                     onScroll={this.onScroll}
                     //onPress={run()}
                 >
-                    {/* <Tool/>
-                    <Draw/>
-                    <Dial/> */}
-                    {/* <Radio/> */}
                     <Dialog/>
-                    <ButtonPress/>
-
+                    <Text style={styles.titleText}>YOUR CHILDREN</Text>
+                    {this.state.children.map((appoints) => (
+                        <View  onLongPress = {()  => {}}  >
+                            <Text></Text> 
+                            <Text></Text>
+                            <Button style={{marginHorizontal: 100, paddingBottom: 10,}} title={appoints.first_name+" "+appoints.last_name}/>
+                                                    
+                        </View>
+                    ))}
+                    
+                    {/* <ButtonPress/> */}
+                    
                 </ScrollView>
                 <ActionButton
                     actions={[
                         //{ icon: 'email', label: 'Email' },
+                        {label: "back to home"}
                     ]}
-                    //hidden={this.state.bottomHidden}
+                    hidden={this.state.bottomHidden}
                     icon="add"
                     transition="speedDial"
                     onPress={childAdd}
-                    // onPress={() => {
-                    //     // if (Platform.OS === 'android') {
-                    //     //     ToastAndroid.show(action, ToastAndroid.SHORT);
-                    //     // }
-                    //     //Actions.ChildRegScreen();
-                    // }}
                     style={{
                         positionContainer: { bottom: 76 },
                     }}
@@ -279,12 +304,30 @@ class Home extends Component {
                     />
                 </BottomNavigation>
             </Container>
-
+            
 
         );
     }
 }
 
 Home.propTypes = propTypes;
+
+const styles = StyleSheet.create({
+    baseText: {
+        fontFamily: "Cochin",
+        backgroundColor: "red",
+        width: 250,
+        marginLeft: 55,
+        marginHorizontal: 100,
+      },
+      titleText: {
+        paddingLeft: 50,
+        fontSize: 20,
+        fontWeight: "bold",
+        paddingBottom: 10,
+        marginHorizontal: 10,
+        paddingTop: 50,
+      }
+})
 
 export default Home;
