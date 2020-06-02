@@ -117,7 +117,7 @@ class RegBack extends Component {
         return (
             <Toolbar
                 key="toolbar"
-                leftElement="menu"
+                leftElement="arrow-back"
                 onLeftElementPress={() => this.props.navigation.goBack()}
                 centerElement="Parent Registration"
                 // searchable={{

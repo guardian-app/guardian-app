@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { ToastAndroid, StyleSheet, ScrollView, Platform, Animated, Easing, Text, View, TouchableOpacity, Button } from 'react-native';
+import { ToastAndroid, StyleSheet, ScrollView, Platform, Animated, Easing, Text, View, Alert, TouchableOpacity, Button } from 'react-native';
 import 'localstorage-polyfill';
 import Axios from 'axios';
 
@@ -88,6 +88,30 @@ class Home extends Component {
         }).catch = (e) => {
             console.error('error ',e)
         }
+    }
+
+    // onLongChild = (data) => {
+    //     console.log("aaaaaaaaaaaaa");
+    //     console.log(data);
+    //     console.log("bbbbbbbbbb");
+    // }
+
+    onChild = (data) => {
+        console.log('pppp');
+        console.log(data);
+
+        Alert.alert(
+            'Menu',
+            'Make your choice',
+            [
+              
+              {text: 'Cancel', onPress: () => {},  style: 'cancel'},
+              {text: 'Child location', onPress: () => {Actions.ChildLocation()}},
+              {text: 'Today report', onPress: () => {}}
+            
+            ]
+        )      
+
     }
 
     onAvatarPressed = (value) => {
@@ -225,7 +249,7 @@ class Home extends Component {
         }
 
         const  onPressLocation = () => {
-            this.setState({ active: 'location' })
+            //this.setState({ active: 'location' })
             Actions.Location1();
         }
 
@@ -247,10 +271,14 @@ class Home extends Component {
                     <Dialog/>
                     <Text style={styles.titleText}>YOUR CHILDREN</Text>
                     {this.state.children.map((appoints) => (
-                        <View  onLongPress = {()  => {}}  >
+                        <View    >
                             <Text></Text> 
                             <Text></Text>
-                            <Button style={{marginHorizontal: 100, paddingBottom: 10,}} title={appoints.first_name+" "+appoints.last_name}/>
+                            <Button 
+                                style={{marginHorizontal: 100, paddingBottom: 10,}} 
+                                title={appoints.first_name+" "+appoints.last_name}
+                                onPress = {()  => this.onChild(appoints.user_id)}
+                                />
                                                     
                         </View>
                     ))}

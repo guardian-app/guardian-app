@@ -92,6 +92,81 @@ export default class Temp extends Component {
     //var email_address = this.state.Username;
     console.log(Username)
       console.log('pppppppp');
+
+      if(!Username){
+        Alert.alert(
+          'Alert',
+            'Required Username',
+            [
+              {text: 'OK', onPress: () => {},  style: 'cancel'},            
+
+            ]
+        )
+      }
+      else{
+        console.log("come user");
+
+        fetch("http://192.168.43.133:3000/users/reset",{
+          method: "POST",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email_address: Username,
+          })
+    
+        })
+    
+        .then(function(response) {
+          
+          console.log("ttttttttttttttttttt")
+          console.log(response.status);
+          
+           if(response.status == 404){
+            console.log('comeeeeeee')
+            Alert.alert(
+              "Identify Failed",
+              "E-mail address is not registered!",
+              [
+                { text: "OK", onPress: ()=> {Actions.LoginScreen();}  }
+              ]
+            )
+          }
+          else if(response.status == 200){
+            console.log('20000000');
+            Actions.ResetScreen();
+          }
+          else{
+            return response;
+          }
+        }).then(function(response) {
+          return response.json();
+        }).then(function(json) {
+          console.log('Request succeeded with JSON response:', json);
+          console.log('Request succeeded with JSON response:', json)
+            //console.log(localStorage.getItem("user"));
+            // localStorage.setItem("key", JSON.stringify(json.token))
+            let value = localStorage.getItem("key");
+            console.log(value);
+            try {
+              value = JSON.parse(value);
+              //this.setState({ [key]: value });
+              console.log(value);
+            } catch (e) {
+              // handle empty string
+              //this.setState({ [key]: value });
+              console.log(value);
+            }
+            console.log('key');
+            console.log(value);
+        }).catch(function(error) {
+          console.log('Request failed:', error);
+        });
+
+      }
+
+      //console.log("lalal")
       // sendEmail(
       //     'pramithvidusara@gmail.com',
       //     'Greeting!',

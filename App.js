@@ -15,10 +15,12 @@ import RegistrationScreen from './screens/registrationScreen';
 import ChildRegScreen from './screens/childRegisterScreen';
 import ChildLogScreen from './screens/ChildLogScreen';
 import ProfileScreen from './screens/profileScreen';
+import RestScreen from './screens/resetScreen';
 
 
 import Location1 from './screens/location1';
 import Location2 from './screens/location2';
+import ChildLocation from './screens/childLocation';
 import All from './screens/all';
 
 const Stack = createStackNavigator();
@@ -128,6 +130,20 @@ export default function App() {
 
           <Scene key="ProfileScreen"
 	          component={ProfileScreen}
+	        	animation='fade'
+	          hideNavBar={true}
+	          
+	        />
+
+          <Scene key="ChildLocation"
+	          component={ChildLocation}
+	        	animation='fade'
+	          hideNavBar={true}
+	          
+	        />
+
+          <Scene key="ResetScreen"
+	          component={RestScreen}
 	        	animation='fade'
 	          hideNavBar={true}
 	          
