@@ -36,10 +36,13 @@ const User = t.struct({
   FirstName: t.String,
   LastName: t.String,
   email: Email,
-  password: Password,
   mobile: Mobile,
   address: t.String,
-  terms: t.Boolean
+  OldPassword: Password,
+  NewPassword: Password,
+  ConfirmPassword: Password,
+
+
 });
 
 const formStyles = {
@@ -65,6 +68,15 @@ const formStyles = {
     }
   }
 }
+
+var value = {
+  FirstName: localStorage.getItem("first_name"),
+  LastName: localStorage.getItem("last_name"),
+  email: localStorage.getItem("username"),
+  mobile: localStorage.getItem("phone_number"),
+  address: localStorage.getItem("address"),
+
+};
 
 const options = {
   fields: {
@@ -117,6 +129,15 @@ const _onAlert=()=> {
 
 export default class App extends Component { 
 
+  state = {
+    first_name: localStorage.getItem("first_name"),
+    last_name: localStorage.getItem("last_name"),
+    user_id: localStorage.getItem("user_id"),
+    phone_number: localStorage.getItem("phone_number"),
+    username: localStorage.getItem("username"),
+    address: localStorage.getItem("address"),
+  }
+
   handleSubmit = () => {
     const value = this._form.getValue();
     console.log('value: ', value);
@@ -139,7 +160,9 @@ export default class App extends Component {
         last_name: value.LastName,
         address: value.address,
         phone_number: value.mobile,
-        password: value.password
+        old_password: value.password,
+        new_password: value.NewPassword,
+        confirm_password: value.ConfirmPassword,
       })
 
     })
@@ -207,17 +230,32 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView  style = {{paddingTop: 20}}>
             <Form 
             ref={c => this._form = c}
             type={User} 
             options={options}
+            value ={value}
             />
-            <Button
-            color="#0020C2"
-            title="Register Child!"
-            onPress={this.handleSubmit}
-            />
+
+            <View style = {{paddingTop: 20}}>
+              <Button
+              
+              color="#0020C2"
+              title="OK"
+              onPress={()=> {}}
+              />
+            </View>
+
+            <View style = {{paddingTop: 20, paddingBottom: 40}}>
+              <Button
+              color="#800080"
+              title="UPDATE"
+              //onPress={this.handleSubmit}
+              />
+            </View>
+
+            
         </ScrollView>
         
       </View>
@@ -231,5 +269,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
     padding: 20,
     backgroundColor: '#ffffff',
+    
   },
 });

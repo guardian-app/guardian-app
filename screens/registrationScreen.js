@@ -156,7 +156,7 @@ class RegBack extends Component {
                     //keyboardDismissMode="interactive"
                     //onScroll={this.onScroll}
                 >
-                    {/* <ParentReg/> */}
+                    <ParentReg/>
                 </ScrollView>
                 
             </Container>

@@ -82,7 +82,7 @@ class Home extends Component {
             setTimeout(()=> this.setState({
                 loading: false,
                 children: data
-            }), 10000)
+            }), 100)
 
             console.log(this.state.children);
         }).catch = (e) => {
@@ -171,12 +171,12 @@ class Home extends Component {
                 onLeftElementPress={() => {Actions.FrontScreen()}}
                 //onLeftElementPress={() => {}}
                 centerElement="Parent"
-                searchable={{
-                    autoFocus: true,
-                    placeholder: 'Search',
-                    onChangeText: value => this.setState({ searchText: value }),
-                    onSearchClosed: () => this.setState({ searchText: '' }),
-                }}
+                // searchable={{
+                //     autoFocus: true,
+                //     placeholder: 'Search',
+                //     onChangeText: value => this.setState({ searchText: value }),
+                //     onSearchClosed: () => this.setState({ searchText: '' }),
+                // }}
             />
         );
     }
@@ -208,7 +208,7 @@ class Home extends Component {
             var id = localStorage.getItem("key");
             console.log("FUCK ID",id);
 
-            Actions.All();
+            Actions.ProfileScreen();
         }
 
         const onPressLogout =() => {

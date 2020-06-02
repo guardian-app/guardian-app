@@ -14,6 +14,7 @@ import FrontScreen from './screens/frontScreen';
 import RegistrationScreen from './screens/registrationScreen';
 import ChildRegScreen from './screens/childRegisterScreen';
 import ChildLogScreen from './screens/ChildLogScreen';
+import ProfileScreen from './screens/profileScreen';
 
 
 import Location1 from './screens/location1';
@@ -123,6 +124,13 @@ export default function App() {
 	          component={ChildLogScreen}
 	        	animation='fade'
 	          hideNavBar={true}
+	        />
+
+          <Scene key="ProfileScreen"
+	          component={ProfileScreen}
+	        	animation='fade'
+	          hideNavBar={true}
+	          
 	        />
 
 	      </Scene>
