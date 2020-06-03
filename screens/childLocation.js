@@ -3,6 +3,8 @@ import {Platform,Dimensions, StyleSheet, Text, View,SafeAreaView} from "react-na
 import MapView, {Marker, AnimatedRegion} from "react-native-maps";
 import PubNubReact from "pubnub-react";
 import Axios from "axios";
+import Geocoder from 'react-native-geocoding';
+import { Actions } from 'react-native-router-flux';
 
 const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
@@ -16,22 +18,32 @@ export default class Location extends Component{
       isMapReady: false,
       latitude: 0,
       longitude: 0,
+      timestamp : 0,
+      address: null,
       error: null
     };
   }
 
   componentDidMount() {
 
+    
+
     let token = localStorage.getItem("key");
+
+    if(!token){
+      Actions.LoginScreen();
+    }
+
+    Geocoder.init("AIzaSyAjoHv0BU_FcJgYz2f2dwUG0LogpVKOLuk",{language: "en"});
 
     if(!token){
         Actions.LoginScreen();
     }
 
-    let parent_id = localStorage.getItem("user_id");
+    let child_id = localStorage.getItem("child_id");
 
     console.log('mount');
-    Axios.get('http://192.168.43.133:3000/',{
+    Axios.get('http://192.168.43.133:3000/location/'+child_id,{
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -41,17 +53,39 @@ export default class Location extends Component{
     .then(res => {
         this.setState({loading: true});
         const data = res.data;
+        console.log("ppp")
+        console.log(data);
+        console.log('oo')
 
         setTimeout(()=> this.setState({
             // loading: false,
             // children: data
+            latitude: data.latitude,
+            longitude: data.longitude,
+            timestamp: data.timestamp,
         }), 100)
 
-            console.log(this.state.children);
-        }).catch = (e) => {
-            console.error('error ',e)
-    }
+        Geocoder.from(data.latitude, data.longitude)
+        .then(json => {
+          console.log("mmmm")
+          console.log(json)
+          var addressComponent = json.results[0].address_components[0];
+          console.log(addressComponent);
+          this.setState({
+            address: addressComponent
+          })
+          console.log(addressComponent);
+        })
+        .catch(error => {
+          console.log('pppppccccc')
+          console.log(error.origin.results[0])
+          console.warn(error)
+        });
 
+            console.log(this.state.children);
+    }).catch = (e) => {
+        console.error('error ',e)
+    }
 
     // navigator.geolocation.getCurrentPosition(position => {
     //   this.setState({

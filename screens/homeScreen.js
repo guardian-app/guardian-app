@@ -96,9 +96,13 @@ class Home extends Component {
     //     console.log("bbbbbbbbbb");
     // }
 
-    onChild = (data) => {
+    onChild = (child_id) => {
         console.log('pppp');
-        console.log(data);
+        console.log(child_id);
+
+        localStorage.setItem("child_id", child_id);
+        console.log(localStorage.getItem("child_id"));
+        console.log('cccccccccccccc');
 
         Alert.alert(
             'Menu',
