@@ -69,7 +69,7 @@ const formStyles = {
   }
 }
 
-var value = {
+var values = {
   FirstName: localStorage.getItem("first_name"),
   LastName: localStorage.getItem("last_name"),
   email: localStorage.getItem("username"),
@@ -235,7 +235,7 @@ export default class App extends Component {
             ref={c => this._form = c}
             type={User} 
             options={options}
-            value ={value}
+            value ={values}
             />
 
             <View style = {{paddingTop: 20}}>
@@ -243,7 +243,7 @@ export default class App extends Component {
               
               color="#0020C2"
               title="OK"
-              onPress={()=> {}}
+              onPress={()=> {Actions.HomeScreen()}}
               />
             </View>
 

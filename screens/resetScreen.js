@@ -6,23 +6,40 @@ import t from 'tcomb-form-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const Form = t.form.Form;
+ 
+global.pass = "";
 
-const Email = t.refinement(t.String, email => {
+const Email = t.refinement(t.String, (email) => {
     const reg = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/; //or any other regexp
     return reg.test(email);
 });
 
 const Password = t.refinement(t.String, (password) => {
+  console.log('aaaaaaaaaawaaaaaaawawwwwwwwwwww');
+    global.pass = password;
     const reg = /^(?=\S+$).{8,}$/;
     console.log(reg.test(password))
+    console.log('pppppp')
     return reg.test(password);
 }); 
 
+const Confirm = t.refinement(t.String, (conPassword)=>{
+  console.log('cau cha')
+  console.log(global.pass)
+  console.log(conPassword);
+  if(conPassword != global.pass){
+    return false;
+  }
+  else{
+    return true;
+  }
+})
+
 const User = t.struct({
-    username: Email,
+  username: Email,
   KeyCode: t.String,
   NewPassword: Password,
-  ConfirmPassword: Password,
+  ConfirmPassword: Confirm,
 });
 
 const formStyles = {
@@ -55,6 +72,7 @@ const options = {
         error: 'Without an key code cannot reset password'
     },  
     username: {
+      email: true,
       error: 'Without an email address cannot reset password'
     },
     NewPassword: {
@@ -63,7 +81,9 @@ const options = {
       error: 'Choose something you use on a dozen other sites or something you won\'t remember'
     },
     ConfirmPassword : {
-        error: 'Password confirmation failed'
+      password: true,
+      secureTextEntry: true,
+      error: 'Password confirmation failed'
     },
   },
   stylesheet: formStyles,
@@ -90,19 +110,16 @@ export default class App extends Component {
     
     ///fetch eka
 
-    fetch("http://192.168.43.133:3000/users/create",{
-      method: "POST",
+    fetch("http://192.168.43.133:3000/users/reset",{
+      method: "PUT",
       headers: {
         "Accept": "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email_address : value.username,
-        first_name: value.FirstName,
-        last_name: value.LastName,
-        address: value.address,
-        phone_number: value.mobile,
-        password: value.password
+        reset_key: value.KeyCode,
+        password: value.NewPassword,
       })
 
     })
@@ -110,11 +127,11 @@ export default class App extends Component {
       
       console.log("ttttttttttttttttttt")
       console.log(response.status);
-      if(response.status == 201){
+      if(response.status == 200){
         console.log('done')
         Alert.alert(
-          "Registration Success",
-          "You are now member of guardian",
+          "Password Reset Successful",
+          "Use application",
           [
             { text: "OK", onPress: _onLogin() }
           ]
@@ -125,7 +142,16 @@ export default class App extends Component {
           "Registration Failed!",
           "Email is already used",
           [
-            { text: "OK",onPress: _onAlert()  }
+            { text: "OK",onPress: {}  }
+          ]
+        )
+      } 
+      else if(response.status == 404){
+        Alert.alert(
+          "Password reset failed",
+          "Verification key is expired!",
+          [
+            { text: "OK",onPress: {}  }
           ]
         )
       } 

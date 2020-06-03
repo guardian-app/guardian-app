@@ -50,7 +50,7 @@ class Home extends Component {
             selected: [],
             children: [],
             searchText: '',
-            active: 'people',
+            active: '',
             moveAnimated: new Animated.Value(0),
             loading: false,
             
