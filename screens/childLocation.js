@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform,Dimensions, StyleSheet, Text, View,SafeAreaView} from "react-native";
+import {Platform,Dimensions, StyleSheet, Text, View,SafeAreaView, Button} from "react-native";
 import MapView, {Marker, AnimatedRegion} from "react-native-maps";
 import PubNubReact from "pubnub-react";
 import Axios from "axios";
@@ -26,21 +26,21 @@ export default class Location extends Component{
 
   componentDidMount() {
 
-    
-
     let token = localStorage.getItem("key");
-
-    if(!token){
-      Actions.LoginScreen();
-    }
-
-    Geocoder.init("AIzaSyAjoHv0BU_FcJgYz2f2dwUG0LogpVKOLuk",{language: "en"});
-
     if(!token){
         Actions.LoginScreen();
     }
+    this.interval = setInterval(() => this.onGetLocation(), 15000);
+  }
 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  onGetLocation = () => {
+    Geocoder.init("AIzaSyAjoHv0BU_FcJgYz2f2dwUG0LogpVKOLuk",{language: "en"});
     let child_id = localStorage.getItem("child_id");
+    let token = localStorage.getItem("key");
 
     console.log('mount');
     Axios.get('http://192.168.43.133:3000/location/'+child_id,{
@@ -63,7 +63,7 @@ export default class Location extends Component{
             latitude: data.latitude,
             longitude: data.longitude,
             timestamp: data.timestamp,
-        }), 100)
+        }), 5000)
 
         Geocoder.from(data.latitude, data.longitude)
         .then(json => {
@@ -86,20 +86,9 @@ export default class Location extends Component{
     }).catch = (e) => {
         console.error('error ',e)
     }
-
-    // navigator.geolocation.getCurrentPosition(position => {
-    //   this.setState({
-    //     latitude: position.coords.latitude,
-    //     longitude: position.coords.longitude,
-    //     error: null
-    //   });
-    //   console.log(position.timestamp);
-    // }, 
-    // error => this.setState({error: error.message}),
-    // {enableHighAccuracy: true, timeout: 20000, maximumAge: 2000}
-    // );
-    
   }
+
+  
 
   onMapLayout = () => {
     this.setState({ isMapReady: true });
@@ -137,8 +126,8 @@ export default class Location extends Component{
           { this.state.isMapReady && 
             <Marker coordinate={this.state}/>
           }
-        </MapView>  
 
+        </MapView>  
       </View>
     )
   }

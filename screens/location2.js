@@ -3,7 +3,7 @@ import React, { Component,useState, useEffect } from 'react';
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 ///////////////////////
 // import React, {Component} from 'react';
-import {Alert,Platform,Dimensions, StyleSheet, Text, View,SafeAreaView, AppState, Button} from "react-native";
+import {Alert,Dimensions, StyleSheet, Text, View,RefreshControl, AppState, Button} from "react-native";
 import MapView, {Marker, AnimatedRegion} from "react-native-maps";
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
@@ -16,6 +16,7 @@ const Height = Dimensions.get('window').height;
 
 const ASPECT_RATIO = Width / Height;
 
+
 export default class Location2 extends Component{
   constructor(props) {
     super(props);
@@ -25,9 +26,13 @@ export default class Location2 extends Component{
       longitude: 0,
       isLoading: true,
       location: [],
+      time: Date.now(),
       error: null,
       appState: AppState.currentState,
+      
     };
+
+    this._backgroundLocation = this._backgroundLocation.bind(this);
   }
 
   wait(timeout) {
@@ -37,11 +42,11 @@ export default class Location2 extends Component{
   }
 
   _sendLocation(lati,long,time){
-    fetch=()=>{
-
+      console.log('tilanga')
+      const child_id = localStorage.getItem("user_id");
       const token = localStorage.getItem("key2");
 
-      fetch("http://192.168.43.133:3000/users/authenticate",{
+      fetch("http://192.168.43.133:3000/location/"+child_id,{
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -51,7 +56,7 @@ export default class Location2 extends Component{
       body: JSON.stringify({
         longitude: long,
         latitude: lati,
-        timestamp: time,
+        //timestamp: time,
       })
 
     })
@@ -87,7 +92,7 @@ export default class Location2 extends Component{
     }).catch(function(error) {
       console.log('Request failed:', error);
     });
-    }
+    
   }
 
   _activeLocation(){
@@ -104,6 +109,8 @@ export default class Location2 extends Component{
         console.log(position.coords.latitude);
         console.log(position.coords.longitude);
         console.log(position.coords.timestamp);
+
+        this._sendLocation(position.coords.latitude,position.coords.longitude,position.timestamp)
 
         setTimeout(function(){
           console.log('vdqq')
@@ -143,6 +150,8 @@ export default class Location2 extends Component{
         longitude: location.longitude,
         error: null
       });
+
+      this._sendLocation(location.latitude, location.longitude, location.timestamp);
     }
 
   }
@@ -150,6 +159,8 @@ export default class Location2 extends Component{
   componentDidMount() {
     
     AppState.addEventListener('change', this._handleAppStateChange);
+
+    
     
     var lati;
     var long;
@@ -160,15 +171,24 @@ export default class Location2 extends Component{
       console.log(this.state.appState);
       console.log('ppcscs');
 
-      this._activeLocation();
-    
+      //setTimeout(this._activeLocation(),15000)
+
+      if(this.state.appState == "active"){
+        console.log('acacacactive')
+        this.interval = setInterval(() => this._activeLocation(), 15000);
+      }else{
+        this.interval = setInterval(() => this._backgroundLocation(), 15000);
+      }
+
+      
+
+      //this._activeLocation();
   }
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this._handleAppStateChange);
+    clearInterval(this.interval);
   }
-
-  
 
   _handleAppStateChange = nextAppState => {
     const [location, setLocation] = useState(null);
@@ -178,7 +198,10 @@ export default class Location2 extends Component{
       console.log('App State: ' + 'App has come to the foreground!');
       alert('App State: ' + 'App has come to the foreground!');
       
-      this._backgroundLocation();
+
+      setTimeout(this._backgroundLocation(), 15000);
+
+      //this._backgroundLocation();
       
     }
     console.log('App State: ' + nextAppState);
@@ -196,6 +219,7 @@ export default class Location2 extends Component{
   
 
   render() {
+
 
     return(
       <View Style = {styles.container}>
@@ -230,7 +254,7 @@ export default class Location2 extends Component{
           }
           
         </MapView>  
-        
+        <Button title="back" onPress={() => Actions.FrontScreen() } />
       </View>
     )
   }
@@ -242,62 +266,7 @@ const styles =  StyleSheet.create({
   },
   map: {
     //flex: 1,
-    height: Height,
+    height: Height-70,
     width: Width
   }
 })
-
-
-
-// import React, { useState, useEffect } from 'react';
-// import { Text, View, StyleSheet, Act } from 'react-native';
-// import * as Location from 'expo-location';
-// import { Actions } from 'react-native-router-flux';
-
-
-// export default function App() {
-//   const [location, setLocation] = useState(null);
-//   const [errorMsg, setErrorMsg] = useState(null);
-
-//   console.log('ssssssssssss')
-//   console.log(localStorage.getItem('key2'));
-
-//   // if(!localStorage.getItem('key2')){
-//   //   Actions.ChildLogScreen();
-//   // }
-
-//   useEffect(() => {
-//     (async () => {
-//       let { status } = await Location.requestPermissionsAsync();
-//       if (status !== 'granted') {
-//         setErrorMsg('Permission to access location was denied');
-//       }
-
-//       let location = await Location.getCurrentPositionAsync({});
-//       setLocation(location);
-//     })();
-//   });
-
-//   let text = 'Waiting..';
-//   if (errorMsg) {
-//     text = errorMsg;
-//   } else if (location) {
-//     text = JSON.stringify(location);
-//     console.log('fffffffffffff')
-//     console.log(location.latitude);
-//   }
-
-//   //Actions.Location1();
-
-//   return (
-//      <View style={styles.container}>
-//        <Text  style = {{paddingTop: 100, marginHorizontal:10}} >{text}</Text>
-//      </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-// });
