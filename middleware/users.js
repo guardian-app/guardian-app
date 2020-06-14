@@ -2,46 +2,65 @@ const jwt = require('jsonwebtoken');
 const { selectUserByEmailAddress, selectUserById } = require('../services/users');
 const { jwtSecret } = require('../config/jwt');
 
-const checkDuplicateEmailAddress = (req, res, next) => {
+const checkDuplicateEmailAddress = async (req, res, next) => {
     const { email_address } = req.body;
 
-    selectUserByEmailAddress(email_address, (err, results) => {
-        if (err) throw err;
-        if (results.length) return res.status(409).send('E-mail address is already registered!');
+    try {
+        const [users] = await selectUserByEmailAddress(email_address);
+        if (users.length) return res.status(409).send('E-mail address is already registered!');
+
         next();
-    });
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
-const validateToken = (req, res, next) => {
+const validateToken = async (req, res, next) => {
     const { token } = req;
     if (!token) return res.status(401).send('Unauthorized');
 
-    jwt.verify(token, jwtSecret, (err, dec) => {
+    jwt.verify(token, jwtSecret, async (err, { user_id }) => {
         if (err) return res.status(401).send('Unauthorized');
 
-        selectUserById(dec.user_id, (err, results) => {
-            if (err) throw err;
-            if (!results.length) return res.status(401).send('Unauthorized');
+        try {
+            const [users] = await selectUserById(user_id);
+            if (!users.length) return res.status(401).send('Unauthorized');
 
-            const { user_id, email_address, first_name, last_name, address, phone_number, role } = results[0];
-            req.user = { user_id, email_address, first_name, last_name, address, phone_number, role };
+            const user = users[0];
+            req.user = {
+                user_id: user.user_id,
+                email_address: user.email_address,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                address: user.address,
+                phone_number: user.phone_number,
+                role: user.role
+            };
+
             next();
-        });
+        } catch (err) {
+            console.warn(`Generic: ${err}`);
+            res.status(500).send('Internal Server Error');
+        };
     });
 };
 
-const isAdmin = (req, res, next) => {
+const isAdmin = async (req, res, next) => {
     const { user_id } = req.user;
 
-    selectUserById(user_id, (err, results) => {
-        if (err) throw err;
-        if (!results.length) return res.status(500).send();
+    try {
+        const [users] = await selectUserById(user_id);
+        if (!users.length) return res.status(500).send();
 
-        const { role } = results[0];
+        const { role } = users[0];
 
         if (role === 'admin') next();
         else return res.status(403).send('Forbidden');
-    });
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
 module.exports = { checkDuplicateEmailAddress, validateToken, isAdmin };

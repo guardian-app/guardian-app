@@ -1,36 +1,43 @@
 const { selectParents, selectParentById, selectParentChildrenById } = require('../services/parents');
 
-const getParents = (req, res) => {
-    selectParents((err, results) => {
-        if (err) throw err;
-        res.json(results);
-    });
+const getParents = async (req, res) => {
+    try {
+        const [parents] = await selectParents();
+        res.json(parents);
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
-const getParent = (req, res) => {
+const getParent = async (req, res) => {
     const { parent_id } = req.params;
 
-    selectParentById(parent_id, (err, results) => {
-        if (err) throw err;
-        if (!results.length) return res.status(404).send('Parent Not Found');
+    try {
+        const [parents] = await selectParentById(parent_id);
+        if (!parents.length) return res.status(404).send('Parent Not Found');
 
-        res.json(results[0]);
-    });
+        res.json(parents[0]);
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
-const getParentChildren = (req, res) => {
+const getParentChildren = async (req, res) => {
     const { parent_id } = req.params;
 
-    selectParentChildrenById(parent_id, (err, results) => {
-        if (err) throw err;
-        if (results.length) return res.json(results);
+    try {
+        const [children] = await selectParentChildrenById(parent_id);
+        if (children.length) return res.json(children);
 
-        selectParentById(parent_id, (err, results) => {
-            if (err) throw err;
-            if (!results.length) return res.status(404).send('Parent Not Found');
-            res.json({});
-        });
-    });
+        const [parent] = await selectParentById(parent_id);
+        if (!parent.length) return res.status(404).send('Parent Not Found');
+        else return res.json({});
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
 module.exports = { getParents, getParent, getParentChildren };

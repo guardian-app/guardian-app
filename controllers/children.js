@@ -2,42 +2,54 @@ const { selectChildren, selectChildById, selectChildParentById, insertChild } = 
 const { selectParentChildrenById } = require('../services/parents');
 const bcrypt = require('bcrypt');
 
-const getChildren = (req, res) => {
-    selectChildren((err, results) => {
-        if (err) throw err;
-        res.json(results);
-    });
+const getChildren = async (req, res) => {
+    try {
+        const [children] = await selectChildren();
+        res.json(children);
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
-const getMyChildren = (req, res) => {
+const getMyChildren = async (req, res) => {
     const parent_id = req.user.user_id;
 
-    selectParentChildrenById(parent_id, (err, results) => {
-        if (err) throw err;
-        res.json(results);
-    });
+    try {
+        const [children] = await selectParentChildrenById(parent_id);
+        res.json(children);
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
-const getChildById = (req, res) => {
+const getChildById = async (req, res) => {
     const { child_id } = req.params;
 
-    selectChildById(child_id, (err, results) => {
-        if (err) throw err;
-        if (!results.length) return res.status(404).send('Child Not Found');
+    try {
+        const [children] = await selectChildById(child_id);
+        if (!children.length) return res.status(404).send('Child Not Found');
 
-        res.json(results[0]);
-    });
+        res.json(children[0]);
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
-const getChildParentById = (req, res) => {
+const getChildParentById = async (req, res) => {
     const { child_id } = req.params;
 
-    selectChildParentById(child_id, (err, results) => {
-        if (err) throw err;
-        if (!results.length) return res.status(404).send('Parent Not Found');
+    try {
+        const [parents] = await selectChildParentById(child_id);
+        if (!parents.length) return res.status(404).send('Parent Not Found');
 
-        res.json(results[0]);
-    });
+        res.json(parents[0]);
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
 const createChild = async (req, res) => {
@@ -55,10 +67,13 @@ const createChild = async (req, res) => {
         parent_id
     };
 
-    insertChild(child, (err) => {
-        if (err) throw err;
+    try {
+        await insertChild(child);
         res.status(201).send('Success');
-    });
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
 module.exports = { getChildren, getChildById, getChildParentById, createChild, getMyChildren };

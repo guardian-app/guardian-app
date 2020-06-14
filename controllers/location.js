@@ -1,16 +1,19 @@
 const { insertLocationRecord, insertLocationRecordBatch, selectLatestLocation } = require('../services/location');
 
-const createLocationRecord = (req, res) => {
+const createLocationRecord = async (req, res) => {
     const { child_id } = req.params;
     const { longitude, latitude } = req.body;
 
-    insertLocationRecord({ child_id, longitude, latitude }, (err) => {
-        if (err) throw err;
+    try {
+        await insertLocationRecord({ child_id, longitude, latitude });
         res.status(200).send('Success');
-    });
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
-const createLocationRecordBatch = (req, res) => {
+const createLocationRecordBatch = async (req, res) => {
     const { child_id } = req.params;
     const { data } = req.body;
 
@@ -18,26 +21,30 @@ const createLocationRecordBatch = (req, res) => {
     // Because mysql2 Prepared Statements doesn't support JSON arrays 
     const data_array = data.map(({ longitude, latitude, timestamp }) => [longitude, latitude, timestamp, child_id]);
 
-    insertLocationRecordBatch(data_array, (err) => {
-        if (err) throw err;
+    try {
+        await insertLocationRecordBatch(data_array);
         res.status(200).send('Success');
-    });
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
-const getLocation = (req, res) => {
+const getLocation = async (req, res) => {
     const { child_id } = req.params;
 
-    selectLatestLocation(child_id, (err, results) => {
-        if (err) throw err;
-        if (!results.length) res.status(404).send('Data Not Found');
+    try {
+        const [location_data] = await selectLatestLocation(child_id);
+        if (!location_data.length) return res.status(404).send('Data Not Found');
 
-        const data = results[0];
-        res.json(data);
-    });
+        res.json(location_data[0]);
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
-const getLocationHistory = (req, res) => {
-    const { child_id } = req.params;
+const getLocationHistory = async (req, res) => {
 
 };
 
