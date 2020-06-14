@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const sendVerificationEmail = (to, key, done) => {
+const sendVerificationEmail = (to, key) => {
     const from = `"Guardian" <${process.env.GMAIL_USER}>`;
     const subject = `Verify your e-mail address`;
 
@@ -22,10 +22,10 @@ const sendVerificationEmail = (to, key, done) => {
         </br>
         Please <a href="http://${process.env.HOST}:${process.env.PORT}/users/verify/${key}">verify your e-mail address</a> to continue.`;
 
-    transporter.sendMail({ from, to, subject, text, html }, done);
+    return transporter.sendMail({ from, to, subject, text, html });
 };
 
-const sendPasswordResetEmail = (to, key, done) => {
+const sendPasswordResetEmail = (to, key) => {
     const from = `"Guardian" <${process.env.GMAIL_USER}>`;
     const subject = `Reset your password`;
 
@@ -38,7 +38,7 @@ const sendPasswordResetEmail = (to, key, done) => {
         </br>
         Please use the code <code>${key}</code> to reset your password.`;
 
-    transporter.sendMail({ from, to, subject, text, html }, done);
+    return transporter.sendMail({ from, to, subject, text, html });
 };
 
 module.exports = { transporter, sendVerificationEmail, sendPasswordResetEmail };

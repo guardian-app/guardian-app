@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const morgan = require('morgan');
 const { nanoid } = require('nanoid');
 const { insertUser, selectUserByEmailAddress, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress, selectUserByVerificationKey, activateUser, deletePasswordResetKey, insertPasswordResetKey, updateUserPassword, selectUserByPasswordResetKey } = require('../services/users');
 const { jwtSecret } = require('../config/jwt');
@@ -21,11 +22,15 @@ const createUser = async (req, res) => {
 
     insertUser(user, async (err) => {
         if (err) throw err;
-        insertVerificationKey(email_address, key, (err) => {
+        insertVerificationKey(email_address, key, async (err) => {
             if (err) throw err;
             res.status(201).send('Success');
 
-            sendVerificationEmail(email_address, key, (err, info) => { if (err) throw err });
+            try {
+                await sendVerificationEmail(email_address, key);
+            } catch (err) {
+                console.warn(`Failed to send verification e-mail: ${err}`);
+            };
         });
     });
 }
@@ -87,11 +92,15 @@ const resendVerificationKey = async (req, res) => {
 
         deleteVerificationKey(email_address, async (err) => {
             if (err) throw err;
-            insertVerificationKey(email_address, key, (err) => {
+            insertVerificationKey(email_address, key, async (err) => {
                 if (err) throw err;
                 res.status(201).send('Success');
 
-                sendVerificationEmail(email_address, key, (err, info) => { if (err) throw err });
+                try {
+                    await sendVerificationEmail(email_address, key);
+                } catch (err) {
+                    console.warn(`Failed to resend verification e-mail: ${err}`);
+                };
             });
         });
     });
