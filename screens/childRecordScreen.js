@@ -14,6 +14,7 @@ import Draw from '../Drawer/index';
 import Radio from '../RadioButton/index';
 import ButtonPress from '../components/home/index';
 import Dialog from '../components/home/dialog';
+import DataTable from "../components/child/locationReport";
 
 // components
 import {
@@ -57,85 +58,20 @@ class Home extends Component {
         };
     }
     
-    async componentDidMount(){
+    // componentDidMount(){
 
-        let token = localStorage.getItem("key");
+    //     console.log("000000000000")
+
+    //     let token = localStorage.getItem("key");
         
-        if(!localStorage.getItem("key")){
-            Actions.LoginScreen();
-        }
+    //     if(!localStorage.getItem("key")){
+    //         Actions.LoginScreen();
+    //     }
 
-       let parent_id = localStorage.getItem("user_id");
+    //    let parent_id = localStorage.getItem("user_id");
 
-        console.log('mount');
-        Axios.get('http://192.168.43.133:3000/parents/'+parent_id+'/children',{
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Authorization": "Bearer "+token,
-            },
-        })
-        .then(res => {
-            this.setState({loading: true});
-            const data = res.data;
-
-            setTimeout(()=> this.setState({
-                loading: false,
-                children: data
-            }), 100)
-
-            console.log(this.state.children);
-        }).catch = (e) => {
-            console.error('error ',e)
-        }
-    }
-
-    // onLongChild = (data) => {
-    //     console.log("aaaaaaaaaaaaa");
-    //     console.log(data);
-    //     console.log("bbbbbbbbbb");
     // }
 
-    onChild = (child_id) => {
-        console.log('pppp');
-        console.log(child_id);
-
-        localStorage.setItem("child_id", child_id);
-        console.log(localStorage.getItem("child_id"));
-        console.log('cccccccccccccc');
-
-        Alert.alert(
-            'Menu',
-            'Make your choice',
-            [
-              
-              {text: 'Cancel', onPress: () => {},  style: 'cancel'},
-              {text: 'Child location', onPress: () => {Actions.ChildLocation()}},
-              {text: 'Today report', onPress: () => {Actions.ChildRecordScreen()}},
-            
-            ]
-        )      
-        console.log('pppp')
-
-    }
-
-    onAvatarPressed = (value) => {
-        console.log('Avatar');
-        console.log('Avatarqqqqqqqqqq');
-        const { selected } = this.state;
-        console.log(selected);
-        const index = selected.indexOf(value);
-
-        if (index >= 0) {
-            // remove item
-            selected.splice(index, 1);
-        } else {
-            // add item
-            selected.push(value);
-        }
-
-        this.setState({ selected });
-    }
     onScroll = (ev) => {
         const currentOffset = ev.nativeEvent.contentOffset.y;
 
@@ -176,53 +112,30 @@ class Home extends Component {
     }
     renderToolbar = () => {
         if (this.state.selected.length > 0) {
-            return (
-                <Toolbar
-                    key="toolbar"
-                    leftElement="clear"
-                    onLeftElementPress={() => this.setState({ selected: [] })}
-                    centerElement={this.state.selected.length.toString()}
-                    rightElement={['delete']}
-                    style={{
-                        container: { backgroundColor: 'white' },
-                        titleText: { color: 'rgba(0,0,0,.87)' },
-                        leftElement: { color: 'rgba(0,0,0,.54)' },
-                        rightElement: { color: 'rgba(0,0,0,.54)' },
-                    }}
-                />
-            );
+            // return (
+            //     <Toolbar
+            //         key="toolbar"
+            //         leftElement="clear"
+            //         onLeftElementPress={() => this.setState({ selected: [] })}
+            //         centerElement={this.state.selected.length.toString()}
+            //         rightElement={['delete']}
+            //         style={{
+            //             container: { backgroundColor: 'white' },
+            //             titleText: { color: 'rgba(0,0,0,.87)' },
+            //             leftElement: { color: 'rgba(0,0,0,.54)' },
+            //             rightElement: { color: 'rgba(0,0,0,.54)' },
+            //         }}
+            //     />
+            // );
         }
 
         return (
             <Toolbar
                 key="toolbar"
                 leftElement="arrow-back"
-                onLeftElementPress={() => {Actions.FrontScreen()}}
+                onLeftElementPress={() => {Actions.HomeScreen()}}
                 //onLeftElementPress={() => {}}
-                centerElement="Parent"
-                // searchable={{
-                //     autoFocus: true,
-                //     placeholder: 'Search',
-                //     onChangeText: value => this.setState({ searchText: value }),
-                //     onSearchClosed: () => this.setState({ searchText: '' }),
-                // }}
-            />
-        );
-    }
-    renderItem = (title, route) => {
-        const searchText = this.state.searchText.toLowerCase();
-
-        if (searchText.length > 0 && title.toLowerCase().indexOf(searchText) < 0) {
-            return null;
-        }
-
-        return (
-            <ListItem
-                // divider
-                // leftElement={<Avatar text={title[0]} />}
-                // onLeftElementPress={() => this.onAvatarPressed(title)}
-                // centerElement={title}
-                // onPress={() => this.props.navigation.navigate(route)}
+                centerElement="Child Report"
             />
         );
     }
@@ -273,37 +186,9 @@ class Home extends Component {
                     onScroll={this.onScroll}
                     //onPress={run()}
                 >
-                    <Dialog/>
-                    <Text style={styles.titleText}>YOUR CHILDREN</Text>
-                    {this.state.children.map((appoints) => (
-                        <View    >
-                            <Text></Text> 
-                            <Text></Text>
-                            <Button 
-                                style={{marginHorizontal: 100, paddingBottom: 10,}} 
-                                title={appoints.first_name+" "+appoints.last_name}
-                                onPress = {()  => this.onChild(appoints.user_id)}
-                                />
-                                                    
-                        </View>
-                    ))}
-                    
-                    {/* <ButtonPress/> */}
+                    <DataTable/>
                     
                 </ScrollView>
-                <ActionButton
-                    actions={[
-                        //{ icon: 'email', label: 'Email' },
-                        {label: "back to home"}
-                    ]}
-                    hidden={this.state.bottomHidden}
-                    icon="add"
-                    transition="speedDial"
-                    onPress={childAdd}
-                    style={{
-                        positionContainer: { bottom: 76 },
-                    }}
-                />
 
                 <BottomNavigation
                     active={this.state.active}

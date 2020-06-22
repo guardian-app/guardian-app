@@ -37,6 +37,36 @@ export default class Location extends Component{
     clearInterval(this.interval);
   }
 
+
+  getAddressFromCoordinates({ latitude, longitude }) {
+    console.log('con')
+    return new Promise((resolve) => {
+      const url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?apiKey=${HERE_API_KEY}&mode=retrieveAddresses&prox=${latitude},${longitude}`
+      fetch(url)
+        .then(res => res.json())
+        .then((resJson) => {
+          console.log(resJson)
+          // the response had a deeply nested structure :/
+          if (resJson
+            && resJson.Response
+            && resJson.Response.View
+            && resJson.Response.View[0]
+            && resJson.Response.View[0].Result
+            && resJson.Response.View[0].Result[0]) {
+            resolve(resJson.Response.View[0].Result[0].Location.Address.Label)
+          } else {
+            resolve()
+          }
+        })
+        .catch((e) => {
+          console.log('Error in getAddressFromCoordinates', e)
+          resolve()
+        })
+    })
+  }
+
+
+
   onGetLocation = () => {
     Geocoder.init("AIzaSyAjoHv0BU_FcJgYz2f2dwUG0LogpVKOLuk",{language: "en"});
     let child_id = localStorage.getItem("child_id");
@@ -65,6 +95,11 @@ export default class Location extends Component{
             timestamp: data.timestamp,
         }), 5000)
 
+        var la = data.latitude;
+        var lo = data.longitude;
+
+        this.getAddressFromCoordinates({ la, lo })
+
         Geocoder.from(data.latitude, data.longitude)
         .then(json => {
           console.log("mmmm")
@@ -92,6 +127,7 @@ export default class Location extends Component{
 
   onMapLayout = () => {
     this.setState({ isMapReady: true });
+    console.log('awmencne')
   }
 
   render() {

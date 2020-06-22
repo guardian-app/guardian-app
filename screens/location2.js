@@ -74,6 +74,9 @@ export default class Location2 extends Component{
         console.log('failed2')
         
       }
+      if(response.status == 200){
+        console.log('done')
+      }
       else{
         return response;
       }

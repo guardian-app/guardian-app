@@ -16,6 +16,7 @@ import ChildRegScreen from './screens/childRegisterScreen';
 import ChildLogScreen from './screens/ChildLogScreen';
 import ProfileScreen from './screens/profileScreen';
 import RestScreen from './screens/resetScreen';
+import ChildRecordScreen from './screens/childRecordScreen';
 
 
 import Location1 from './screens/location1';
@@ -144,6 +145,13 @@ export default function App() {
 
           <Scene key="ResetScreen"
 	          component={RestScreen}
+	        	animation='fade'
+	          hideNavBar={true}
+	          
+	        />
+
+          <Scene key="ChildRecordScreen"
+	          component={ChildRecordScreen}
 	        	animation='fade'
 	          hideNavBar={true}
 	          
