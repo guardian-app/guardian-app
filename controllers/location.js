@@ -1,4 +1,4 @@
-const { insertLocationRecord, insertLocationRecordBatch, selectLatestLocation } = require('../services/location');
+const { insertLocationRecord, insertLocationRecordBatch, selectLatestLocation, selectTodayLocationHistory } = require('../services/location');
 
 const createLocationRecord = async (req, res) => {
     const { child_id } = req.params;
@@ -45,7 +45,17 @@ const getLocation = async (req, res) => {
 };
 
 const getLocationHistory = async (req, res) => {
+    const { child_id } = req.params;
 
+    try {
+        const [location_data] = await selectTodayLocationHistory(child_id);
+        if (!location_data.length) return res.status(404).send('Data Not Found');
+
+        res.json(location_data);
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 };
 
 module.exports = { getLocation, getLocationHistory, createLocationRecord, createLocationRecordBatch };

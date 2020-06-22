@@ -21,4 +21,10 @@ const selectLatestLocation = (child_id) => {
     );
 };
 
-module.exports = { insertLocationRecord, insertLocationRecordBatch, selectLatestLocation }
+const selectTodayLocationHistory = (child_id) => {
+    return database.execute(
+        "SELECT `longitude`, `latitude`, `timestamp` FROM `location_record` WHERE DATE(`timestamp`) = CURDATE() ORDER BY `timestamp` DESC LIMIT 48",
+        [child_id]
+    );
+};
+module.exports = { insertLocationRecord, insertLocationRecordBatch, selectLatestLocation, selectTodayLocationHistory }
