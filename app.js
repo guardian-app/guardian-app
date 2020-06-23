@@ -12,6 +12,7 @@ const usersRouter = require('./routes/users');
 const parentsRouter = require('./routes/parents');
 const childrenRouter = require('./routes/children');
 const locationRouter = require('./routes/location');
+const geofenceService = require('./routes/geofence');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -28,6 +29,7 @@ app.use('/users', usersRouter);
 app.use('/parents', parentsRouter);
 app.use('/children', childrenRouter);
 app.use('/location', locationRouter);
+app.use('/geofence', geofenceService);
 
 app.listen(port, () => console.log(`Server listening: http://localhost:${port}`));
 module.exports = app;
