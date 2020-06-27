@@ -4,6 +4,8 @@ import { Table, Row, Rows } from 'react-native-table-component';
 //import {axios} from 'axios';
 import {Actions, ActionConst} from 'react-native-router-flux';
 import axios, * as others from 'axios';
+import Geocoder from 'react-native-geocoding';
+
 export default class tableExample extends Component {
 constructor(props) {
     super(props);
@@ -18,6 +20,27 @@ constructor(props) {
         ["Alka", "29", "female", "Delhi",] ] }
     }
 
+    getData(){
+        Geocoder.init("AIzaSyCByfizTIm7VD9eaxjq30oN_N5Zcjd09Zw");
+        //Geocoder.setApiKey("AIzaSyAjoHv0BU_FcJgYz2f2dwUG0LogpVKOLuk");
+
+        Geocoder.from(6.927079, 79.861244)
+        .then(json => {
+                var addressComponent = json.results[0].address_components[0];
+                var addressComponent1 = json.results[0].address_components[1]
+                var addressComponent2 = json.results[0].address_components[2]
+                var addressComponent3 = json.results[0].address_components[3]
+                var addressComponent4 = json.results[0].address_components[4]
+                var addressComponent5 = json.results[0].address_components[5]
+                var addressComponent6 = json.results[0].address_components[6]
+            console.log(addressComponent.long_name);
+            console.log(addressComponent1.long_name);
+        })
+        .catch(error => console.warn(error,"i am error"));
+
+       
+    }
+
     componentDidMount() {
 
         let token = localStorage.getItem("key");
@@ -25,6 +48,8 @@ constructor(props) {
         if(!localStorage.getItem("key")){
             Actions.LoginScreen();
         }
+
+        this.getData();
 
         let child_id = localStorage.getItem("child_id");
         console.log('oadpvdknvne')
@@ -38,9 +63,11 @@ constructor(props) {
             },
         })
         .then(res => {
-            console.log('pp')
+            console.log('ppppppppppppp')
             this.setState({loading: true});
             const data = res.data;
+            console.log(data[10]);
+            console.log('till')
 
             setTimeout(()=> this.setState({
                 loading: false,

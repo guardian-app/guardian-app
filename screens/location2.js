@@ -160,6 +160,10 @@ export default class Location2 extends Component{
   }
 
   componentDidMount() {
+
+    if(localStorage.getItem("key2") == ""){
+      Actions.LoginScreen();
+    }
     
     AppState.addEventListener('change', this._handleAppStateChange);
 
@@ -189,6 +193,9 @@ export default class Location2 extends Component{
   }
 
   componentWillUnmount() {
+    if(localStorage.getItem("key2") == ""){
+      Actions.LoginScreen();
+    }
     AppState.removeEventListener('change', this._handleAppStateChange);
     clearInterval(this.interval);
   }
@@ -218,6 +225,16 @@ export default class Location2 extends Component{
     console.log('location ppp')
     console.log(this.state)
   }
+
+  onPressLogout =() => {
+    console.log('till')
+    localStorage.setItem("key2", "");
+    localStorage.setItem("role","")
+    localStorage.setItem("id","");
+    console.log(localStorage.getItem("key"));
+    this.setState({ appState: "" });
+    Actions.LoginScreen();
+}
 
   
 
@@ -258,6 +275,7 @@ export default class Location2 extends Component{
           
         </MapView>  
         <Button title="back" onPress={() => Actions.FrontScreen() } />
+        <Button title="Logout" onPress={this.onPressLogout } />
       </View>
     )
   }
