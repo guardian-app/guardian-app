@@ -20,11 +20,11 @@ const validateToken = async (req, res, next) => {
     const { token } = req;
     if (!token) return res.status(401).send('Unauthorized');
 
-    jwt.verify(token, jwtSecret, async (err, { user_id }) => {
-        if (err) return res.status(401).send('Unauthorized');
+    jwt.verify(token, jwtSecret, async (err, payload) => {
+        if (err || !payload) return res.status(401).send('Unauthorized');
 
         try {
-            const [users] = await selectUserById(user_id);
+            const [users] = await selectUserById(payload.user_id);
             if (!users.length) return res.status(401).send('Unauthorized');
 
             const user = users[0];
