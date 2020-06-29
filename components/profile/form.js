@@ -138,6 +138,17 @@ export default class App extends Component {
     address: localStorage.getItem("address"),
   }
 
+  componentDidMount(){
+    this.setState({
+      first_name: localStorage.getItem("first_name"),
+      last_name: localStorage.getItem("last_name"),
+      user_id: localStorage.getItem("user_id"),
+      phone_number: localStorage.getItem("phone_number"),
+      username: localStorage.getItem("username"),
+      address: localStorage.getItem("address"),
+    })
+  }
+
   handleSubmit = () => {
     const value = this._form.getValue();
     console.log('value: ', value);

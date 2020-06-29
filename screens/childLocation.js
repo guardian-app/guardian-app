@@ -38,32 +38,33 @@ export default class Location extends Component{
   }
 
 
-  getAddressFromCoordinates({ latitude, longitude }) {
-    console.log('con')
-    return new Promise((resolve) => {
-      const url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?apiKey=${HERE_API_KEY}&mode=retrieveAddresses&prox=${latitude},${longitude}`
-      fetch(url)
-        .then(res => res.json())
-        .then((resJson) => {
-          console.log(resJson)
-          // the response had a deeply nested structure :/
-          if (resJson
-            && resJson.Response
-            && resJson.Response.View
-            && resJson.Response.View[0]
-            && resJson.Response.View[0].Result
-            && resJson.Response.View[0].Result[0]) {
-            resolve(resJson.Response.View[0].Result[0].Location.Address.Label)
-          } else {
-            resolve()
-          }
-        })
-        .catch((e) => {
-          console.log('Error in getAddressFromCoordinates', e)
-          resolve()
-        })
-    })
-  }
+  // getAddressFromCoordinates({ latitude, longitude }) {
+  //   var HERE_API_KEY = "AIzaSyCByfizTIm7VD9eaxjq30oN_N5Zcjd09Zw";
+  //   console.log('con')
+  //   return new Promise((resolve) => {
+  //     const url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?apiKey=${HERE_API_KEY}&mode=retrieveAddresses&prox=${latitude},${longitude}`
+  //     fetch(url)
+  //       .then(res => res.json())
+  //       .then((resJson) => {
+  //         console.log(resJson)
+  //         // the response had a deeply nested structure :/
+  //         if (resJson
+  //           && resJson.Response
+  //           && resJson.Response.View
+  //           && resJson.Response.View[0]
+  //           && resJson.Response.View[0].Result
+  //           && resJson.Response.View[0].Result[0]) {
+  //           resolve(resJson.Response.View[0].Result[0].Location.Address.Label)
+  //         } else {
+  //           resolve()
+  //         }
+  //       })
+  //       .catch((e) => {
+  //         console.log('Error in getAddressFromCoordinates', e)
+  //         resolve()
+  //       })
+  //   })
+  // }
 
 
 
@@ -98,8 +99,8 @@ export default class Location extends Component{
         var la = data.latitude;
         var lo = data.longitude;
 
-        this.getAddressFromCoordinates({ la, lo })
-
+        //this.getAddressFromCoordinates({ la, lo })
+        Geocoder.init("AIzaSyCByfizTIm7VD9eaxjq30oN_N5Zcjd09Zw");
         Geocoder.from(data.latitude, data.longitude)
         .then(json => {
           console.log("mmmm")

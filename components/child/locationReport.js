@@ -1,55 +1,65 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { Table, Row, Rows } from 'react-native-table-component';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
+import { Table, Row, Rows, TableWrapper } from 'react-native-table-component';
 //import {axios} from 'axios';
 import {Actions, ActionConst} from 'react-native-router-flux';
 import axios, * as others from 'axios';
 import Geocoder from 'react-native-geocoding';
+//import { Table, TableWrapper, Row } from 'react-native-table-component';
 
 export default class tableExample extends Component {
 constructor(props) {
     super(props);
     this.state = {
-        headerData:  ["username", "age", "sex", "location"],
+        loading: false,
+        headerData:  ["Time Stamp","Latitude", "Longitude"],
         tableContents: [
         ["ranjan", "30", "male", "Chennai"],
         ["Ajay", "29", "male", "Mumbai",],
         ["vijay", "29", "male", "Mumbai",],
         ["Suraj", "24", "male", "Kolkata",],
         ["Akash", "27", "male", "Mumbai",],
-        ["Alka", "29", "female", "Delhi",] ] }
+        ["Alka", "29", "female", "Delhi",] ],
+        locationData: [],
+        address: "",
+        widthArr: [150, 100, 150],
+
+
+
+
+    
+    }
     }
 
-    getData(){
+    getData(la,lo){
         Geocoder.init("AIzaSyCByfizTIm7VD9eaxjq30oN_N5Zcjd09Zw");
-        //Geocoder.setApiKey("AIzaSyAjoHv0BU_FcJgYz2f2dwUG0LogpVKOLuk");
-
-        Geocoder.from(6.927079, 79.861244)
+       
+        Geocoder.from(la, lo)
         .then(json => {
-                var addressComponent = json.results[0].address_components[0];
+                
+                var addressComponent = json.results[0].formatted_address;
                 var addressComponent1 = json.results[0].address_components[1]
                 var addressComponent2 = json.results[0].address_components[2]
                 var addressComponent3 = json.results[0].address_components[3]
                 var addressComponent4 = json.results[0].address_components[4]
                 var addressComponent5 = json.results[0].address_components[5]
                 var addressComponent6 = json.results[0].address_components[6]
-            console.log(addressComponent.long_name);
-            console.log(addressComponent1.long_name);
+            console.log(addressComponent);
+            alert(addressComponent)
+            this.setState({
+                address:addressComponent.long_name
+            })
         })
-        .catch(error => console.warn(error,"i am error"));
-
-       
+        .catch(error => console.warn(error,"i am error"))
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
         let token = localStorage.getItem("key");
 
         if(!localStorage.getItem("key")){
             Actions.LoginScreen();
         }
-
-        this.getData();
 
         let child_id = localStorage.getItem("child_id");
         console.log('oadpvdknvne')
@@ -63,21 +73,36 @@ constructor(props) {
             },
         })
         .then(res => {
-            console.log('ppppppppppppp')
+            console.log('response come');
             this.setState({loading: true});
             const data = res.data;
-            console.log(data[10]);
-            console.log('till')
 
+            const result = Object.keys(data).map((key) => data[key]);
+            console.log(result[0])
+
+            var myArr = []
+
+            for(let i = 0; i< data.length; i++){
+
+                 myArr.push([data[i].timestamp,data[i].latitude,data[i].longitude]);
+            }
+
+            console.log(this.state.address)
+            console.log('l');
+
+            for(let x of myArr){
+                console.log(x);
+            }
+            
             setTimeout(()=> this.setState({
                 loading: false,
-                children: data
-            }), 100)
+                locationData: myArr,
+            }), 1000)
 
-            console.log(this.state.children);
         }).catch = (e) => {
             console.error('error ',e)
         }
+        
         
     }
 
@@ -85,11 +110,50 @@ constructor(props) {
         const state = this.state;
         return (
             <View style={{marginHorizontal: 10}} >
-                <Table>
-                    <Row data={state.headerData}/>
-                    <Rows data={state.tableContents}/>
-                </Table>
+                <View style = {styles.container}>
+                            <ScrollView horizontal = {true} style  ={{flex: 1, marginTop: 10}} >
+                                <View>
+                                    <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                                        <Row data={state.headerData} widthArr={state.widthArr} style={styles.header} textStyle={styles.text}/>
+                                    </Table>
+                                    <ScrollView horizontal = {false} style={styles.dataWrapper}>
+                                        <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                                            {this.state.locationData.map((appoints, i) => (
+                                                <TouchableOpacity onPress = {()  => this.getData(this.state.locationData[i][1],this.state.locationData[i][2])} >
+                                                    <Text></Text>
+                                                    <Row 
+                                                        key = {i}  
+                                                        data = {appoints}
+                                                        widthArr={this.state.widthArr}
+                                                        style={[styles.row, i%2 && {backgroundColor: '#F7F6E7'}]}
+                                                        textStyle={styles.text}
+                                                    />
+                                                </TouchableOpacity>
+                                            ))}
+                                        </Table>
+                                    </ScrollView>
+                                </View>
+                            </ScrollView>
+                    </View>        
             </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container: { 
+        flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' 
+    },
+    header: { 
+        height: 50, backgroundColor: '#537791' 
+    },
+    text: { 
+        textAlign: 'center', fontWeight: '100' 
+    },
+    dataWrapper: { 
+        marginTop: -1 
+    },
+    row: { 
+        height: 40, backgroundColor: '#E7E6E1' 
+    }
+})
