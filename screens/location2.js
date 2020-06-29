@@ -111,7 +111,8 @@ export default class Location2 extends Component{
         console.log(position.timestamp);
         console.log(position.coords.latitude);
         console.log(position.coords.longitude);
-        console.log(position.coords.timestamp);
+        console.log(position.coords.altitude);
+        console.log(position.coords.accuracy);
 
         this._sendLocation(position.coords.latitude,position.coords.longitude,position.timestamp)
 
@@ -148,6 +149,8 @@ export default class Location2 extends Component{
       console.log('fffffffffffff')
       console.log(location.latitude);
       console.log(location.timestamp);
+      console.log(location.latitudeDelta);
+
       this.setState({
         latitude: location.latitude,
         longitude: location.longitude,
@@ -187,9 +190,6 @@ export default class Location2 extends Component{
         this.interval = setInterval(() => this._backgroundLocation(), 15000);
       }
 
-      
-
-      //this._activeLocation();
   }
 
   componentWillUnmount() {
@@ -232,7 +232,7 @@ export default class Location2 extends Component{
     localStorage.setItem("role","")
     localStorage.setItem("id","");
     console.log(localStorage.getItem("key"));
-    this.setState({ appState: "" });
+    this.setState({ appState: "background" });
     Actions.LoginScreen();
 }
 
@@ -274,7 +274,7 @@ export default class Location2 extends Component{
           }
           
         </MapView>  
-        <Button title="back" onPress={() => Actions.FrontScreen() } />
+        {/* <Button title="back" onPress={() => Actions.FrontScreen() } /> */}
         <Button title="Logout" onPress={this.onPressLogout } />
       </View>
     )
