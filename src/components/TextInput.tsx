@@ -34,4 +34,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default TextInput;
+export default memo(TextInput);

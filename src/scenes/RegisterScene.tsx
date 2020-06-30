@@ -87,7 +87,7 @@ const RegisterScene = ({ navigation, userCreate }: Props) => {
 
             <Header>Create new account</Header>
 
-            <ScrollView contentContainerStyle={styles.container} style={{width: '100%'}}>
+            <ScrollView contentContainerStyle={styles.container} style={{ width: '100%' }}>
                 <TextInput
                     label="Email"
                     returnKeyType="next"
@@ -160,16 +160,16 @@ const RegisterScene = ({ navigation, userCreate }: Props) => {
                 />
             </ScrollView>
 
-                <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
-                    Sign Up
+            <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
+                Sign Up
                 </Button>
 
-                <View style={styles.row}>
-                    <Text style={styles.label}>Already have an account? </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate("LoginScene")}>
-                        <Text style={styles.link}>Login</Text>
-                    </TouchableOpacity>
-                </View>
+            <View style={styles.row}>
+                <Text style={styles.label}>Already have an account? </Text>
+                <TouchableOpacity onPress={() => navigation.navigate("LoginScene")}>
+                    <Text style={styles.link}>Login</Text>
+                </TouchableOpacity>
+            </View>
 
         </Background>
     );
@@ -193,9 +193,6 @@ const styles = StyleSheet.create({
     },
     container: {
         width: '100%',
-        // marginVertical: 12,
-        // flex: 1,
-        // padding: 20,
         maxWidth: 340,
         alignSelf: 'center',
         alignItems: 'center',
@@ -207,4 +204,4 @@ const mapDispatchToProps = (dispatch: Function) => ({
     userCreate: (user: User) => dispatch(userCreate(user))
 });
 
-export default compose(connect(null, mapDispatchToProps))(RegisterScene);
+export default compose(connect(null, mapDispatchToProps), React.memo)(RegisterScene);
