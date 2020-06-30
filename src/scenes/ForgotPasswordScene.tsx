@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react';
 import { Text, StyleSheet, TouchableOpacity } from 'react-native';
+import HideWithKeyboard from 'react-native-hide-with-keyboard';
 import { emailValidator } from '../utils/validators';
 import {
     Button,
@@ -34,7 +35,10 @@ const ForgotPasswordScene = ({ navigation }: Props) => {
         <Background>
             <BackButton goBack={() => navigation.navigate("LoginScene")} />
 
-            <Logo />
+            <HideWithKeyboard>
+                <Logo />
+            </HideWithKeyboard>
+
             <Header>Restore Password</Header>
 
             <TextInput

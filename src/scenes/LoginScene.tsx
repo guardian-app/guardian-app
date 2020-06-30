@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import HideWithKeyboard from 'react-native-hide-with-keyboard';
 import {
     Background,
     Logo,
@@ -37,7 +38,10 @@ const LoginScene = ({ navigation }: Props) => {
         <Background>
             <BackButton goBack={() => navigation.navigate("HomeScene")} />
 
-            <Logo />
+            <HideWithKeyboard>
+                <Logo />
+            </HideWithKeyboard>
+
             <Header>Welcome back!</Header>
 
             <TextInput
