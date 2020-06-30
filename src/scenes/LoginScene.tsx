@@ -1,6 +1,8 @@
-import React, { memo, useState } from 'react';
-import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { TouchableOpacity, StyleSheet, Text, View, Keyboard } from 'react-native';
 import HideWithKeyboard from 'react-native-hide-with-keyboard';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import {
     Background,
     Logo,
@@ -11,15 +13,34 @@ import {
 } from '../components';
 import { theme } from '../styles';
 import { emailValidator, passwordValidator } from '../utils/validators';
-import { Navigation } from '../types';
+import { Navigation, User } from '../types';
+import { userAuthenticate } from '../actions';
 
-type Props = {
+export interface OwnProps {
     navigation: Navigation;
-};
+}
 
-const LoginScene = ({ navigation }: Props) => {
+interface StateProps {
+    authenticateError: string,
+    currentUser: User
+}
+
+interface DispatchProps {
+    userAuthenticate: (user: User) => void
+}
+
+type Props = StateProps & DispatchProps & OwnProps
+
+const LoginScene = ({ navigation, userAuthenticate, authenticateError, currentUser }: Props) => {
     const [email, setEmail] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
+    const [errorVisibility, setErrorVisibility] = useState(false);
+
+    useEffect(() => {
+        if (currentUser.hasOwnProperty('user_id')) {
+            console.warn("Redirect now!");
+        };
+    });
 
     const _onLoginPressed = () => {
         const emailError = emailValidator(email.value);
@@ -29,9 +50,12 @@ const LoginScene = ({ navigation }: Props) => {
             setEmail({ ...email, error: emailError });
             setPassword({ ...password, error: passwordError });
             return;
-        }
+        };
 
-        navigation.navigate("DashboardScene");
+        Keyboard.dismiss();
+        setErrorVisibility(true);
+        userAuthenticate({ email_address: email.value, password: password.value });
+        // navigation.navigate("DashboardScene");
     };
 
     return (
@@ -73,9 +97,11 @@ const LoginScene = ({ navigation }: Props) => {
                 </TouchableOpacity>
             </View>
 
+            {errorVisibility && authenticateError.length && <Text style={styles.errorText}>{authenticateError}</Text>}
+
             <Button mode="contained" onPress={_onLoginPressed}>
                 Login
-      </Button>
+            </Button>
 
             <View style={styles.row}>
                 <Text style={styles.label}>Don’t have an account? </Text>
@@ -97,6 +123,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 4,
     },
+    errorText: {
+        flexDirection: 'row',
+        marginTop: 4,
+        marginBottom: 4,
+        color: theme.colors.error,
+    },
     label: {
         color: theme.colors.secondary,
     },
@@ -106,4 +138,13 @@ const styles = StyleSheet.create({
     },
 });
 
-export default memo(LoginScene);
+const mapDispatchToProps = (dispatch: any) => ({
+    userAuthenticate: (user: User) => dispatch(userAuthenticate(user))
+});
+
+const mapStateToProps = (state: any) => ({
+    authenticateError: state.userReducer.authenticateError,
+    currentUser: state.userReducer.currentUser
+});
+
+export default compose(connect(mapStateToProps, mapDispatchToProps), React.memo)(LoginScene);

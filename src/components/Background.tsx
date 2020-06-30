@@ -4,7 +4,6 @@ import {
     StyleSheet,
     KeyboardAvoidingView,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 type Props = {
     children: React.ReactNode;

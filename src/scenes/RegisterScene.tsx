@@ -140,12 +140,12 @@ const RegisterScene = ({ navigation, userCreate }: Props) => {
                 />
 
                 <TextInput
-                    label="Last name"
+                    label="Address"
                     returnKeyType="next"
-                    value={lastName.value}
-                    onChangeText={text => setLastName({ value: text, error: '' })}
-                    error={!!lastName.error}
-                    errorText={lastName.error}
+                    value={address.value}
+                    onChangeText={text => setAddress({ value: text, error: '' })}
+                    error={!!address.error}
+                    errorText={address.error}
                 />
 
                 <TextInput
