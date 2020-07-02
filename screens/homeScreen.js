@@ -84,25 +84,16 @@ class Home extends Component {
                 children: data
             }), 100)
 
-            console.log(this.state.children);
+            
         }).catch = (e) => {
             console.error('error ',e)
         }
     }
 
-    // onLongChild = (data) => {
-    //     console.log("aaaaaaaaaaaaa");
-    //     console.log(data);
-    //     console.log("bbbbbbbbbb");
-    // }
-
     onChild = (child_id) => {
-        console.log('pppp');
-        console.log(child_id);
-
+        
         localStorage.setItem("child_id", child_id);
-        console.log(localStorage.getItem("child_id"));
-        console.log('cccccccccccccc');
+        
 
         Alert.alert(
             'Menu',
@@ -120,8 +111,7 @@ class Home extends Component {
     }
 
     onAvatarPressed = (value) => {
-        console.log('Avatar');
-        console.log('Avatarqqqqqqqqqq');
+        
         const { selected } = this.state;
         console.log(selected);
         const index = selected.indexOf(value);
@@ -200,12 +190,7 @@ class Home extends Component {
                 onLeftElementPress={() => {Actions.FrontScreen()}}
                 //onLeftElementPress={() => {}}
                 centerElement="Parent"
-                // searchable={{
-                //     autoFocus: true,
-                //     placeholder: 'Search',
-                //     onChangeText: value => this.setState({ searchText: value }),
-                //     onSearchClosed: () => this.setState({ searchText: '' }),
-                // }}
+                
             />
         );
     }
@@ -218,11 +203,7 @@ class Home extends Component {
 
         return (
             <ListItem
-                // divider
-                // leftElement={<Avatar text={title[0]} />}
-                // onLeftElementPress={() => this.onAvatarPressed(title)}
-                // centerElement={title}
-                // onPress={() => this.props.navigation.navigate(route)}
+               
             />
         );
     }

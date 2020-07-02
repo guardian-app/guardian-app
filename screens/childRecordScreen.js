@@ -57,20 +57,6 @@ class Home extends Component {
             
         };
     }
-    
-    // componentDidMount(){
-
-    //     console.log("000000000000")
-
-    //     let token = localStorage.getItem("key");
-        
-    //     if(!localStorage.getItem("key")){
-    //         Actions.LoginScreen();
-    //     }
-
-    //    let parent_id = localStorage.getItem("user_id");
-
-    // }
 
     onScroll = (ev) => {
         const currentOffset = ev.nativeEvent.contentOffset.y;
@@ -112,21 +98,7 @@ class Home extends Component {
     }
     renderToolbar = () => {
         if (this.state.selected.length > 0) {
-            // return (
-            //     <Toolbar
-            //         key="toolbar"
-            //         leftElement="clear"
-            //         onLeftElementPress={() => this.setState({ selected: [] })}
-            //         centerElement={this.state.selected.length.toString()}
-            //         rightElement={['delete']}
-            //         style={{
-            //             container: { backgroundColor: 'white' },
-            //             titleText: { color: 'rgba(0,0,0,.87)' },
-            //             leftElement: { color: 'rgba(0,0,0,.54)' },
-            //             rightElement: { color: 'rgba(0,0,0,.54)' },
-            //         }}
-            //     />
-            // );
+           
         }
 
         return (
@@ -141,14 +113,10 @@ class Home extends Component {
     }
     render() {
 
-        const run =() =>{
-            console.log("run")
-        }
 
         const onPressProfile = () => {
             this.setState({ active: 'profile' })
             var id = localStorage.getItem("key");
-            console.log("FUCK ID",id);
 
             Actions.ProfileScreen();
         }

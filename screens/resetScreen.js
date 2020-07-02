@@ -15,18 +15,15 @@ const Email = t.refinement(t.String, (email) => {
 });
 
 const Password = t.refinement(t.String, (password) => {
-  console.log('aaaaaaaaaawaaaaaaawawwwwwwwwwww');
+  
     global.pass = password;
     const reg = /^(?=\S+$).{8,}$/;
-    console.log(reg.test(password))
-    console.log('pppppp')
+    
     return reg.test(password);
 }); 
 
 const Confirm = t.refinement(t.String, (conPassword)=>{
-  console.log('cau cha')
-  console.log(global.pass)
-  console.log(conPassword);
+  
   if(conPassword != global.pass){
     return false;
   }
@@ -106,7 +103,6 @@ export default class App extends Component {
 
   handleSubmit = () => {
     const value = this._form.getValue();
-    console.log('value: ', value);
     
     ///fetch eka
 
@@ -125,8 +121,6 @@ export default class App extends Component {
     })
     .then(function(response) {
       
-      console.log("ttttttttttttttttttt")
-      console.log(response.status);
       if(response.status == 200){
         console.log('done')
         Alert.alert(
@@ -159,12 +153,6 @@ export default class App extends Component {
         return response;
       }
 
-      // if (response.ok) {
-      //   console.log("ok",response.ok,"ok")
-      //   return response;
-      // }
-      
-      // throw Error(response.statusText);
     }).then(function(response) {
       return response.json();
     }).then(function(json) {

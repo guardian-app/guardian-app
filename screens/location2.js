@@ -2,7 +2,7 @@
 import React, { Component,useState, useEffect } from 'react';
 import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 ///////////////////////
-// import React, {Component} from 'react';
+
 import {Alert,Dimensions, StyleSheet, Text, View,RefreshControl, AppState, Button} from "react-native";
 import MapView, {Marker, AnimatedRegion} from "react-native-maps";
 import * as Location from 'expo-location';
@@ -42,7 +42,6 @@ export default class Location2 extends Component{
   }
 
   _sendLocation(lati,long,time){
-      console.log('tilanga')
       const child_id = localStorage.getItem("user_id");
       const token = localStorage.getItem("key2");
 
@@ -62,16 +61,13 @@ export default class Location2 extends Component{
     })
 
     .then(function(response) {
-      
-      console.log("ttttttttttttttttttt")
-      console.log(response.status);
-      
+
        if(response.status == 404){
-        console.log('comeeeeeee')
+        Alert.alert("Not Found");
         
       } 
       if(response.status == 401){
-        console.log('failed2')
+        Alert.alert("Error");
         
       }
       if(response.status == 200){
@@ -84,13 +80,6 @@ export default class Location2 extends Component{
       return response.json();
     }).then(function(json) {
       console.log('Request succeeded with JSON response:', json);       
-        try {
-          console.log('try')
-        } catch (e) {
-
-          console.log("catch");
-        }
-        console.log('key');
         
     }).catch(function(error) {
       console.log('Request failed:', error);
@@ -100,24 +89,16 @@ export default class Location2 extends Component{
 
   _activeLocation(){
     navigator.geolocation.getCurrentPosition(position => {
-      console.log('tui')
-      console.log('tuitui')
         this.setState({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           error: null
         });
-        console.log('location pppqqqqqq');
-        console.log(position.timestamp);
-        console.log(position.coords.latitude);
-        console.log(position.coords.longitude);
-        console.log(position.coords.altitude);
-        console.log(position.coords.accuracy);
 
         this._sendLocation(position.coords.latitude,position.coords.longitude,position.timestamp)
 
         setTimeout(function(){
-          console.log('vdqq')
+
         },1000);
     }, 
     error => this.setState({error: error.message}),
@@ -146,10 +127,6 @@ export default class Location2 extends Component{
       text = errorMsg;
     } else if (location) {
       text = JSON.stringify(location);
-      console.log('fffffffffffff')
-      console.log(location.latitude);
-      console.log(location.timestamp);
-      console.log(location.latitudeDelta);
 
       this.setState({
         latitude: location.latitude,
@@ -170,21 +147,14 @@ export default class Location2 extends Component{
     
     AppState.addEventListener('change', this._handleAppStateChange);
 
-    
-    
     var lati;
     var long;
 
     let time = 0
 
-    console.log('we');
-      console.log(this.state.appState);
-      console.log('ppcscs');
-
       //setTimeout(this._activeLocation(),15000)
 
       if(this.state.appState == "active"){
-        console.log('acacacactive')
         this.interval = setInterval(() => this._activeLocation(), 15000);
       }else{
         this.interval = setInterval(() => this._backgroundLocation(), 15000);
@@ -203,31 +173,27 @@ export default class Location2 extends Component{
   _handleAppStateChange = nextAppState => {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
-    console.log('done')
+    
     if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
       console.log('App State: ' + 'App has come to the foreground!');
       alert('App State: ' + 'App has come to the foreground!');
       
-
       setTimeout(this._backgroundLocation(), 15000);
 
       //this._backgroundLocation();
-      
     }
     console.log('App State: ' + nextAppState);
     //alert('App State: ' + nextAppState);
     this.setState({ appState: nextAppState });
-    console.log('awaqq')
+    
   };
 
   onMapLayout = () => {
     this.setState({ isMapReady: true });
-    console.log('location ppp')
-    console.log(this.state)
   }
 
   onPressLogout =() => {
-    console.log('till')
+    
     localStorage.setItem("key2", "");
     localStorage.setItem("role","")
     localStorage.setItem("id","");

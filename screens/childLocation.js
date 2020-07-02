@@ -37,37 +37,6 @@ export default class Location extends Component{
     clearInterval(this.interval);
   }
 
-
-  // getAddressFromCoordinates({ latitude, longitude }) {
-  //   var HERE_API_KEY = "AIzaSyCByfizTIm7VD9eaxjq30oN_N5Zcjd09Zw";
-  //   console.log('con')
-  //   return new Promise((resolve) => {
-  //     const url = `https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json?apiKey=${HERE_API_KEY}&mode=retrieveAddresses&prox=${latitude},${longitude}`
-  //     fetch(url)
-  //       .then(res => res.json())
-  //       .then((resJson) => {
-  //         console.log(resJson)
-  //         // the response had a deeply nested structure :/
-  //         if (resJson
-  //           && resJson.Response
-  //           && resJson.Response.View
-  //           && resJson.Response.View[0]
-  //           && resJson.Response.View[0].Result
-  //           && resJson.Response.View[0].Result[0]) {
-  //           resolve(resJson.Response.View[0].Result[0].Location.Address.Label)
-  //         } else {
-  //           resolve()
-  //         }
-  //       })
-  //       .catch((e) => {
-  //         console.log('Error in getAddressFromCoordinates', e)
-  //         resolve()
-  //       })
-  //   })
-  // }
-
-
-
   onGetLocation = () => {
     Geocoder.init("AIzaSyAjoHv0BU_FcJgYz2f2dwUG0LogpVKOLuk",{language: "en"});
     let child_id = localStorage.getItem("child_id");
@@ -84,9 +53,6 @@ export default class Location extends Component{
     .then(res => {
         this.setState({loading: true});
         const data = res.data;
-        console.log("ppp")
-        console.log(data);
-        console.log('oo')
 
         setTimeout(()=> this.setState({
             // loading: false,
@@ -103,22 +69,16 @@ export default class Location extends Component{
         Geocoder.init("AIzaSyCByfizTIm7VD9eaxjq30oN_N5Zcjd09Zw");
         Geocoder.from(data.latitude, data.longitude)
         .then(json => {
-          console.log("mmmm")
-          console.log(json)
           var addressComponent = json.results[0].address_components[0];
-          console.log(addressComponent);
           this.setState({
             address: addressComponent
           })
-          console.log(addressComponent);
+
         })
         .catch(error => {
-          console.log('pppppccccc')
-          console.log(error.origin.results[0])
           console.warn(error)
         });
 
-            console.log(this.state.children);
     }).catch = (e) => {
         console.error('error ',e)
     }
@@ -128,7 +88,6 @@ export default class Location extends Component{
 
   onMapLayout = () => {
     this.setState({ isMapReady: true });
-    console.log('awmencne')
   }
 
   render() {
@@ -171,12 +130,6 @@ export default class Location extends Component{
 }
 
 const styles =  StyleSheet.create({
-  // container: {
-  //   ...StyleSheet.absoluteFillObject
-  // },
-  // map:{
-  //   ...StyleSheet.absoluteFillObject
-  // }
   container: {
     flex: 1
   },

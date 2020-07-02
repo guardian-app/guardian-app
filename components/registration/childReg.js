@@ -39,7 +39,6 @@ const User = t.struct({
   password: Password,
   mobile: Mobile,
   address: t.String,
-  terms: t.Boolean
 });
 
 const formStyles = {
@@ -88,9 +87,6 @@ const options = {
     NIC :{
         error: "Enter correct NIC number"
     },
-    terms: {
-      label: 'Agree to Terms',
-    },
     mobile: {
         keyboardType:'numeric',
         error: 'Please, provide correct phone number',
@@ -119,10 +115,8 @@ export default class App extends Component {
 
   handleSubmit = () => {
     const value = this._form.getValue();
-    console.log('value: ', value);
 
     var token = localStorage.getItem("key");
-    console.log(token)
     
     ///fetch eka
 
@@ -145,8 +139,6 @@ export default class App extends Component {
     })
     .then(function(response) {
       
-      console.log("ttttttttttttttttttt")
-      console.log(response.status);
       if(response.status == 201){
         console.log('done')
         Alert.alert(
@@ -188,12 +180,6 @@ export default class App extends Component {
         return response;
       }
 
-      // if (response.ok) {
-      //   console.log("ok",response.ok,"ok")
-      //   return response;
-      // }
-      
-      // throw Error(response.statusText);
     }).then(function(response) {
       return response.json();
     }).then(function(json) {

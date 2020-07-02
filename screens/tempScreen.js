@@ -19,12 +19,7 @@ const propTypes = {
 const TempScreen = ({navigation}) => {
     return (
         <View style={styles.container}>
-            {/* share button */}
-            {/* <ActionButton
-                    actions={['email', 'phone', 'sms', 'favorite']}
-                    icon="share"
-                    transition="toolbar"
-                /> */}
+           
             <ActionButton
                     actions={['email', { icon: 'phone', label: 'Phone' }, 'sms', 'favorite']}
                     icon="share"

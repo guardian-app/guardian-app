@@ -54,12 +54,12 @@ class Home extends Component {
             active: 'people',
             moveAnimated: new Animated.Value(0),
             loading: false,
-            first_name: localStorage.getItem("first_name"),
-            last_name: localStorage.getItem("last_name"),
-            user_id: localStorage.getItem("user_id"),
-            phone_number: localStorage.getItem("phone_number"),
-            username: localStorage.getItem("username"),
-            address: localStorage.getItem("address"),
+            // first_name: localStorage.getItem("first_name"),
+            // last_name: localStorage.getItem("last_name"),
+            // user_id: localStorage.getItem("user_id"),
+            // phone_number: localStorage.getItem("phone_number"),
+            // username: localStorage.getItem("username"),
+            // address: localStorage.getItem("address"),
             
         };
     }
@@ -74,18 +74,19 @@ class Home extends Component {
             Actions.LoginScreen();
         }
 
-        // this.setState({loading: true});
-        // const data = res.data;
+        this.setState({
+            first_name: localStorage.getItem("first_name"),
+            last_name: localStorage.getItem("last_name"),
+            user_id: localStorage.getItem("user_id"),
+            phone_number: localStorage.getItem("phone_number"),
+            username: localStorage.getItem("username"),
+            address: localStorage.getItem("address"),
+        })
 
-        // setTimeout(()=> this.setState({
-        //     loading: false,
-        //     children: data
-        // }), 10000)
     }
 
     onAvatarPressed = (value) => {
-        console.log('Avatar');
-        console.log('Avatarqqqqqqqqqq');
+
         const { selected } = this.state;
         console.log(selected);
         const index = selected.indexOf(value);
@@ -164,12 +165,6 @@ class Home extends Component {
                 onLeftElementPress={() => {Actions.HomeScreen()}}
                 //onLeftElementPress={() => {}}
                 centerElement="My Profile"
-                // searchable={{
-                //     autoFocus: true,
-                //     placeholder: 'Search',
-                //     onChangeText: value => this.setState({ searchText: value }),
-                //     onSearchClosed: () => this.setState({ searchText: '' }),
-                // }}
             />
         );
     }
@@ -182,26 +177,14 @@ class Home extends Component {
 
         return (
             <ListItem
-                // divider
-                // leftElement={<Avatar text={title[0]} />}
-                // onLeftElementPress={() => this.onAvatarPressed(title)}
-                // centerElement={title}
-                // onPress={() => this.props.navigation.navigate(route)}
+                
             />
         );
     }
     render() {
 
-        const run =() =>{
-            console.log("run")
-        }
-
         const onPressProfile = () => {
             this.setState({ active: 'profile' })
-            // var id = localStorage.getItem("key");
-            // console.log("FUCK ID",id);
-
-            //Actions.ProfileScreen();
         }
 
         const onPressLogout =() => {
@@ -209,7 +192,7 @@ class Home extends Component {
             localStorage.setItem("key", "");
             localStorage.setItem("role","")
             localStorage.setItem("id","");
-            console.log(localStorage.getItem("key"));
+
             Actions.LoginScreen();
         } 
 
@@ -222,11 +205,6 @@ class Home extends Component {
             Actions.Location1();
         }
 
-        // const childAdd =(action) => {
-        //     console.log('fuck');
-        //     Actions.ChildRegScreen();
-        // }
-
         return (
             <Container >
                 
@@ -235,33 +213,12 @@ class Home extends Component {
                     keyboardShouldPersistTaps="always"
                     keyboardDismissMode="interactive"
                     onScroll={this.onScroll}
-                    //onPress={run()}
+                    
                 >
                     
-                    {/* {this.state.children.map((appoints) => (
-                        <View  onLongPress = {()  => {}}  >
-                            <Text></Text> 
-                            <Text></Text>
-                            <Button style={{marginHorizontal: 100, paddingBottom: 10,}} title={appoints.first_name+" "+appoints.last_name}/>
-                                                    
-                        </View>
-                    ))} */}
                     <Data/>
                     
                 </ScrollView>
-                {/* <ActionButton
-                    actions={[
-                        //{ icon: 'email', label: 'Email' },
-                        {label: "back to home"}
-                    ]}
-                    hidden={this.state.bottomHidden}
-                    icon="add"
-                    transition="speedDial"
-                    onPress={childAdd}
-                    style={{
-                        positionContainer: { bottom: 76 },
-                    }}
-                /> */}
 
                 <BottomNavigation
                     active={this.state.active}

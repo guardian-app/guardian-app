@@ -13,13 +13,6 @@ constructor(props) {
     this.state = {
         loading: false,
         headerData:  ["Time Stamp","Latitude", "Longitude"],
-        tableContents: [
-        ["ranjan", "30", "male", "Chennai"],
-        ["Ajay", "29", "male", "Mumbai",],
-        ["vijay", "29", "male", "Mumbai",],
-        ["Suraj", "24", "male", "Kolkata",],
-        ["Akash", "27", "male", "Mumbai",],
-        ["Alka", "29", "female", "Delhi",] ],
         locationData: [],
         address: "",
         widthArr: [150, 100, 150],
@@ -62,9 +55,6 @@ constructor(props) {
         }
 
         let child_id = localStorage.getItem("child_id");
-        console.log('oadpvdknvne')
-        console.log(child_id);
-
         axios.get('http://192.168.43.133:3000/location/'+child_id+'/history',{
             headers: {
                 "Accept": "application/json",
@@ -73,25 +63,16 @@ constructor(props) {
             },
         })
         .then(res => {
-            console.log('response come');
             this.setState({loading: true});
             const data = res.data;
 
             const result = Object.keys(data).map((key) => data[key]);
-            console.log(result[0])
 
             var myArr = []
 
             for(let i = 0; i< data.length; i++){
 
                  myArr.push([data[i].timestamp,data[i].latitude,data[i].longitude]);
-            }
-
-            console.log(this.state.address)
-            console.log('l');
-
-            for(let x of myArr){
-                console.log(x);
             }
             
             setTimeout(()=> this.setState({

@@ -77,12 +77,7 @@ export default class Location extends Component{
 }
 
 const styles =  StyleSheet.create({
-  // container: {
-  //   ...StyleSheet.absoluteFillObject
-  // },
-  // map:{
-  //   ...StyleSheet.absoluteFillObject
-  // }
+  
   container: {
     flex: 1
   },

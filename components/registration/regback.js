@@ -120,12 +120,7 @@ class RegBack extends Component {
                 leftElement="menu"
                 onLeftElementPress={() => this.props.navigation.goBack()}
                 centerElement="Parent Registration"
-                // searchable={{
-                //     autoFocus: true,
-                //     placeholder: 'Search',
-                //     onChangeText: value => this.setState({ searchText: value }),
-                //     onSearchClosed: () => this.setState({ searchText: '' }),
-                // }}
+                
             />
         );
     }

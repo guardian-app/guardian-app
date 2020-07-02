@@ -37,40 +37,8 @@ export default class ButtonSubmit extends Component {
     this.buttonAnimated = new Animated.Value(0);
     this.growAnimated = new Animated.Value(0);
     this._onPress = this._onPress.bind(this);
-    //this.child = this.child.bind(this);
+
   }
-
-  // child() {
-
-  //   if(localStorage.getItem("key2")){
-  //     Actions.Location2();
-  //   }
-
-  //   console.log('fuck');
-  //   if (this.state.isLoading) return;
-
-
-  //   console.log(this.state);
-  //   console.log(this.growAnimated);
-  //   this.setState({isLoading: true});
-  //   Animated.timing(this.buttonAnimated, {
-  //     toValue: 1,
-  //     duration: 200,
-  //     easing: Easing.linear,
-  //   }).start();
-
-  //   setTimeout(() => {
-  //     this._onGrow();
-  //   }, 2000);
-
-  //   setTimeout(() => {
-  //       console.log(this.buttonAnimated.setValue(0))
-  //     Actions.ChildLogScreen();
-  //     this.setState({isLoading: false});
-  //     this.buttonAnimated.setValue(0);
-  //     this.growAnimated.setValue(0);
-  //   }, 2300);
-  // }
 
   _onPress() {
     if (this.state.isLoading) return;
@@ -129,9 +97,6 @@ export default class ButtonSubmit extends Component {
 
   render() {
 
-    console.log(this.props.navigation);
-    //console.log(this.props.parent.bind(this));
-
     const changeWidth = this.buttonAnimated.interpolate({
       inputRange: [0, 1],
       outputRange: [200 - MARGIN, MARGIN],
@@ -140,17 +105,6 @@ export default class ButtonSubmit extends Component {
       inputRange: [0, 1],
       outputRange: [1, MARGIN],
     });
-
-    const parent = () => {
-      console.log('ppppppppppppppp')
-      //this.props.navigation.navigate('LoginScreen')
-      object.parent1();
-    }
-
-    const child = ({navigation})=> {
-      console.log('ccccccccccccccccccccccccccc');
-    }
-
 
     return (
       <View style={styles.container}>
@@ -171,22 +125,6 @@ export default class ButtonSubmit extends Component {
             style={[styles.circle, {transform: [{scale: changeScale}]}]}
           />
         </Animated.View>
-        {/* <Animated.View style={{width: changeWidth}}>
-          <TouchableOpacity
-            style={styles.button}
-            //onPress={this._onPress}
-            onPress={this.child}
-            activeOpacity={1}>
-            {this.state.isLoading ? (
-              <Image source={spinner} style={styles.image} />
-            ) : (
-              <Text style={styles.text}>CHILD</Text>
-            )}
-          </TouchableOpacity>
-          <Animated.View
-            style={[styles.circle, {transform: [{scale: changeScale}]}]}
-          />
-        </Animated.View> */}
       </View>
     );
   }

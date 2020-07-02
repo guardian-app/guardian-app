@@ -28,27 +28,19 @@ class DialogSpec extends Component {
     render() {
         return (
             <Container>  
-                {/* <Toolbar
-                    leftElement="arrow-back"
-                    onLeftElementPress={() => this.props.navigation.goBack()}
-                    centerElement="Dialog"
-                /> */}
                 <View style={styles.container}>
                     <Dialog>
                         <Dialog.Title><Text>Guidelines</Text></Dialog.Title>
                         <Dialog.Content>
                             <Text>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                nisi ut aliquip ex ea commodo consequat.
+                                You can track your child's location history through this.
+                                You have to allow location permissions on your children's device.
+                                If you want to get locations with high accuracy, 
+                                you have to have a good internet connection on both devices
                             </Text>
                         </Dialog.Content>
                         <Dialog.Actions>
-                            {/* <DialogDefaultActions
-                                actions={['Dismiss', 'Keep']}
-                                onActionPress={() => {}}
-                            /> */}
+                           
                         </Dialog.Actions>
                     </Dialog>
                 </View>

@@ -72,26 +72,14 @@ export default class Temp extends Component {
 
   showPass() {
 
-    // const {username} = this.state;
-    // const {password} = this.state;
-    // console.log('fuck');
-    // console.log("username: ",this.state.username);
-    // console.log("password: ",this.state.password);
-
-    // console.log(this.state.showPass);
-    // console.log(this.state.showPass);
-
     this.state.press === false
       ? this.setState({showPass: false, press: true})
       : this.setState({showPass: true, press: false});
   }
 
   _forgot() {
-    console.log('call')
     const {Username} = this.state
     //var email_address = this.state.Username;
-    console.log(Username)
-      console.log('pppppppp');
 
       if(!Username){
         Alert.alert(
@@ -104,7 +92,6 @@ export default class Temp extends Component {
         )
       }
       else{
-        console.log("come user");
 
         fetch("http://192.168.43.133:3000/users/reset",{
           method: "POST",
@@ -120,8 +107,6 @@ export default class Temp extends Component {
     
         .then(function(response) {
           
-          console.log("ttttttttttttttttttt")
-          console.log(response.status);
           
            if(response.status == 404){
             console.log('comeeeeeee')
@@ -134,7 +119,6 @@ export default class Temp extends Component {
             )
           }
           else if(response.status == 200){
-            console.log('20000000');
             Actions.ResetScreen();
           }
           else{
@@ -179,9 +163,6 @@ export default class Temp extends Component {
 
   _onPress() {
 
-    console.log('fuck');
-    console.log("username: ",this.state.Username);
-    console.log("password: ",this.state.Password);
 
     if (this.state.isLoading) return;
 
@@ -207,11 +188,7 @@ export default class Temp extends Component {
 
     .then(function(response) {
       
-      console.log("ttttttttttttttttttt")
-      console.log(response.status);
-      
        if(response.status == 404){
-        console.log('comeeeeeee')
         Alert.alert(
           "Login Failed",
           "E-mail address is not registered!",
@@ -260,22 +237,17 @@ export default class Temp extends Component {
         localStorage.setItem("address", json.user.address);
         localStorage.setItem("phone_number", json.user.phone_number);
       }
-        //console.log(localStorage.getItem("user"));
-        // localStorage.setItem("key", JSON.stringify(json.token))
+        
         let value = localStorage.getItem("key");
-        console.log(value);
+        
         try {
           value = JSON.parse(value);
           //this.setState({ [key]: value });
-          console.log(value);
+          c
         } catch (e) {
-          // handle empty string
-          //this.setState({ [key]: value });
-          console.log(value);
+          
         }
-        console.log('key');
-        console.log(value);
-
+        
         Alert.alert(
           "Login Successful",
           "",

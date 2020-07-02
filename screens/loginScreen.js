@@ -17,9 +17,6 @@ export default class LoginScreen extends Component {
 
         <Temp/>
         <SignupSection/>
-        {/* <Form />
-        <SignupSection />
-        <ButtonSubmit /> */}
       </Wallpaper>
     );
   }

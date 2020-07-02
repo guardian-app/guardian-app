@@ -16,9 +16,6 @@ export default class FrontScreen extends Component {
   render() {
 
     console.log(this.props.navigation);
-    // const parent1 = () => {
-    //   this.props.navigation.navigate('LoginScreen')
-    // }
 
     return (
       <Wallpaper>
@@ -29,15 +26,3 @@ export default class FrontScreen extends Component {
   }
 }
 
-// const FrontScreen =() => {
-//       return (
-//       <View>
-//         <Wallpaper>
-//         <Logo />
-//         <ButtonSubmit />
-//       </Wallpaper>
-//       </View>
-//     );
-// }
-
-// export default FrontScreen
