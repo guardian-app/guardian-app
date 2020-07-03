@@ -43,7 +43,13 @@ const AppContainer = () => {
                     </NavigationContainer>
                 );
             } else {
-                return <SplashScene />;
+                return (
+                    <NavigationContainer>
+                        <Stack.Navigator initialRouteName="SplashScene" headerMode="none">
+                            <Stack.Screen name="SplashScene" component={SplashScene} />
+                        </Stack.Navigator>
+                    </NavigationContainer>
+                );
             };
         } else {
             return (
@@ -59,7 +65,13 @@ const AppContainer = () => {
         };
     } else {
         userValidateToken();
-        return <SplashScene />;
+        return (
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="SplashScene" headerMode="none">
+                    <Stack.Screen name="SplashScene" component={SplashScene} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        );
     };
 };
 
