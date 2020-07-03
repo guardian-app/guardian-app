@@ -13,8 +13,7 @@ const Background = ({ children }: Props) => (
     <ImageBackground
         source={require('../assets/background_dot.png')}
         resizeMode="repeat"
-        style={styles.background}
-    >
+        style={styles.background}>
         <KeyboardAvoidingView style={styles.container}>
             {children}
         </KeyboardAvoidingView>
@@ -24,7 +23,7 @@ const Background = ({ children }: Props) => (
 const styles = StyleSheet.create({
     background: {
         flex: 1,
-        width: '100%',
+        width: '100%'
     },
     container: {
         flex: 1,
@@ -33,8 +32,8 @@ const styles = StyleSheet.create({
         maxWidth: 340,
         alignSelf: 'center',
         alignItems: 'center',
-        justifyContent: 'center',
-    },
+        justifyContent: 'center'
+    }
 });
 
 export default memo(Background);

@@ -14,8 +14,7 @@ const Button = ({ mode, style, children, ...props }: Props) => (
         ]}
         labelStyle={styles.text}
         mode={mode}
-        {...props}
-    >
+        {...props}>
         {children}
     </PaperButton>
 );
@@ -29,7 +28,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 15,
         lineHeight: 26,
-    },
+    }
 });
 
 export default memo(Button);

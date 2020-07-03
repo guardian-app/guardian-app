@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import HideWithKeyboard from 'react-native-hide-with-keyboard';
 import { connect } from 'react-redux';
@@ -9,7 +9,7 @@ import {
     Button,
     TextInput,
     BackButton
-} from '../components'
+} from '../components';
 import { theme } from '../styles';
 import { Navigation } from '../types';
 import {
@@ -20,21 +20,25 @@ import {
     addressValidator,
     phoneValidator
 } from '../utils/validators';
-import { compose } from 'redux';
 import { userCreate } from '../actions';
 import { User } from '../types';
 
 export interface OwnProps {
     navigation: Navigation;
-}
+};
 
 interface DispatchProps {
     userCreate: (user: User) => void
-}
+};
 
-type Props = DispatchProps & OwnProps
+interface StateProps {
+    createError: string,
+    createMessage: string
+};
 
-const RegisterScene = ({ navigation, userCreate }: Props) => {
+type Props = DispatchProps & OwnProps & StateProps;
+
+const RegisterScene = ({ navigation, userCreate, createError, createMessage }: Props) => {
     const [emailAddress, setEmailAddress] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
     const [confirmPassword, setConfirmPassword] = useState({ value: '', error: '' });
@@ -42,6 +46,13 @@ const RegisterScene = ({ navigation, userCreate }: Props) => {
     const [lastName, setLastName] = useState({ value: '', error: '' })
     const [address, setAddress] = useState({ value: '', error: '' });
     const [phoneNumber, setPhoneNumber] = useState({ value: '', error: '' });
+    const [submitted, setSubmitted] = useState(false);
+
+    useEffect(() => {
+        if (submitted && createMessage.length) {
+            navigation.navigate("LoginScene");
+        };
+    }, [submitted, createMessage]);
 
     const _onSignUpPressed = () => {
         const emailAddressError = emailValidator(emailAddress.value);
@@ -60,10 +71,10 @@ const RegisterScene = ({ navigation, userCreate }: Props) => {
             setLastName({ ...lastName, error: lastNameError });
             setAddress({ ...address, error: addressError });
             setPhoneNumber({ ...phoneNumber, error: phoneNumberError });
-
             return;
-        }
+        };
 
+        setSubmitted(true);
         userCreate({
             email_address: emailAddress.value,
             password: password.value,
@@ -72,9 +83,6 @@ const RegisterScene = ({ navigation, userCreate }: Props) => {
             address: address.value,
             phone_number: phoneNumber.value,
         });
-
-        // Finally,
-        // navigation.navigate("Dashboard");
     };
 
     return (
@@ -160,9 +168,11 @@ const RegisterScene = ({ navigation, userCreate }: Props) => {
                 />
             </ScrollView>
 
+            {(submitted && createError && createError.length) ? <Text style={styles.errorText}>{createError}</Text> : null}
+
             <Button mode="contained" onPress={_onSignUpPressed} style={styles.button}>
                 Sign Up
-                </Button>
+            </Button>
 
             <View style={styles.row}>
                 <Text style={styles.label}>Already have an account? </Text>
@@ -198,10 +208,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    errorText: {
+        flexDirection: 'row',
+        marginTop: 4,
+        marginBottom: 4,
+        color: theme.colors.error,
+    }
 });
 
-const mapDispatchToProps = (dispatch: Function) => ({
+const mapDispatchToProps = (dispatch: any) => ({
     userCreate: (user: User) => dispatch(userCreate(user))
 });
 
-export default compose(connect(null, mapDispatchToProps), React.memo)(RegisterScene);
+const mapStateToProps = (state: any) => ({
+    createMessage: state.userReducer.createMessage,
+    createError: state.userReducer.createError
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterScene);

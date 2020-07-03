@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         height: 128,
         marginBottom: 12,
         borderRadius: 32
-    },
+    }
 });
 
 export default memo(Logo);

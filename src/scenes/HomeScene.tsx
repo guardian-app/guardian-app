@@ -29,6 +29,6 @@ const LoginScene = ({ navigation }: Props) => {
             </Button>
         </Background>
     );
-}
+};
 
 export default LoginScene;

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, StyleSheet, Text, View, Keyboard } from 'react-native';
+import {
+    TouchableOpacity,
+    StyleSheet,
+    Text,
+    View,
+    Keyboard
+} from 'react-native';
 import HideWithKeyboard from 'react-native-hide-with-keyboard';
-import { compose } from 'redux';
+import { Snackbar } from 'react-native-paper';
 import { connect } from 'react-redux';
 import {
     Background,
@@ -13,34 +19,35 @@ import {
 } from '../components';
 import { theme } from '../styles';
 import { emailValidator, passwordValidator } from '../utils/validators';
-import { Navigation, User } from '../types';
+import { User, Navigation } from '../types';
 import { userAuthenticate } from '../actions';
 
 export interface OwnProps {
     navigation: Navigation;
-}
+};
 
 interface StateProps {
     authenticateError: string,
+    createMessage: string,
+    resetMessage: string,
     currentUser: User
-}
+};
 
 interface DispatchProps {
     userAuthenticate: (user: User) => void
-}
+};
 
-type Props = StateProps & DispatchProps & OwnProps
+type Props = StateProps & DispatchProps & OwnProps;
 
-const LoginScene = ({ navigation, userAuthenticate, authenticateError, currentUser }: Props) => {
+const LoginScene = ({ navigation, userAuthenticate, authenticateError, currentUser, createMessage, resetMessage }: Props) => {
     const [email, setEmail] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
-    const [errorVisibility, setErrorVisibility] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
+    const [visible, setVisible] = React.useState(!!createMessage || !!resetMessage);
 
     useEffect(() => {
-        if (currentUser.hasOwnProperty('user_id')) {
-            console.warn("Redirect now!");
-        };
-    });
+        if (!!createMessage || !!resetMessage) setVisible(true);
+    }, [submitted, currentUser, createMessage, resetMessage]);
 
     const _onLoginPressed = () => {
         const emailError = emailValidator(email.value);
@@ -53,63 +60,74 @@ const LoginScene = ({ navigation, userAuthenticate, authenticateError, currentUs
         };
 
         Keyboard.dismiss();
-        setErrorVisibility(true);
+        setSubmitted(true);
         userAuthenticate({ email_address: email.value, password: password.value });
-        // navigation.navigate("DashboardScene");
     };
 
     return (
-        <Background>
-            <BackButton goBack={() => navigation.navigate("HomeScene")} />
+        <View style={styles.container}>
+            <Background>
+                <BackButton goBack={() => navigation.navigate("HomeScene")} />
 
-            <HideWithKeyboard>
-                <Logo />
-            </HideWithKeyboard>
+                <HideWithKeyboard>
+                    <Logo />
+                </HideWithKeyboard>
 
-            <Header>Welcome back!</Header>
+                <Header>Welcome back!</Header>
 
-            <TextInput
-                label="Email"
-                returnKeyType="next"
-                value={email.value}
-                onChangeText={text => setEmail({ value: text, error: '' })}
-                error={!!email.error}
-                errorText={email.error}
-                autoCapitalize="none"
-                autoCompleteType="email"
-                textContentType="emailAddress"
-                keyboardType="email-address"
-            />
+                <TextInput
+                    label="Email"
+                    returnKeyType="next"
+                    value={email.value}
+                    onChangeText={text => setEmail({ value: text, error: '' })}
+                    error={!!email.error}
+                    errorText={email.error}
+                    autoCapitalize="none"
+                    autoCompleteType="email"
+                    textContentType="emailAddress"
+                    keyboardType="email-address"
+                />
 
-            <TextInput
-                label="Password"
-                returnKeyType="done"
-                value={password.value}
-                onChangeText={text => setPassword({ value: text, error: '' })}
-                error={!!password.error}
-                errorText={password.error}
-                secureTextEntry
-            />
+                <TextInput
+                    label="Password"
+                    returnKeyType="done"
+                    value={password.value}
+                    onChangeText={text => setPassword({ value: text, error: '' })}
+                    error={!!password.error}
+                    errorText={password.error}
+                    secureTextEntry
+                />
 
-            <View style={styles.forgotPassword}>
-                <TouchableOpacity onPress={() => navigation.navigate("ForgotPasswordScene")}>
-                    <Text style={styles.label}>Forgot your password?</Text>
-                </TouchableOpacity>
-            </View>
+                <View style={styles.forgotPassword}>
+                    <TouchableOpacity onPress={() => navigation.navigate("ForgotPasswordScene")}>
+                        <Text style={styles.label}>Forgot your password?</Text>
+                    </TouchableOpacity>
+                </View>
 
-            {errorVisibility && authenticateError.length && <Text style={styles.errorText}>{authenticateError}</Text>}
+                {(submitted && authenticateError.length) ? <Text style={styles.errorText}>{authenticateError}</Text> : null}
 
-            <Button mode="contained" onPress={_onLoginPressed}>
-                Login
+                <Button mode="contained" onPress={_onLoginPressed}>
+                    Login
             </Button>
 
-            <View style={styles.row}>
-                <Text style={styles.label}>Don’t have an account? </Text>
-                <TouchableOpacity onPress={() => navigation.navigate("RegisterScene")}>
-                    <Text style={styles.link}>Sign up</Text>
-                </TouchableOpacity>
-            </View>
-        </Background>
+                <View style={styles.row}>
+                    <Text style={styles.label}>Don’t have an account? </Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("RegisterScene")}>
+                        <Text style={styles.link}>Sign up</Text>
+                    </TouchableOpacity>
+                </View>
+            </Background>
+
+            <Snackbar
+                visible={visible}
+                onDismiss={() => setVisible(false)}
+                action={{
+                    label: 'OK',
+                    onPress: () => setVisible(false)
+                }}>
+                {resetMessage || createMessage}
+            </Snackbar>
+        </View>
     );
 };
 
@@ -136,6 +154,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: theme.colors.primary,
     },
+    container: {
+        flex: 1,
+        justifyContent: 'space-between',
+    }
 });
 
 const mapDispatchToProps = (dispatch: any) => ({
@@ -144,7 +166,9 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 const mapStateToProps = (state: any) => ({
     authenticateError: state.userReducer.authenticateError,
+    createMessage: state.userReducer.createMessage,
+    resetMessage: state.userReducer.resetMessage,
     currentUser: state.userReducer.currentUser
 });
 
-export default compose(connect(mapStateToProps, mapDispatchToProps), React.memo)(LoginScene);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScene);

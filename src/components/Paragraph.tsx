@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
         lineHeight: 26,
         color: theme.colors.secondary,
         textAlign: 'center',
-        marginBottom: 14,
-    },
+        marginBottom: 14
+    }
 });
 
 export default memo(Paragraph);

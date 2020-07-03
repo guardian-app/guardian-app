@@ -10,4 +10,4 @@ export type User = {
     address?: string,
     phone_number?: string,
     role?: string
-}
+};

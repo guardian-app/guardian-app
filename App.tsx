@@ -14,10 +14,10 @@ const App = () => {
   return (
     <StoreProvider store={store}>
       <PaperProvider theme={theme}>
-          <AppContainer />
+        <AppContainer />
       </PaperProvider >
     </StoreProvider>
   );
-}
+};
 
 export default App;
