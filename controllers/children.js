@@ -1,6 +1,7 @@
 const { selectChildren, selectChildById, selectChildParentById, insertChild } = require('../services/children');
 const { selectParentChildrenById } = require('../services/parents');
 const bcrypt = require('bcrypt');
+const { selectUserByEmailAddress } = require('../services/users');
 
 const getChildren = async (req, res) => {
     try {
@@ -69,7 +70,9 @@ const createChild = async (req, res) => {
 
     try {
         await insertChild(child);
-        res.status(201).send('Success');
+
+        const [users] = await selectUserByEmailAddress(email_address);
+        res.status(201).json({ ...users[0], password: undefined, role: undefined });
     } catch (err) {
         console.warn(`Generic: ${err}`);
         res.status(500).send('Internal Server Error');
