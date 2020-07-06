@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'red',
-    fontSize: 20,
+    fontSize: 20, //font size
     marginVertical: 10,
     alignItems: 'center'
   }
