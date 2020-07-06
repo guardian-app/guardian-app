@@ -14,16 +14,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
+  // return (
+  //   <Typography variant="body2" color="textSecondary" align="center">
+  //     {'Copyright © '}
+  //     <Link color="inherit" href="https://material-ui.com/">
+  //       Your Website
+  //     </Link>{' '}
+  //     {new Date().getFullYear()}
+  //     {'.'}
+  //   </Typography>
+  // );
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -100,10 +100,44 @@ export default function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                name="password"
+                id="address"
+                label="Address"
+                name="adress"
+                autoComplete="adress"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="tele"
+                label="Telephone Number"
+                name="tele"
+                autoComplete="tele"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="password"
                 label="Password"
                 type="password"
-                id="password"
+                name="password"
+                autoComplete="current-password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="conpassword"
+                label="Confirm Password"
+                type="password"
+                id="conpassword"
                 autoComplete="current-password"
               />
             </Grid>
@@ -132,9 +166,9 @@ export default function SignUp() {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
+      {/* <Box mt={5}>
         <Copyright />
-      </Box>
+      </Box> */}
     </Container>
   );
 }

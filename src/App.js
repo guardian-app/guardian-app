@@ -9,6 +9,11 @@ function App() {
   return (
     <Router>
     <div className="App">
+    {/* <Route exact path="/" render={props=> (
+      <React.Fragment>
+        {<SignIn/>}
+      </React.Fragment>
+    )} /> */}
      <Route path="/dashboard" component={Dashboard}/> 
      <Route path="/signup" component={SignUp}/> 
      <Route path="/signin" component={SignIn}/>
