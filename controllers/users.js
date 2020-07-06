@@ -20,10 +20,8 @@ const createUser = async (req, res) => {
     };
 
     try {
-        await Promise.all([
-            insertUser(user),
-            insertVerificationKey(email_address, key)
-        ]);
+        await insertUser(user),
+        await insertVerificationKey(email_address, key)
 
         res.status(201).send('Success');
         await sendVerificationEmail(email_address, key);
