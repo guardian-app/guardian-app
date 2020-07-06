@@ -16,8 +16,19 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "package": "com.teamguardian.guardian",
+      "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDsnlRQE-g0hBTL_UbnpdmtHDMSwJCX4CQ"
+        }
+      }
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.teamguardian.guardian",
+      "buildNumber": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"

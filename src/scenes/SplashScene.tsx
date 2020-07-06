@@ -6,6 +6,7 @@ import {
     Paragraph
 } from '../components';
 import { ActivityIndicator } from 'react-native-paper';
+import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
 import { colors } from '../styles';
 
@@ -22,6 +23,8 @@ const SplashScene = () => {
             <View style={{ marginTop: 64 }}>
                 <ActivityIndicator animating={true} size="large" color={colors.primary} />
             </View>
+
+            <StatusBar style="light" />
         </Background>
     );
 };

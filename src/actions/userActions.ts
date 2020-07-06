@@ -3,6 +3,8 @@ import { User } from '../types';
 
 export const userCreate = (user: User) => {
     return async (dispatch: Function) => {
+        dispatch(userCreate_Ready());
+
         const request = fetch(
             `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/users/create`,
             {
@@ -28,6 +30,8 @@ export const userCreate = (user: User) => {
 
 export const userAuthenticate = (user: User) => {
     return async (dispatch: Function) => {
+        dispatch(userAuthenticate_Ready());
+
         const request = fetch(
             `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/users/authenticate`,
             {
@@ -57,6 +61,8 @@ export const userAuthenticate = (user: User) => {
 
 export const userResetPasswordRequest = (emailAddress: string) => {
     return async (dispatch: Function) => {
+        dispatch(userResetPasswordRequest_Ready());
+
         const request = fetch(
             `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/users/reset`,
             {
@@ -82,10 +88,12 @@ export const userResetPasswordRequest = (emailAddress: string) => {
 
 export const userResetPassword = (emailAddress: string, resetCode: string, password: string) => {
     return async (dispatch: Function) => {
+        dispatch(userResetPassword_Ready());
+
         const request = fetch(
-            `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/users/authenticate`,
+            `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/users/reset`,
             {
-                method: "POST",
+                method: "PUT",
                 headers: { 'Content-Type': 'application/json', Accept: 'application/json', },
                 body: JSON.stringify({ email_address: emailAddress, reset_key: resetCode, password: password })
             }
@@ -107,6 +115,8 @@ export const userResetPassword = (emailAddress: string, resetCode: string, passw
 
 export const userValidateToken = () => {
     return async (dispatch: Function) => {
+        dispatch(userAuthenticate_Ready());
+
         try {
             const token = await SecureStore.getItemAsync("token");
             if (token === null) return dispatch(userAuthenticate_Failure(''));
@@ -144,6 +154,10 @@ export const userLogout = () => {
     };
 };
 
+const userAuthenticate_Ready = () => ({
+    type: 'USER_AUTHENTICATE_READY'
+});
+
 const userAuthenticate_Success = (user: User, token: string) => ({
     type: 'USER_AUTHENTICATE_SUCCESS',
     user: user,
@@ -153,6 +167,10 @@ const userAuthenticate_Success = (user: User, token: string) => ({
 const userAuthenticate_Failure = (message: string) => ({
     type: 'USER_AUTHENTICATE_FAILURE',
     error: message
+});
+
+const userCreate_Ready = () => ({
+    type: 'USER_CREATE_READY'
 });
 
 const userCreate_Success = (message: string) => ({
@@ -165,6 +183,10 @@ const userCreate_Failure = (message: string) => ({
     error: message
 });
 
+const userResetPasswordRequest_Ready = () => ({
+    type: 'USER_RESET_PASSWORD_REQUEST_READY'
+});
+
 const userResetPasswordRequest_Success = (message: string) => ({
     type: 'USER_RESET_PASSWORD_REQUEST_SUCCESS',
     message: message
@@ -173,6 +195,10 @@ const userResetPasswordRequest_Success = (message: string) => ({
 const userResetPasswordRequest_Failure = (message: string) => ({
     type: 'USER_RESET_PASSWORD_REQUEST_FAILURE',
     error: message
+});
+
+const userResetPassword_Ready = () => ({
+    type: 'USER_RESET_PASSWORD_READY'
 });
 
 const userResetPassword_Success = (message: string) => ({

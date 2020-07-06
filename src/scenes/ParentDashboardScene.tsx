@@ -1,12 +1,8 @@
 import React, { useCallback } from 'react';
+import { BottomNavigation, } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
-import {
-    Logo,
-    Header,
-    Paragraph,
-    Button,
-    Background
-} from '../components';
+import { default as ParentChildrenScene } from './ParentChildrenScene';
+import { default as ParentProfileScene } from './ParentProfileScene';
 import { Navigation } from '../types';
 import { userLogout } from '../actions';
 
@@ -21,18 +17,28 @@ const Dashboard = ({ navigation }: Props) => {
         [dispatch]
     );
 
+    const [index, setIndex] = React.useState(0);
+    const [routes] = React.useState([
+        { key: 'children', title: 'Children', icon: 'account-child' },
+        { key: 'profile', title: 'Profile', icon: 'account' },
+    ]);
+
+    const renderScene = ({ route, jumpTo }: any) => {
+        switch (route.key) {
+            case 'children':
+                return <ParentChildrenScene navigation={navigation} />;
+            case 'profile':
+                return <ParentProfileScene navigation={navigation} />;
+        };
+    };
+
     return (
-        <Background>
-            <Logo />
-            <Header>Parent Dashboard</Header>
-            <Paragraph>
-                Your amazing app starts here. Open you favourite code editor and start
-                editing this project.
-            </Paragraph>
-            <Button mode="outlined" onPress={logout}>
-                Logout
-            </Button>
-        </Background>
+        <BottomNavigation
+            navigationState={{ index, routes }}
+            onIndexChange={setIndex}
+            renderScene={renderScene}
+            sceneAnimationEnabled={true}
+        />
     );
 };
 

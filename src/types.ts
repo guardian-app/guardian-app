@@ -1,8 +1,11 @@
 export type Navigation = {
-    navigate: (scene: string) => void;
+    navigate: (scene: string, params?: {}) => void;
+    goBack: () => void;
 };
 
 export type User = {
+    user_id?: number,
+    parent_id?: number
     email_address: string,
     password?: string,
     first_name?: string,

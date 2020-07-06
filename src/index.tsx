@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,7 +10,9 @@ import {
     ForgotPasswordScene,
     ChildDashboardScene,
     ParentDashboardScene,
-    SplashScene
+    SplashScene,
+    AddChildScene,
+    ChildMapScene
 } from './scenes';
 import { userValidateToken as _userValidateToken } from './actions';
 
@@ -24,6 +26,10 @@ const AppContainer = () => {
     const dispatch = useDispatch();
     const userValidateToken: any = () => dispatch(_userValidateToken());
 
+    useEffect(() => {
+        if (!tokenValidated) userValidateToken();
+    }, [tokenValidated]);
+
     if (tokenValidated) {
         if (loggedIn && currentUser) {
             if (currentUser.role === "parent") {
@@ -31,6 +37,8 @@ const AppContainer = () => {
                     <NavigationContainer>
                         <Stack.Navigator initialRouteName="ParentDashboardScene" headerMode="none">
                             <Stack.Screen name="ParentDashboardScene" component={ParentDashboardScene} />
+                            <Stack.Screen name="AddChildScene" component={AddChildScene} />
+                            <Stack.Screen name="ChildMapScene" component={ChildMapScene} />
                         </Stack.Navigator>
                     </NavigationContainer>
                 );
@@ -64,7 +72,6 @@ const AppContainer = () => {
             );
         };
     } else {
-        userValidateToken();
         return (
             <NavigationContainer>
                 <Stack.Navigator initialRouteName="SplashScene" headerMode="none">

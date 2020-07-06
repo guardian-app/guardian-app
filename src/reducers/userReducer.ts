@@ -14,18 +14,26 @@ const initialState = {
 
 export default function reducer(state = initialState, action: any) {
     switch (action.type) {
+        case 'USER_AUTHENTICATE_READY':
+            return { ...state, currentUser: {}, loggedIn: false, authenticateError: '', token: '', createMessage: '', resetMessage: '' }
         case 'USER_AUTHENTICATE_SUCCESS':
-            return { ...state, authenticateError: '', currentUser: action.user, loggedIn: true, token: action.token }
+            return { ...state, currentUser: action.user, loggedIn: true, token: action.token }
         case 'USER_AUTHENTICATE_FAILURE':
-            return { ...state, authenticateError: action.error, currentUser: {}, loggedIn: false, token: '' }
+            return { ...state, authenticateError: action.error }
+        case 'USER_CREATE_READY':
+            return { ...state, createMessage: '', createError: '' }
         case 'USER_CREATE_SUCCESS':
-            return { ...state, createMessage: action.message, createError: '' }
+            return { ...state, createMessage: action.message }
         case 'USER_CREATE_FAILURE':
-            return { ...state, createError: action.error, createMessage: '' }
+            return { ...state, createError: action.error }
+        case 'USER_RESET_PASSWORD_REQUEST_READY':
+            return { ...state, resetRequestMessage: '', resetRequestError: '' }
         case 'USER_RESET_PASSWORD_REQUEST_SUCCESS':
-            return { ...state, resetRequestMessage: action.message, resetRequestError: '' }
+            return { ...state, resetRequestMessage: action.message }
         case 'USER_RESET_PASSWORD_REQUEST_FAILURE':
-            return { ...state, resetRequestError: action.error, resetRequestMessage: '' }
+            return { ...state, resetRequestError: action.error }
+        case 'USER_RESET_PASSWORD_READY':
+            return { ...state, resetMessage: '', resetError: '' }
         case 'USER_RESET_PASSWORD_SUCCESS':
             return { ...state, resetMessage: action.message, resetError: '' }
         case 'USER_RESET_PASSWORD_FAILURE':
