@@ -1,6 +1,7 @@
 import React from 'react';
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler,MDBRow,MDBCol, MDBCollapse, MDBNavItem, MDBNavLink, MDBContainer, MDBView, MDBMask,MDBCard,MDBCardBody, MDBModalFooter,MDBIcon,MDBCardHeader,MDBBtn,MDBInput } from 'mdbreact';
 import { BrowserRouter as Router } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 class FullPageIntroWithNonFixedNavbar extends React.Component {
     //function  FullPageIntroWithNonFixedNavbar(){
@@ -37,21 +38,21 @@ class FullPageIntroWithNonFixedNavbar extends React.Component {
                     <MDBCollapse isOpen={this.state.collapse} navbar>
                       <MDBNavbarNav left>
                         <MDBNavItem >
-                          <MDBNavLink to="/">Home</MDBNavLink>
+                          <MDBNavLink exact to="/">Home</MDBNavLink>
                         </MDBNavItem>
                         <MDBNavItem >
-                          <MDBNavLink to="/about">About Us</MDBNavLink>
+                          <MDBNavLink exact to="/about">About Us</MDBNavLink>
                         </MDBNavItem>
                         <MDBNavItem>
-                          <MDBNavLink to="/contact">Contacts</MDBNavLink>
+                          <MDBNavLink exact to="/contact">Contact Us</MDBNavLink>
                         </MDBNavItem>
                       </MDBNavbarNav>
                       <MDBNavbarNav right>
-                        <MDBNavItem active>
-                        <MDBNavLink to="#">Sign Up</MDBNavLink> 
+                        <MDBNavItem >
+                        <MDBNavLink exact to="/register">Sign Up</MDBNavLink> 
                         </MDBNavItem>
-                        <MDBNavItem active>
-                        <MDBNavLink to="#">Login</MDBNavLink> 
+                        <MDBNavItem >
+                        <MDBNavLink exact to="/login">Login</MDBNavLink> 
                         </MDBNavItem>
                       </MDBNavbarNav>
                     </MDBCollapse>
