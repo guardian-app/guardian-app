@@ -20,6 +20,15 @@ const Mobile = t.refinement(t.String, (mobile)=>{
   const reg = /^\d{10}$/;
   return reg.test(mobile);
 });
+const nic = t.refinement(t.String, (NIC)=>{
+  if(NIC.length == 10 || NIC.length == 12){
+      return true;
+  }
+  else{
+      return false;
+  }
+})
+
 
 export default class App extends Component { 
 
