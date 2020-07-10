@@ -11,6 +11,11 @@ const Email = t.refinement(t.String, (email) => {
     const reg = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/; //or any other regexp
     return reg.test(email);
 });
+const Password = t.refinement(t.String, (password) => {
+  const reg = /^(?=\S+$).{8,}$/;
+  console.log(reg.test(password))
+  return reg.test(password);
+}); 
 export default class App extends Component { 
 
  
