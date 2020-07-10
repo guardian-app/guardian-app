@@ -16,6 +16,11 @@ const Password = t.refinement(t.String, (password) => {
   console.log(reg.test(password))
   return reg.test(password);
 }); 
+const Mobile = t.refinement(t.String, (mobile)=>{
+  const reg = /^\d{10}$/;
+  return reg.test(mobile);
+});
+
 export default class App extends Component { 
 
  
