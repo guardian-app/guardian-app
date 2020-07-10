@@ -29,6 +29,13 @@ const nic = t.refinement(t.String, (NIC)=>{
   }
 })
 
+const User = t.struct({
+  FirstName: t.String,
+  LastName: t.String,
+  mobile: Mobile,
+
+});
+
 
 export default class App extends Component { 
 
