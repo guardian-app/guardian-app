@@ -36,6 +36,66 @@ const User = t.struct({
 
 });
 
+const formStyles = {
+  ...Form.stylesheet,
+  formGroup: {
+    normal: {
+      marginBottom: 10
+    },
+  },
+  controlLabel: {
+    normal: {
+      color: 'blue',
+      fontSize: 18,
+      marginBottom: 7,
+      fontWeight: '600'
+    },
+    // the style applied when a validation error occours
+    error: {
+      color: 'red',
+      fontSize: 18,
+      marginBottom: 7,
+      fontWeight: '600'
+    }
+  }
+}
+
+var values = {
+  FirstName: localStorage.getItem("first_name"),
+  LastName: localStorage.getItem("last_name"),
+  mobile: localStorage.getItem("phone_number"),
+};
+
+const options = {
+  fields: {
+    FirstName : {
+        error: 'provide your first name'
+    }  ,
+    LastName : {
+        error: 'provide your last name'
+    }  ,
+   
+    mobile: {
+        keyboardType:'numeric',
+        error: 'Please, provide correct phone number',
+    },
+   
+  },
+  stylesheet: formStyles,
+};
+
+const _onHome = () =>{
+
+  setTimeout(() => {
+    Actions.HomeScreen();
+  }, 2300);
+}
+
+const _onAlert=()=> {
+  setTimeout(() => {
+    Actions.ChildRegScreen();
+  }, 2300);
+}
 
 export default class App extends Component { 
 
