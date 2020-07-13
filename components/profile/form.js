@@ -23,6 +23,18 @@ const Mobile = t.refinement(t.String, (mobile)=>{
     return reg.test(mobile);
 });
 
+const ConfirmPassword = t.refinement(t.String, (password) => {
+  const reg = /^(?=\S+$).{8,}$/;
+  console.log(reg.test(password))
+  return reg.test(password);
+}); 
+
+const NewPassword = t.refinement(t.String, (password) => {
+  const reg = /^(?=\S+$).{8,}$/;
+  console.log(reg.test(password))
+  return reg.test(password);
+}); 
+
 const nic = t.refinement(t.String, (NIC)=>{
     if(NIC.length == 10 || NIC.length == 12){
         return true;
@@ -38,9 +50,9 @@ const User = t.struct({
   email: Email,
   mobile: Mobile,
   address: t.String,
-  OldPassword: Password,
-  NewPassword: Password,
-  ConfirmPassword: Password,
+  // OldPassword: Password,
+  // NewPassword: NewPassword,
+  // ConfirmPassword: ConfirmPassword,
 
 });
 
@@ -88,12 +100,12 @@ const options = {
     email: {
       error: 'Without an email address how are you going to reset your password when you forget it?'
     },
-    password: {
+    OldPassword: {
       password: true,
       secureTextEntry: true,
       error: 'Choose something you use on a dozen other sites or something you won\'t remember'
     },
-    "Confirm Password" : {
+    ConfirmPassword : {
         error: 'Password confirmation failed'
     }  ,
     NIC :{
@@ -105,6 +117,9 @@ const options = {
     },
     address: {
       error: 'Please provide Address'
+    },
+    NewPassword:{
+
     }
   },
   stylesheet: formStyles,
@@ -125,100 +140,107 @@ const _onAlert=()=> {
 
 export default class App extends Component { 
 
-  state = {
-    first_name: localStorage.getItem("first_name"),
-    last_name: localStorage.getItem("last_name"),
-    user_id: localStorage.getItem("user_id"),
-    phone_number: localStorage.getItem("phone_number"),
-    username: localStorage.getItem("username"),
-    address: localStorage.getItem("address"),
-  }
+  // state = {
+  //   first_name: localStorage.getItem("first_name"),
+  //   last_name: localStorage.getItem("last_name"),
+  //   user_id: localStorage.getItem("user_id"),
+  //   phone_number: localStorage.getItem("phone_number"),
+  //   username: localStorage.getItem("username"),
+  //   address: localStorage.getItem("address"),
+  // }
 
   componentDidMount(){
-    this.setState({
-      first_name: localStorage.getItem("first_name"),
-      last_name: localStorage.getItem("last_name"),
-      user_id: localStorage.getItem("user_id"),
-      phone_number: localStorage.getItem("phone_number"),
-      username: localStorage.getItem("username"),
-      address: localStorage.getItem("address"),
-    })
+    //this._form.getValue();
+    // this.setState({
+    //   first_name: localStorage.getItem("first_name"),
+    //   last_name: localStorage.getItem("last_name"),
+    //   user_id: localStorage.getItem("user_id"),
+    //   phone_number: localStorage.getItem("phone_number"),
+    //   username: localStorage.getItem("username"),
+    //   address: localStorage.getItem("address"),
+    // })
   }
 
   handleSubmit = () => {
     const value = this._form.getValue();
     var token = localStorage.getItem("key");
-    
+    console.log(value)
     ///fetch eka
+    if(value.email && value.FirstName && value.LastName && value.address && value.mobile && value.OldPassword && value.NewPassword && value.ConfirmPassword){
 
-    fetch("http://192.168.43.133:3000/children/create",{
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": "Bearer "+token,
-      },
-      body: JSON.stringify({
-        email_address : value.email,
-        first_name: value.FirstName,
-        last_name: value.LastName,
-        address: value.address,
-        phone_number: value.mobile,
-        old_password: value.password,
-        new_password: value.NewPassword,
-        confirm_password: value.ConfirmPassword,
+      fetch("http://192.168.43.133:3000/children/create",{
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer "+token,
+        },
+        body: JSON.stringify({
+          email_address : value.email,
+          first_name: value.FirstName,
+          last_name: value.LastName,
+          address: value.address,
+          phone_number: value.mobile,
+          old_password: value.OldPassword,
+          new_password: value.NewPassword,
+          confirm_password: value.ConfirmPassword,
+        })
+
       })
+      .then(function(response) {
+        
+        if(response.status == 201){
+          console.log('done')
+          Alert.alert(
+            "Registration Success",
+            "Your child is now member of guardian",
+            [
+              { text: "OK", onPress: _onHome() }
+            ]
+          )
+        }
+        else if(response.status == 409){
+          Alert.alert(
+            "Registration Failed!",
+            "Email is already used",
+            [
+              { text: "OK",onPress: _onAlert()  }
+            ]
+          )
+        } 
+        else if(response.status == 401){
+          Alert.alert(
+            "Registration Failed!",
+            "Not found",
+            [
+              { text: "OK",onPress: _onAlert()  }
+            ]
+          )
+        }
+        else if(response.status == 403){
+          Alert.alert(
+            "Registration Failed!",
+            "You are not parent",
+            [
+              { text: "OK",onPress: _onAlert()  }
+            ]
+          )
+        }  
+        else{
+          return response;
+        }
+      }).then(function(response) {
+        return response.json();
+      }).then(function(json) {
+        console.log('Request succeeded with JSON response:', json);
+      }).catch(function(error) {
+        console.log('Request failed:', error);
+      });
 
-    })
-    .then(function(response) {
-      
-      if(response.status == 201){
-        console.log('done')
-        Alert.alert(
-          "Registration Success",
-          "Your child is now member of guardian",
-          [
-            { text: "OK", onPress: _onHome() }
-          ]
-        )
-      }
-      else if(response.status == 409){
-        Alert.alert(
-          "Registration Failed!",
-          "Email is already used",
-          [
-            { text: "OK",onPress: _onAlert()  }
-          ]
-        )
-      } 
-      else if(response.status == 401){
-        Alert.alert(
-          "Registration Failed!",
-          "Not found",
-          [
-            { text: "OK",onPress: _onAlert()  }
-          ]
-        )
-      }
-      else if(response.status == 403){
-        Alert.alert(
-          "Registration Failed!",
-          "You are not parent",
-          [
-            { text: "OK",onPress: _onAlert()  }
-          ]
-        )
-      }  
-      else{
-        return response;
-      }
-    }).then(function(response) {
-      return response.json();
-    }).then(function(json) {
-      console.log('Request succeeded with JSON response:', json);
-    }).catch(function(error) {
-      console.log('Request failed:', error);
-    });
+    }
+    else{
+      Alert.alert("fill all details");
+    }
 
   }
   
@@ -242,13 +264,13 @@ export default class App extends Component {
               />
             </View>
 
-            <View style = {{paddingTop: 20, paddingBottom: 40}}>
+            {/* <View style = {{paddingTop: 20, paddingBottom: 40}}>
               <Button
               color="#800080"
               title="UPDATE"
-              //onPress={this.handleSubmit}
+              onPress={this.handleSubmit}
               />
-            </View>
+            </View> */}
             
         </ScrollView>
         

@@ -30,6 +30,7 @@ export default class Location extends Component{
     if(!token){
         Actions.LoginScreen();
     }
+    
     this.interval = setInterval(() => this.onGetLocation(), 15000);
   }
 

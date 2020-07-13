@@ -17,6 +17,7 @@ import ChildLogScreen from './screens/ChildLogScreen';
 import ProfileScreen from './screens/profileScreen';
 import RestScreen from './screens/resetScreen';
 import ChildRecordScreen from './screens/childRecordScreen';
+import ContactAddScreen from './screens/trustedContact';
 
 
 import Location1 from './screens/location1';
@@ -152,6 +153,12 @@ export default function App() {
 
           <Scene key="ChildRecordScreen"
 	          component={ChildRecordScreen}
+	        	animation='fade'
+	          hideNavBar={true}
+	          
+	        />
+          <Scene key="ContactAddScreen"
+	          component={ContactAddScreen}
 	        	animation='fade'
 	          hideNavBar={true}
 	          

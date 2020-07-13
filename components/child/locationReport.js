@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Text, Alert } from 'react-native';
 import { Table, Row, Rows, TableWrapper } from 'react-native-table-component';
 //import {axios} from 'axios';
 import {Actions, ActionConst} from 'react-native-router-flux';
 import axios, * as others from 'axios';
 import Geocoder from 'react-native-geocoding';
+import { createIconSetFromFontello } from 'react-native-vector-icons';
 //import { Table, TableWrapper, Row } from 'react-native-table-component';
 
 export default class tableExample extends Component {
@@ -16,10 +17,6 @@ constructor(props) {
         locationData: [],
         address: "",
         widthArr: [150, 100, 150],
-
-
-
-
     
     }
     }
@@ -63,8 +60,15 @@ constructor(props) {
             },
         })
         .then(res => {
+            console.log('cncncnc')
             this.setState({loading: true});
             const data = res.data;
+
+            if(res.status == 404){
+                console.log('fsdff')
+                Alert.alert('you child not login today')
+                Actions.HomeScreen();
+            }
 
             const result = Object.keys(data).map((key) => data[key]);
 

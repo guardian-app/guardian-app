@@ -1,6 +1,6 @@
 
 import React, { Component,useState, useEffect } from 'react';
-import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
+// import BackgroundGeolocation from '@mauron85/react-native-background-geolocation';
 ///////////////////////
 
 import {Alert,Dimensions, StyleSheet, Text, View,RefreshControl, AppState, Button} from "react-native";
@@ -10,11 +10,16 @@ import * as TaskManager from 'expo-task-manager';
 import Constants from 'expo-constants'
 import ActionButton from 'react-native-material-ui/src'
 import {Actions, ActionConst} from 'react-native-router-flux';
+import BackgroundGeolocation from "react-native-background-geolocation";
+
 
 const Width = Dimensions.get('window').width;
 const Height = Dimensions.get('window').height;
-
+const SCREEN_HEIGHT = Height;
+const SCREEN_WIDTH  = Width;
 const ASPECT_RATIO = Width / Height;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 
 export default class Location2 extends Component{
@@ -29,11 +34,24 @@ export default class Location2 extends Component{
       time: Date.now(),
       error: null,
       appState: AppState.currentState,
+      initialPosition : {
+        latitude: 6.927079,
+        longitude: 79.861244,
+        latitudeDelta: 2,
+        longitudeDelta: 5
+      },
+
+      markerPosition: {
+        latitude: 0,
+        longitude: 0,
+      }
       
     };
 
     this._backgroundLocation = this._backgroundLocation.bind(this);
   }
+
+  watchId = null;
 
   wait(timeout) {
     return new Promise(resolve => {
@@ -89,11 +107,29 @@ export default class Location2 extends Component{
 
   _activeLocation(){
     navigator.geolocation.getCurrentPosition(position => {
-        this.setState({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null
-        });
+        // this.setState({
+        //   latitude: position.coords.latitude,
+        //   longitude: position.coords.longitude,
+        //   error: null
+        // });
+        // this.setState({
+        //   latitude: parseFloat(position.coords.latitude),
+        //   longitude: parseFloat(position.coords.longitude),
+        //   error: null
+        // });
+
+        var lat = parseFloat(position.coords.latitude);
+        var long = parseFloat(position.coords.longitude);
+
+        var initialRegion={
+          latitude: lat,
+          longitude: long,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }
+
+        this.setState({initialPosition: initialRegion});
+        this.setState({markerPosition: initialRegion});
 
         this._sendLocation(position.coords.latitude,position.coords.longitude,position.timestamp)
 
@@ -101,8 +137,23 @@ export default class Location2 extends Component{
 
         },1000);
     }, 
-    error => this.setState({error: error.message}),
-    {enableHighAccuracy: true, timeout: 20000, maximumAge: 2000}
+    (error) => this.setState({error: error.message}),
+    {enableHighAccuracy: true, timeout: 20000, maximumAge: 2000},
+    this.watchId = navigator.geolocation.watchPosition((position) => {
+      var lat = parseFloat(position.coords.latitude);
+        var long = parseFloat(position.coords.longitude);
+
+        var lastRegion={
+          latitude: lat,
+          longitude: long,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }
+
+        this.setState({initialPosition: lastRegion});
+        this.setState({markerPosition: lastRegion});
+    })
+      //this.watchId  = navigator
     );
   }
 
@@ -145,6 +196,10 @@ export default class Location2 extends Component{
       Actions.LoginScreen();
     }
     
+   
+
+
+
     AppState.addEventListener('change', this._handleAppStateChange);
 
     var lati;
@@ -163,11 +218,12 @@ export default class Location2 extends Component{
   }
 
   componentWillUnmount() {
-    if(localStorage.getItem("key2") == ""){
-      Actions.LoginScreen();
-    }
+    
     AppState.removeEventListener('change', this._handleAppStateChange);
     clearInterval(this.interval);
+
+    navigator.geolocation.clearWatch(this.watchId);
+
   }
 
   _handleAppStateChange = nextAppState => {
@@ -210,7 +266,7 @@ export default class Location2 extends Component{
     return(
       <View Style = {styles.container}>
                 
-        <MapView
+        {/* <MapView
           onPress={e => console.log(e.nativeEvent)}
           provider='google'
           mapType='mutedStandard'
@@ -239,7 +295,41 @@ export default class Location2 extends Component{
             <Marker coordinate={this.state}/>
           }
           
-        </MapView>  
+        </MapView>   */}
+        <MapView
+          style={styles.map}
+          initialRegion={this.state.initialPosition}
+          onPress={e => console.log(e.nativeEvent)}
+          provider='google'
+          mapType='mutedStandard'
+          paddingAdjustmentBehavio="GoogleMaps"
+          showsIndoorLevelPicker={true}
+          cacheEnabled={true}
+          loadingEnabled	={true}
+          isAccessibilityElement	= {true}
+          showsScale
+          showsCompass
+          showsPointsOfInterest
+          showsBuildings
+          showsUserLocation ={true}
+        >
+
+          <MapView.Marker
+            coordinate={this.state.markerPosition}
+          >
+            <View 
+            //style={styles.radius}
+            >
+              <View 
+              //style={styles.marker}
+              >
+
+              </View>
+            </View>
+
+          </MapView.Marker>
+
+        </MapView>
         {/* <Button title="back" onPress={() => Actions.FrontScreen() } /> */}
         <Button title="Logout" onPress={this.onPressLogout } />
       </View>
