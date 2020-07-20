@@ -18,7 +18,7 @@ import ProfileScreen from './screens/profileScreen';
 import RestScreen from './screens/resetScreen';
 import ChildRecordScreen from './screens/childRecordScreen';
 import ContactAddScreen from './screens/trustedContact';
-
+import AddRadiusScreen from './screens/addRadius';
 
 import Location1 from './screens/location1';
 import Location2 from './screens/location2';
@@ -30,50 +30,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    // <View style={styles.screen}>
-      
-    //   <NavigationContainer>
-    //     <Stack.Navigator>
-
-    //       <Stack.Screen
-    //         name= "FrontScreen"
-    //         component= {FrontScreen}
-    //         options={{ title: '',
-    //          headerStyle: {
-    //            height: 0,
-    //           backgroundColor: "#4CBBB9",
-    //         },
-    //         headerTintColor: "black",
-    //         headerTitleStyle: {
-    //           fontWeight: "bold",
-    //           fontSize: 30,
-    //         },
-    //         headerTitleAlign: "center",
-    //       }}
-    //       /> 
-
-    //        <Stack.Screen
-    //         name= "LoginScreen"
-    //         component= {LoginScreen}
-    //         options={{ title: '',
-    //          headerStyle: {
-    //            height: 0,
-    //           backgroundColor: "#4CBBB9",
-    //         },
-    //         headerTintColor: "black",
-    //         headerTitleStyle: {
-    //           fontWeight: "bold",
-    //           fontSize: 30,
-    //         },
-    //         headerTitleAlign: "center",
-    //       }}
-    //       /> 
-
-    //     </Stack.Navigator>
-    //   </NavigationContainer>
-    // </View>
-
-
+    
     <Router>
 	      <Scene key="root">
         <Scene key="FrontScreen"
@@ -159,6 +116,13 @@ export default function App() {
 	        />
           <Scene key="ContactAddScreen"
 	          component={ContactAddScreen}
+	        	animation='fade'
+	          hideNavBar={true}
+	          
+	        />
+
+          <Scene key="AddRadiusScreen"
+	          component={AddRadiusScreen}
 	        	animation='fade'
 	          hideNavBar={true}
 	          

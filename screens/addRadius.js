@@ -1,35 +1,34 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { ToastAndroid, StyleSheet,Image, ScrollView, Platform, Animated, Easing, Text, View, Alert, TouchableOpacity, Button,ListView} from 'react-native';
+import { ToastAndroid, StyleSheet, ScrollView, Platform, Animated, Easing, Text, View, TouchableOpacity, Button } from 'react-native';
 import 'localstorage-polyfill';
 import Axios from 'axios';
-import { Content, Header, Form, Input, Item,ListItem,Icon,  Label, List} from 'native-base'; 
 
 import routes from '../routes';
 
 import Container from '../Container';
-// import List from "../List/index";
-// import Tool from '../Toolbars/index';
-// import Draw from '../Drawer/index';
-// //import Dialog from '../Dialog/index';
-// import Radio from '../RadioButton/index';
-// import ButtonPress from '../components/home/index';
+import List from "../List/index";
+import Tool from '../Toolbars/index';
+import Draw from '../Drawer/index';
+//import Dialog from '../Dialog/index';
+import Radio from '../RadioButton/index';
+import ButtonPress from '../components/home/index';
 import Dialog from '../components/home/dialog';
+import Data from '../components/geofence/addGeofence';
 
 // components
 import {
     ActionButton,
     Avatar,
-    //ListItem,
+    ListItem,
     Toolbar,
     BottomNavigation,
-    //Icon,
+    Icon,
     Subheader,
     // Button, 
 } from 'react-native-material-ui/src';
 import { createIconSetFromFontello } from 'react-native-vector-icons';
 import {Actions, ActionConst} from 'react-native-router-flux';
-import { red100 } from 'react-native-material-ui/src/styles/colors';
 
 const UP = 1;
 const DOWN = -1;
@@ -47,13 +46,12 @@ class Home extends Component {
 
         this.offset = 0;
         this.scrollDirection = 0;
-        //this.db = new ListView.DataSource({ rowHasChanged: (r1, r2 => r1 !== r2)  })
 
         this.state = {
             selected: [],
             children: [],
             searchText: '',
-            active: '',
+            active: 'people',
             moveAnimated: new Animated.Value(0),
             loading: false,
             
@@ -62,59 +60,27 @@ class Home extends Component {
     
     async componentDidMount(){
 
+        this.setState({ active: 'emergency' });
+
         let token = localStorage.getItem("key");
         
         if(!localStorage.getItem("key")){
             Actions.LoginScreen();
         }
 
-       let parent_id = localStorage.getItem("user_id");
-
-        console.log('mount');
-        Axios.get('http://192.168.43.133:3000/parents/'+parent_id+'/children',{
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-                "Authorization": "Bearer "+token,
-            },
+        this.setState({
+            first_name: localStorage.getItem("first_name"),
+            last_name: localStorage.getItem("last_name"),
+            user_id: localStorage.getItem("user_id"),
+            phone_number: localStorage.getItem("phone_number"),
+            username: localStorage.getItem("username"),
+            address: localStorage.getItem("address"),
         })
-        .then(res => {
-            this.setState({loading: true});
-            const data = res.data;
-
-            setTimeout(()=> this.setState({
-                loading: false,
-                children: data
-            }), 100)
-
-            
-        }).catch = (e) => {
-            console.error('error ',e)
-        }
-    }
-
-    onChild = (child_id) => {
-        
-        localStorage.setItem("child_id", child_id);
-        
-
-        Alert.alert(
-            'Menu',
-            'Make your choice',
-            [
-              
-              {text: 'Cancel', onPress: () => {},  style: 'cancel'},
-              {text: 'Child location', onPress: () => {Actions.ChildLocation()}},
-              {text: 'Today report', onPress: () => {Actions.ChildRecordScreen()}},
-            
-            ]
-        )      
-        console.log('pppp')
 
     }
 
     onAvatarPressed = (value) => {
-        
+
         const { selected } = this.state;
         console.log(selected);
         const index = selected.indexOf(value);
@@ -190,10 +156,9 @@ class Home extends Component {
             <Toolbar
                 key="toolbar"
                 leftElement="arrow-back"
-                onLeftElementPress={() => {Actions.FrontScreen()}}
+                onLeftElementPress={() => {Actions.HomeScreen()}}
                 //onLeftElementPress={() => {}}
-                centerElement="Parent"
-                
+                centerElement="My Profile"
             />
         );
     }
@@ -206,22 +171,14 @@ class Home extends Component {
 
         return (
             <ListItem
-               
+                
             />
         );
     }
     render() {
 
-        const run =() =>{
-            console.log("run")
-        }
-
         const onPressProfile = () => {
             this.setState({ active: 'profile' })
-            var id = localStorage.getItem("key");
-            console.log("FUCK ID",id);
-
-            Actions.ProfileScreen();
         }
 
         const onPressLogout =() => {
@@ -229,33 +186,17 @@ class Home extends Component {
             localStorage.setItem("key", "");
             localStorage.setItem("role","")
             localStorage.setItem("id","");
-            console.log(localStorage.getItem("key"));
+
             Actions.LoginScreen();
         } 
 
         const onPressEmergency = () => {
             this.setState({ active: 'emergency' });
-            Alert.alert(
-                'Menu',
-                'Make your choice',
-                [
-                
-                    {text: 'Cancel', onPress: () => {},  style: 'cancel'},
-                    {text: 'Add Contact', onPress: () => {Actions.ContactAddScreen()}},
-                    {text: 'Today report', onPress: () => {Actions.AddRadiusScreen()}},
-                
-                ]
-            )
         }
 
         const  onPressLocation = () => {
-            //this.setState({ active: 'location' })
+            this.setState({ active: 'location' })
             Actions.Location1();
-        }
-
-        const childAdd =(action) => {
-            console.log('fuck');
-            Actions.ChildRegScreen();
         }
 
         return (
@@ -266,60 +207,12 @@ class Home extends Component {
                     keyboardShouldPersistTaps="always"
                     keyboardDismissMode="interactive"
                     onScroll={this.onScroll}
-                    //onPress={run()}
-                >
-                    <Dialog/>
-                    <Text style={styles.titleText}>YOUR CHILDREN</Text>
-                    {this.state.children.map((appoints) => (
-                         <View    >
-                             {/* <Text></Text> 
-                             <Text></Text> */}
-                          {/* //  <Button 
-                        //         style={{marginHorizontal: 100, paddingBottom: 10,}} 
-                        //         title={appoints.first_name+" "+appoints.last_name}
-                        //         onPress = {()  => this.onChild(appoints.user_id)}
-                           //     /> */}
-                            
-                                <ListItem  >
-                                <Image source={require('../image/iconchild.jpg')} style={{height:20, width: 20}} />
-                                    <TouchableOpacity onPress = {()  => this.onChild(appoints.user_id)}  >
-                                        
-                                        <Text style={{fontWeight:"bold", color:"grey"}}>{appoints.first_name+" "+appoints.last_name}</Text>
-                                    </TouchableOpacity>
-                                </ListItem>
-                                
-                                                    
-                         </View>
-
-                        
-                    ))}
-                        {/* <Content>
-                            <List
-                                dataSource={this.db.cloneWithRows(this.state.children)}
-                                renderRow={data =>
-                                    <ListItem>
-                                        <Text>{data.first_name} {data.last_name}</Text>
-                                    </ListItem>
-                                }
-                            />
-                        </Content> */}
                     
-                    {/* <ButtonPress/> */}
+                >
+                    
+                    <Data/>
                     
                 </ScrollView>
-                <ActionButton
-                    actions={[
-                        //{ icon: 'email', label: 'Email' },
-                        {label: "back to home"}
-                    ]}
-                    hidden={this.state.bottomHidden}
-                    icon="add"
-                    transition="speedDial"
-                    onPress={childAdd}
-                    style={{
-                        positionContainer: { bottom: 76 },
-                    }}
-                />
 
                 <BottomNavigation
                     active={this.state.active}
