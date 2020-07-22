@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import axios from 'axios';
 
 function Copyright() {
   // return (
@@ -49,6 +50,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function SignIn() {
+
+ 
+
+
+
+
   // constructor(){
   //   this.state ={
   //     username: "",
@@ -60,17 +67,28 @@ export default function SignIn() {
 
     const classes = useStyles();
 
-    const [email, setEmail] = useState("");
+    const [email_address, setEmail] = useState("");
     const [password, setPassword] = useState("");
   
     function validateForm() {
-      return email.length > 0 && password.length > 0;
+      return email_address.length > 0 && password.length > 0;
     }
   
     function handleSubmit(event) {
-      console.log(email)
+
+      axios.post('http://localhost:3000/users/authenticate', {
+        email_address: this.email_address,
+        password: this.password
+      })
+
+      console.log(email_address)
       console.log(password)
       event.preventDefault();
+
+      
+
+
+      
     }
 
     return (
@@ -93,7 +111,7 @@ export default function SignIn() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              value={email}
+              value={email_address}
               onChange={e => setEmail(e.target.value)}
               autoFocus
             />
