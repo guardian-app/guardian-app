@@ -25,7 +25,7 @@ const Mobile = t.refinement(t.String, (mobile)=>{
 
 
 const User = t.struct({
-  FirstName: t.String,
+   FirstName: t.String,
   LastName: t.String,
   email: Email,
   relationship: t.String,
@@ -107,7 +107,7 @@ export default class App extends Component {
     
     ///fetch eka
 
-    fetch("http://192.168.43.133:3000/",{
+    fetch("http://192.168.43.133:3000/users/createContact",{
       method: "POST",
       headers: {
         "Accept": "application/json",

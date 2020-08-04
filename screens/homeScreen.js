@@ -242,7 +242,7 @@ class Home extends Component {
                 
                     {text: 'Cancel', onPress: () => {},  style: 'cancel'},
                     {text: 'Add Contact', onPress: () => {Actions.ContactAddScreen()}},
-                    {text: 'Today report', onPress: () => {Actions.AddRadiusScreen()}},
+                    {text: 'View Contacts', onPress: () => {Actions.AddRadiusScreen()}},
                 
                 ]
             )
@@ -272,6 +272,7 @@ class Home extends Component {
                     <Text style={styles.titleText}>YOUR CHILDREN</Text>
                     {this.state.children.map((appoints) => (
                          <View    >
+                            
                              {/* <Text></Text> 
                              <Text></Text> */}
                           {/* //  <Button 
