@@ -213,7 +213,12 @@ class Home extends Component {
     render() {
 
         const run =() =>{
-            console.log("run")
+            this.setState({ active: 'Logout' })
+            localStorage.setItem("key", "");
+            localStorage.setItem("role","")
+            localStorage.setItem("id","");
+            console.log(localStorage.getItem("key"));
+            Actions.LoginScreen();
         }
 
         const onPressProfile = () => {
@@ -226,11 +231,17 @@ class Home extends Component {
 
         const onPressLogout =() => {
             this.setState({ active: 'Logout' })
-            localStorage.setItem("key", "");
-            localStorage.setItem("role","")
-            localStorage.setItem("id","");
-            console.log(localStorage.getItem("key"));
-            Actions.LoginScreen();
+            Alert.alert(
+                'Confirmed',
+                'Are you sure to logout?',
+                [
+                
+                    {text: 'Cancel', onPress: () => {Actions.HomeScreen()},  style: 'cancel'},
+                    {text: 'Logout', onPress: () => {run()}},
+                   
+                
+                ]
+            )
         } 
 
         const onPressEmergency = () => {
