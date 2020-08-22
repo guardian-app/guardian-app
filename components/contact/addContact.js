@@ -212,9 +212,9 @@
 import React, { Component } from "react"
 import { View, Button } from "react-native"
 
-import TextField from "textfield"
+import TextField from "./textfield"
 import validation from "validation"
-import validate from "validation_wrapper"
+import validate from "./validation_wrapper"
 
 export default class Form extends Component {
   constructor(props) {
@@ -223,21 +223,37 @@ export default class Form extends Component {
     this.state = {
       email: "",
       emailError: "",
-      password: "",
-      passwordError: ""
+      // password: "",
+      // passwordError: "",
+      firstname: '',
+      firstnameError: '',
+      lastname: "",
+      lastnameError: "",
+      mobile: "",
+      mobileError: "",
+      relationship: "",
+      relationshipError: "",
     }
   }
 
-  register() {
+  validateRegister() {
     const emailError = validate("email", this.state.email)
-    const passwordError = validate("password", this.state.password)
+    // const passwordError = validate("password", this.state.password)
+    const firstnameError = validate("firstname", this.state.firstname)
+    const lastnameError = validate("lastname", this.state.lastname)
+    const mobileError = validate("mobile", this.state.mobile)
+    const relationshipError = validate("relationship", this.state.relationship)
 
     this.setState({
       emailError: emailError,
-      passwordError: passwordError
+      firstnameError: firstnameError,
+      lastnameError: lastnameError,
+      mobileError: mobileError,
+      relationshipError: relationshipError
+      // passwordError: passwordError,
     })
 
-    if (!emailError && !passwordError) {
+    if (!emailError && !firstnameError && !lastnameError && !mobileError && !relationshipError) {
       alert("Details are valid!")
     }
   }
@@ -255,7 +271,7 @@ export default class Form extends Component {
           error={this.state.emailError}
         />
 
-        <TextField
+        {/* <TextField
           onChangeText={(value) => this.setState({ password: value.trim() })}
           onBlur={() => {
             this.setState({
@@ -264,6 +280,46 @@ export default class Form extends Component {
           }}
           error={this.state.passwordError}
           secureTextEntry={true}
+        /> */}
+
+        <TextField
+          onChangeText={(value) => this.setState({ firstname: value.trim() })}
+          onBlur={() => {
+            this.setState({
+              firstnameError: validate("firstname", this.state.firstname)
+            })
+          }}
+          error={this.state.firstnameError}
+        />
+
+        <TextField
+          onChangeText={(value) => this.setState({ lastname: value.trim() })}
+          onBlur={() => {
+            this.setState({
+              lastnameError: validate("lastname", this.state.lastname)
+            })
+          }}
+          error={this.state.lastnameError}
+        />
+
+        <TextField
+          onChangeText={(value) => this.setState({ mobile: value.trim() })}
+          onBlur={() => {
+            this.setState({
+              mobileError: validate("mobile", this.state.mobile)
+            })
+          }}
+          error={this.state.mobileError}
+        />
+
+        <TextField
+          onChangeText={(value) => this.setState({ relationship: value.trim() })}
+          onBlur={() => {
+            this.setState({
+              relationshipError: validate("email", this.state.relationship)
+            })
+          }}
+          error={this.state.relationshipError}
         />
 
         <Button title="Register" onPress={this.validateRegister} />
