@@ -11,7 +11,7 @@ const isOwner = (req, res, next) => {
 const isChildParent = async (req, res, next) => {
     const { child_id } = req.params;
     const { user_id, role } = req.user;
-
+    console.log('daaaa',child_id)
     if (role === 'admin') return next();
 
     try {

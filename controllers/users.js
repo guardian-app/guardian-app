@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { nanoid } = require('nanoid');
-const { insertUser, selectUserByEmailAddress, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress, selectUserByVerificationKey, activateUser, deletePasswordResetKey, insertPasswordResetKey, updateUserPassword, selectUserByPasswordResetKey } = require('../services/users');
+const { insertUser, selectUserByEmailAddress, updateUser, insertVerificationKey, deleteVerificationKey, selectVerificationKeyByEmailAddress, selectUserByVerificationKey, activateUser, deletePasswordResetKey, insertPasswordResetKey, updateUserPassword, selectUserByPasswordResetKey, insertContact, selectContactByEmailAddress } = require('../services/users');
 const { jwtSecret } = require('../config/jwt');
 const { sendVerificationEmail, sendPasswordResetEmail } = require('../config/nodemailer');
 
@@ -189,4 +189,33 @@ const updatePassword = async (req, res) => {
     };
 };
 
-module.exports = { createUser, authenticateUser, getProfile, updateProfile, resendVerificationKey, verifyUser, sendPasswordResetKey, updatePassword };
+const createContact = async( req, res) => {
+    console.log("come contact")
+    const {email_address, first_name, last_name, address, phone_number, relationship} = req.body;
+    const parent_id = req.user.user_id;
+    console.log(first_name);
+
+    const contact = {
+        email_address,
+        first_name,
+        last_name,
+        address,
+        phone_number,
+        relationship,
+        parent_id
+    };
+
+    try{
+        await insertContact(contact);
+
+        const [contacts] = await selectContactByEmailAddress(email_address);
+        console.log(contacts)
+        res.status(201).json({ ...contacts[0] });
+    }
+    catch(err){
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+module.exports = { createUser, authenticateUser, getProfile, updateProfile, resendVerificationKey, verifyUser, sendPasswordResetKey, updatePassword, createContact };
