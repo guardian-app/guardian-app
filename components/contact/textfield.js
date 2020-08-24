@@ -4,7 +4,7 @@ import { View, TextInput, Text } from "react-native"
 const TextField = (props) => (
   <View>
     <TextInput />
-    props.error ? <Text> {props.error} </Text> : null
+    {/* props.error ? <Text> {props.error} </Text> : null */}
   </View>
 )
 

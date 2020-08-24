@@ -209,121 +209,192 @@
 
 
 //////////////////////////
-import React, { Component } from "react"
-import { View, Button } from "react-native"
+// import React, { Component } from "react"
+// import { View, Button } from "react-native"
 
-import TextField from "./textfield"
-import validation from "validation"
-import validate from "./validation_wrapper"
+// import TextField from "./textfield"
+// import validation from "validation"
+// import validate from "./validation_wrapper"
 
-export default class Form extends Component {
-  constructor(props) {
-    super(props)
+// export default class Form extends Component {
+//   constructor(props) {
+//     super(props)
 
-    this.state = {
-      email: "",
-      emailError: "",
-      // password: "",
-      // passwordError: "",
-      firstname: '',
-      firstnameError: '',
-      lastname: "",
-      lastnameError: "",
-      mobile: "",
-      mobileError: "",
-      relationship: "",
-      relationshipError: "",
-    }
+//     this.state = {
+//       email: "",
+//       emailError: "",
+//       // password: "",
+//       // passwordError: "",
+//       firstname: '',
+//       firstnameError: '',
+//       lastname: "",
+//       lastnameError: "",
+//       mobile: "",
+//       mobileError: "",
+//       relationship: "",
+//       relationshipError: "",
+//     }
+//   }
+
+//   validateRegister() {
+//     const emailError = validate("email", this.state.email)
+//     // const passwordError = validate("password", this.state.password)
+//     const firstnameError = validate("firstname", this.state.firstname)
+//     const lastnameError = validate("lastname", this.state.lastname)
+//     const mobileError = validate("mobile", this.state.mobile)
+//     const relationshipError = validate("relationship", this.state.relationship)
+
+//     this.setState({
+//       emailError: emailError,
+//       firstnameError: firstnameError,
+//       lastnameError: lastnameError,
+//       mobileError: mobileError,
+//       relationshipError: relationshipError
+//       // passwordError: passwordError,
+//     })
+
+//     if (!emailError && !firstnameError && !lastnameError && !mobileError && !relationshipError) {
+//       alert("Details are valid!")
+//     }
+//   }
+
+//   render() {
+//     return (
+//       <View>
+//         <TextField
+//           onChangeText={(value) => this.setState({ email: value.trim() })}
+//           onBlur={() => {
+//             this.setState({
+//               emailError: validate("email", this.state.email)
+//             })
+//           }}
+//           error={this.state.emailError}
+//         />
+
+//         {/* <TextField
+//           onChangeText={(value) => this.setState({ password: value.trim() })}
+//           onBlur={() => {
+//             this.setState({
+//               passwordError: validate("password", this.state.password)
+//             })
+//           }}
+//           error={this.state.passwordError}
+//           secureTextEntry={true}
+//         /> */}
+
+//         <TextField
+//           onChangeText={(value) => this.setState({ firstname: value.trim() })}
+//           onBlur={() => {
+//             this.setState({
+//               firstnameError: validate("firstname", this.state.firstname)
+//             })
+//           }}
+//           error={this.state.firstnameError}
+//         />
+
+//         <TextField
+//           onChangeText={(value) => this.setState({ lastname: value.trim() })}
+//           onBlur={() => {
+//             this.setState({
+//               lastnameError: validate("lastname", this.state.lastname)
+//             })
+//           }}
+//           error={this.state.lastnameError}
+//         />
+
+//         <TextField
+//           onChangeText={(value) => this.setState({ mobile: value.trim() })}
+//           onBlur={() => {
+//             this.setState({
+//               mobileError: validate("mobile", this.state.mobile)
+//             })
+//           }}
+//           error={this.state.mobileError}
+//         />
+
+//         <TextField
+//           onChangeText={(value) => this.setState({ relationship: value.trim() })}
+//           onBlur={() => {
+//             this.setState({
+//               relationshipError: validate("email", this.state.relationship)
+//             })
+//           }}
+//           error={this.state.relationshipError}
+//         />
+
+//         <Button title="Register" onPress={this.validateRegister} />
+//       </View>
+//     )
+//   }
+// }
+
+
+import React, { Component } from 'react'
+import { Text, View, TextInput, Button, StyleSheet } from 'react-native'
+
+export default class addContact extends Component {
+
+  state = {
+    firstname: '',
+    lastname: '',
+    email: "",
+    mobile: "",
+    relationship: "",
   }
 
-  validateRegister() {
-    const emailError = validate("email", this.state.email)
-    // const passwordError = validate("password", this.state.password)
-    const firstnameError = validate("firstname", this.state.firstname)
-    const lastnameError = validate("lastname", this.state.lastname)
-    const mobileError = validate("mobile", this.state.mobile)
-    const relationshipError = validate("relationship", this.state.relationship)
+  onSubmit () {
 
-    this.setState({
-      emailError: emailError,
-      firstnameError: firstnameError,
-      lastnameError: lastnameError,
-      mobileError: mobileError,
-      relationshipError: relationshipError
-      // passwordError: passwordError,
-    })
-
-    if (!emailError && !firstnameError && !lastnameError && !mobileError && !relationshipError) {
-      alert("Details are valid!")
-    }
   }
 
   render() {
     return (
-      <View>
-        <TextField
-          onChangeText={(value) => this.setState({ email: value.trim() })}
-          onBlur={() => {
-            this.setState({
-              emailError: validate("email", this.state.email)
-            })
-          }}
-          error={this.state.emailError}
-        />
-
-        {/* <TextField
-          onChangeText={(value) => this.setState({ password: value.trim() })}
-          onBlur={() => {
-            this.setState({
-              passwordError: validate("password", this.state.password)
-            })
-          }}
-          error={this.state.passwordError}
-          secureTextEntry={true}
-        /> */}
-
-        <TextField
-          onChangeText={(value) => this.setState({ firstname: value.trim() })}
-          onBlur={() => {
-            this.setState({
-              firstnameError: validate("firstname", this.state.firstname)
-            })
-          }}
-          error={this.state.firstnameError}
-        />
-
-        <TextField
-          onChangeText={(value) => this.setState({ lastname: value.trim() })}
-          onBlur={() => {
-            this.setState({
-              lastnameError: validate("lastname", this.state.lastname)
-            })
-          }}
-          error={this.state.lastnameError}
-        />
-
-        <TextField
-          onChangeText={(value) => this.setState({ mobile: value.trim() })}
-          onBlur={() => {
-            this.setState({
-              mobileError: validate("mobile", this.state.mobile)
-            })
-          }}
-          error={this.state.mobileError}
-        />
-
-        <TextField
-          onChangeText={(value) => this.setState({ relationship: value.trim() })}
-          onBlur={() => {
-            this.setState({
-              relationshipError: validate("email", this.state.relationship)
-            })
-          }}
-          error={this.state.relationshipError}
-        />
-
-        <Button title="Register" onPress={this.validateRegister} />
+      <View style= {styles.container}>
+        <View style={styles.dataForm}>
+          <View>
+            <Text>First Name</Text>
+            <TextInput
+              placeholder="  first name"
+            />
+          </View>
+          <View>
+            <Text>Last Name</Text>
+            <TextInput
+              placeholder="  last name"
+            />
+          </View>
+          <View>
+            <Text>Email Address</Text>
+            <TextInput
+              placeholder="  email"
+            />
+          </View>
+          <View>
+            <Text>Mobile Number</Text>
+            <TextInput
+              placeholder="  mobile number"
+            />
+          </View>
+          <View>
+            <Text>Relationship</Text>
+            <TextInput
+              placeholder="  relationship"
+            />
+          </View>
+        </View>
+        
+        <View>
+          <Button title="Add Relation" onPress = {this.onSubmit} />
+        </View>
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  dataForm: {
+    marginHorizontal: 5,
+  }
+})

@@ -158,7 +158,7 @@ class Home extends Component {
                 leftElement="arrow-back"
                 onLeftElementPress={() => {Actions.HomeScreen()}}
                 //onLeftElementPress={() => {}}
-                centerElement="My Profile"
+                centerElement="Add Contact"
             />
         );
     }
