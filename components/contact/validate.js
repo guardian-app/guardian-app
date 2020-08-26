@@ -55,8 +55,12 @@ export const validationDictionary = {
       message: "^This is required"
     },
 
-    mobile: {
+    numericality: {
+      //greaterThan: 0,
+      equal : 10,
+      onlyInteger: true,
       message: "^Mobile number must be valid"
+
     }
   },
 
