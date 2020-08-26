@@ -19,11 +19,11 @@ export default class addContact extends Component {
   
       inputs: {
         firstname: {
-          type: "generic",
+          type: "firstname",
           value: ""
         },
         lastname: {
-          type: "generic",
+          type: "lastname",
           value: ""
         },
         email: {
@@ -31,7 +31,7 @@ export default class addContact extends Component {
           value: ""
         },
         address: {
-          type: "generic",
+          type: "address",
           value: ""
         },
   
@@ -39,6 +39,11 @@ export default class addContact extends Component {
           type: "mobile",
           value: ""
         },
+
+        relationship: {
+          type: "relationship",
+          value: ""
+        }
   
       }
   
@@ -90,11 +95,28 @@ export default class addContact extends Component {
     );
   }
 
-  updateInputVal = (val, prop) => {
-    const state = this.state;
-    state[prop] = val;
-    this.setState(state);
+  getFormValidation() {
+    const { inputs } = this.state;
+  
+    const updatedInputs = {};
+  
+    for (const [key, input] of Object.entries(inputs)) {
+      updatedInputs[key] = getInputValidationState({
+        input,
+        value: input.value
+      });
+    }
+  
+    this.setState({
+      inputs: updatedInputs
+    });
   }
+
+  // updateInputVal = (val, prop) => {
+  //   const state = this.state;
+  //   state[prop] = val;
+  //   this.setState(state);
+  // }
 
   onSubmit = ()  => {
 
@@ -184,18 +206,26 @@ export default class addContact extends Component {
 
   }
 
-_onHome = () =>{
+  _onHome = () =>{
 
-  setTimeout(() => {
-    Actions.HomeScreen();
-  }, 2300);
-}
+    setTimeout(() => {
+      Actions.HomeScreen();
+    }, 2300);
+  }
 
-_onAlert=()=> {
-  setTimeout(() => {
-    //Actions.ChildRegScreen();
-  }, 2300);
-}
+  _onAlert=()=> {
+    setTimeout(() => {
+      //Actions.ChildRegScreen();
+    }, 2300);
+  }
+
+  renderError(id) {
+    const { inputs } = this.state;
+    if (inputs[id].errorLabel) {
+      return <Text style={styles.error}>{inputs[id].errorLabel}</Text>;
+    }
+    return null;
+  }
 
   render() {
     return (
@@ -206,48 +236,78 @@ _onAlert=()=> {
             <TextInput
               placeholder="  first name"
               value={this.state.firstname}
-              onChangeText={(val) => this.updateInputVal(val, 'firstname')}
+              // onChangeText={(val) => this.updateInputVal(val, 'firstname')}
+              onChangeText={value => {
+                this.onInputChange({ id: "firstname", value });
+              }}
             />
+            {this.renderError("firstname")}
+            
           </View>
           <View style={styles.textContainer}>
             <Text>Last Name</Text>
             <TextInput
               placeholder="  last name"
               value={this.state.lastname}
-              onChangeText={(val) => this.updateInputVal(val,'lastname')}
+              // onChangeText={(val) => this.updateInputVal(val,'lastname')}
+              onChangeText={value => {
+                this.onInputChange({ id: "lastname", value });
+              }}
             />
+            {this.renderError("lastname")}
+          
           </View>
           <View style={styles.textContainer}>
             <Text>Email Address</Text>
             <TextInput
               placeholder="  email"
               value={this.state.email}
-              onChangeText={(val) => this.updateInputVal(val, 'email')}
+              // onChangeText={(val) => this.updateInputVal(val, 'email')}
+              onChangeText={value => {
+                this.onInputChange({ id: "email", value });
+              }}
             />
+            {this.renderError("email")}
+            
           </View>
           <View style={styles.textContainer}>
             <Text>Mobile Number</Text>
             <TextInput
               placeholder="  mobile number"
               value={this.state.mobile}
-              onChangeText={(val) => this.updateInputVal(val, 'mobile')}
+              // onChangeText={(val) => this.updateInputVal(val, 'mobile')}
+              onChangeText={value => {
+                this.onInputChange({ id: "mobile", value });
+              }}
             />
+            {this.renderError("mobile")}
+            
           </View>
           <View style={styles.textContainer}>
             <Text>Relationship</Text>
             <TextInput
               placeholder="  relationship"
               value={this.state.relationship}
-              onChangeText ={(val) => this.updateInputVal(val, 'relationship')}
+              // onChangeText ={(val) => this.updateInputVal(val, 'relationship')}
+              onChangeText={value => {
+                this.onInputChange({ id: "relationship", value });
+              }}
             />
+            {this.renderError("relationship")}
+            
           </View>
           <View style={styles.textContainer}>
             <Text>Address</Text>
             <TextInput
               placeholder="  address"
               value={this.state.address}
-              onChangeText ={(val) => this.updateInputVal(val, 'address')}
+              // onChangeText ={(val) => this.updateInputVal(val, 'address')}
+              onChangeText={value => {
+                this.onInputChange({ id: "address", value });
+              }}
             />
+            {this.renderError("address")}
+            
           </View>
         </View>
         
