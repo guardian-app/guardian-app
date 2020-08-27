@@ -131,10 +131,58 @@ export default class addContact extends Component {
     }, 2300);
   }
 
+  firstnameValidator(){
+    if(this.state.firstname == ''){
+      this.setState({firstnameError: "Fill the first name field"})
+    }
+    else{
+      this.setState({firstnameError: ''})
+    }
+  }
+
+  lastnameValidator(){
+    if(this.state.lastname == ''){
+      this.setState({lastnameError: "Fill the last name field"})
+    }
+    else{
+      this.setState({lastnameError: ''})
+    }
+  }
+
+  addressValidator(){
+    if(this.state.address == ''){
+      this.setState({addressError: "Fill the address field"})
+    }
+    else{
+      this.setState({addressError: ''})
+    }
+  }
+
+  relationshipValidator(){
+    if(this.state.relationship == ''){
+      this.setState({relationshipError: "Fill the relationship field"})
+    }
+    else{
+      this.setState({relationshipError: ''})
+    }
+  }
+
+  mobileValidator(){
+    if(this.state.mobile == ""){
+      this.setState({mobileError: "Fill the mobile field"})
+    }
+    else if(this.state.mobile.length != 10){
+      this.setState({mobileError: "Mobile number is not valid"})
+    }
+    else{
+      this.setState({mobileError: ""})
+    }
+  }
+
   emailValidator(){
     const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
     if(this.state.email== ""){
-      this.setState({emailError: "fill the email field"})
+      this.setState({emailError: "Fill the email field"})
     }
     else if( ! expression.test(String(this.state.email).toLowerCase())){
       this.setState({emailError: "Please insert a valid email"});
@@ -153,19 +201,22 @@ export default class addContact extends Component {
             <TextInput
               placeholder="  first name"
               value={this.state.firstname}
-              onBlur={()=>this.nameValidator()}
+              onBlur={()=>this.firstnameValidator()}
               // onChangeText={(val) => this.updateInputVal(val, 'firstname')}
               onChangeText={(text) => {this.setState({firstname: text})}}
             />
+            <Text style={{ color:"red"}}>{this.state.firstnameError}</Text>
           </View>
           <View style={styles.textContainer}>
             <Text>Last Name</Text>
             <TextInput
               placeholder="  last name"
               value={this.state.lastname}
+              onBlur={()=>this.lastnameValidator()}
               // onChangeText={(val) => this.updateInputVal(val,'lastname')}
               onChangeText={(text) => {this.setState({lastname: text})}}
             />
+            <Text style={{ color:"red"}}>{this.state.lastnameError}</Text>
           </View>
           <View style={styles.textContainer}>
             <Text>Email Address</Text>
@@ -185,27 +236,34 @@ export default class addContact extends Component {
               value={this.state.mobile}
               keyboardType="numeric"
               maxLength={10}
+              onBlur={()=>this.mobileValidator()}
               // onChangeText={(val) => this.updateInputVal(val, 'mobile')}
               onChangeText={(text) => {this.setState({mobile: text})}}
-            />           
+            />
+            <Text style={{ color:"red"}}>{this.state.mobileError}</Text>           
           </View>
           <View style={styles.textContainer}>
             <Text>Relationship</Text>
             <TextInput
               placeholder="  relationship"
               value={this.state.relationship}
+              onBlur={()=>this.relationshipValidator()}
               // onChangeText ={(val) => this.updateInputVal(val, 'relationship')}
               onChangeText={(text) => {this.setState({relationship: text})}}
             />
+            <Text style={{ color:"red"}}>{this.state.relationshipError}</Text>
           </View>
+
           <View style={styles.textContainer}>
             <Text>Address</Text>
             <TextInput
               placeholder="  address"
               value={this.state.address}
+              onBlur={()=>this.addressValidator()}
               // onChangeText ={(val) => this.updateInputVal(val, 'address')}
               onChangeText={(text) => {this.setState({address: text})}}
             />
+            <Text style={{ color:"red"}}>{this.state.addressError}</Text>
           </View>
         </View>
         
