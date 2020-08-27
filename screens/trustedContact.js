@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
-import { ToastAndroid, StyleSheet, ScrollView, Platform, Animated, Easing, Text, View, TouchableOpacity, Button } from 'react-native';
+import { ToastAndroid, StyleSheet, ScrollView, Platform, Animated, Easing, Text, View, TouchableOpacity, Button, Alert } from 'react-native';
 import 'localstorage-polyfill';
 import Axios from 'axios';
 

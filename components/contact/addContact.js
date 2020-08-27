@@ -2,6 +2,18 @@ import React, { Component } from 'react'
 import { Text, View, TextInput, Button, StyleSheet, Alert } from 'react-native'
 import {Actions, ActionConst} from 'react-native-router-flux'
 
+
+const _onHome = ()=>{
+  setTimeout(() => {
+    Actions.HomeScreen();
+  }, 2300);
+}
+
+const _onAlert = () =>{
+  setTimeout(() => {
+    Actions.ContactAddScreen();
+  }, 2300);
+}
 export default class addContact extends Component {
 
   constructor(props){
@@ -97,6 +109,15 @@ export default class addContact extends Component {
             ]
           )
         }  
+        else if(response.status == 500){
+          Alert.alert(
+            "Insertion Failed!",
+            "System error",
+            [
+              { text: "OK",onPress: _onAlert()  }
+            ]
+          )
+        }  
         else{
           return response;
         }
@@ -116,19 +137,6 @@ export default class addContact extends Component {
       )
     }
 
-  }
-
-  _onHome = () =>{
-
-    setTimeout(() => {
-      Actions.HomeScreen();
-    }, 2300);
-  }
-
-  _onAlert=()=> {
-    setTimeout(() => {
-      //Actions.ChildRegScreen();
-    }, 2300);
   }
 
   firstnameValidator(){
