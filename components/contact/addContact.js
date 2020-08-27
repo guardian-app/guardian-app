@@ -14,70 +14,14 @@ export default class addContact extends Component {
       mobile: "",
       relationship: "",
       address: '',
+      firstnameError: '',
+      lastnameError: '',
+      emailError: "",
+      mobileError: "",
+      relationshipError: "",
+      addressError: '',
       }
 
-    //validationService
-    this.onInputChange = this.onInputChange.bind(this);
-  }
-
-  validateInput({ type, value }) {
-    const result = validatejs(
-      {
-        [type]: value
-      },
-      {
-        [type]: validationDictionary[type]
-      }
-    );
-  
-    if (result) {
-      return result[type][0];
-    }
-  
-    return null;
-  }
-
-  getInputValidationState = ({ input, value }) => {
-    return {
-      ...input,
-      value,
-      errorLabel: input.optional
-        ? null
-        : this.validateInput({ type: input.type, value })
-    };
-  }
-
-  onInputChange({ id, value, cb = () => {} }) {
-    const { inputs } = this.state;
-    this.setState(
-      {
-        inputs: {
-          ...inputs,
-          [id]: this.getInputValidationState({
-            input: inputs[id],
-            value
-          })
-        }
-      },
-      cb
-    );
-  }
-
-  getFormValidation() {
-    const { inputs } = this.state;
-  
-    const updatedInputs = {};
-  
-    for (const [key, input] of Object.entries(inputs)) {
-      updatedInputs[key] = getInputValidationState({
-        input,
-        value: input.value
-      });
-    }
-  
-    this.setState({
-      inputs: updatedInputs
-    });
   }
 
   // updateInputVal = (val, prop) => {
@@ -187,12 +131,17 @@ export default class addContact extends Component {
     }, 2300);
   }
 
-  renderError(id) {
-    const { inputs } = this.state;
-    if (inputs[id].errorLabel) {
-      return <Text style={styles.error}>{inputs[id].errorLabel}</Text>;
+  emailValidator(){
+    const expression = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+    if(this.state.email== ""){
+      this.setState({emailError: "fill the email field"})
     }
-    return null;
+    else if( ! expression.test(String(this.state.email).toLowerCase())){
+      this.setState({emailError: "Please insert a valid email"});
+    }
+    else{
+      this.setState({emailError: ""});
+    }
   }
 
   render() {
@@ -204,13 +153,10 @@ export default class addContact extends Component {
             <TextInput
               placeholder="  first name"
               value={this.state.firstname}
+              onBlur={()=>this.nameValidator()}
               // onChangeText={(val) => this.updateInputVal(val, 'firstname')}
-              onChangeText={value => {
-                this.onInputChange({ id: "firstname", value });
-              }}
+              onChangeText={(text) => {this.setState({firstname: text})}}
             />
-            {this.renderError("firstname")}
-            
           </View>
           <View style={styles.textContainer}>
             <Text>Last Name</Text>
@@ -218,38 +164,30 @@ export default class addContact extends Component {
               placeholder="  last name"
               value={this.state.lastname}
               // onChangeText={(val) => this.updateInputVal(val,'lastname')}
-              onChangeText={value => {
-                this.onInputChange({ id: "lastname", value });
-              }}
+              onChangeText={(text) => {this.setState({lastname: text})}}
             />
-            {this.renderError("lastname")}
-          
           </View>
           <View style={styles.textContainer}>
             <Text>Email Address</Text>
             <TextInput
               placeholder="  email"
               value={this.state.email}
+              onBlur={()=> this.emailValidator()}
               // onChangeText={(val) => this.updateInputVal(val, 'email')}
-              onChangeText={value => {
-                this.onInputChange({ id: "email", value });
-              }}
+              onChangeText={(text) => {this.setState({email: text})}}
             />
-            {this.renderError("email")}
-            
+            <Text style={{ color:"red"}}>{this.state.emailError}</Text>
           </View>
           <View style={styles.textContainer}>
             <Text>Mobile Number</Text>
             <TextInput
               placeholder="  mobile number"
               value={this.state.mobile}
+              keyboardType="numeric"
+              maxLength={10}
               // onChangeText={(val) => this.updateInputVal(val, 'mobile')}
-              onChangeText={value => {
-                this.onInputChange({ id: "mobile", value });
-              }}
-            />
-            {this.renderError("mobile")}
-            
+              onChangeText={(text) => {this.setState({mobile: text})}}
+            />           
           </View>
           <View style={styles.textContainer}>
             <Text>Relationship</Text>
@@ -257,12 +195,8 @@ export default class addContact extends Component {
               placeholder="  relationship"
               value={this.state.relationship}
               // onChangeText ={(val) => this.updateInputVal(val, 'relationship')}
-              onChangeText={value => {
-                this.onInputChange({ id: "relationship", value });
-              }}
+              onChangeText={(text) => {this.setState({relationship: text})}}
             />
-            {this.renderError("relationship")}
-            
           </View>
           <View style={styles.textContainer}>
             <Text>Address</Text>
@@ -270,12 +204,8 @@ export default class addContact extends Component {
               placeholder="  address"
               value={this.state.address}
               // onChangeText ={(val) => this.updateInputVal(val, 'address')}
-              onChangeText={value => {
-                this.onInputChange({ id: "address", value });
-              }}
+              onChangeText={(text) => {this.setState({address: text})}}
             />
-            {this.renderError("address")}
-            
           </View>
         </View>
         
