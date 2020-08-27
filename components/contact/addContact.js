@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { Text, View, TextInput, Button, StyleSheet, Alert } from 'react-native'
 import {Actions, ActionConst} from 'react-native-router-flux'
 
-import validatejs from './validate'
-
 export default class addContact extends Component {
 
   constructor(props){
@@ -16,40 +14,10 @@ export default class addContact extends Component {
       mobile: "",
       relationship: "",
       address: '',
-  
-      inputs: {
-        firstname: {
-          type: "firstname",
-          value: ""
-        },
-        lastname: {
-          type: "lastname",
-          value: ""
-        },
-        email: {
-          type: "email",
-          value: ""
-        },
-        address: {
-          type: "address",
-          value: ""
-        },
-  
-        mobile: {
-          type: "mobile",
-          value: ""
-        },
-
-        relationship: {
-          type: "relationship",
-          value: ""
-        }
-  
       }
-  
-    }
 
-    this.onInputChange = validationService.onInputChange.bind(this);
+    //validationService
+    this.onInputChange = this.onInputChange.bind(this);
   }
 
   validateInput({ type, value }) {
@@ -69,13 +37,13 @@ export default class addContact extends Component {
     return null;
   }
 
-  getInputValidationState({ input, value }) {
+  getInputValidationState = ({ input, value }) => {
     return {
       ...input,
       value,
       errorLabel: input.optional
         ? null
-        : validateInput({ type: input.type, value })
+        : this.validateInput({ type: input.type, value })
     };
   }
 
@@ -85,7 +53,7 @@ export default class addContact extends Component {
       {
         inputs: {
           ...inputs,
-          [id]: getInputValidationState({
+          [id]: this.getInputValidationState({
             input: inputs[id],
             value
           })
