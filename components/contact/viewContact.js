@@ -1,46 +1,17 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Text, Alert } from 'react-native';
 import { Table, Row, Rows, TableWrapper } from 'react-native-table-component';
-//import {axios} from 'axios';
+
 import {Actions, ActionConst} from 'react-native-router-flux';
 import axios, * as others from 'axios';
-import Geocoder from 'react-native-geocoding';
-import { createIconSetFromFontello } from 'react-native-vector-icons';
-//import { Table, TableWrapper, Row } from 'react-native-table-component';
 
 export default class tableViewContact extends Component {
-constructor(props) {
-    super(props);
-    this.state = {
-        loading: false,
-        headerData:  ["Time Stamp","Latitude", "Longitude"],
-        locationData: [],
-        address: "",
-        widthArr: [150, 100, 150],
-    
-    }
-    }
-
-    getData(la,lo){
-        Geocoder.init("AIzaSyCByfizTIm7VD9eaxjq30oN_N5Zcjd09Zw");
-       
-        Geocoder.from(la, lo)
-        .then(json => {
-                
-                var addressComponent = json.results[0].formatted_address;
-                var addressComponent1 = json.results[0].address_components[1]
-                var addressComponent2 = json.results[0].address_components[2]
-                var addressComponent3 = json.results[0].address_components[3]
-                var addressComponent4 = json.results[0].address_components[4]
-                var addressComponent5 = json.results[0].address_components[5]
-                var addressComponent6 = json.results[0].address_components[6]
-            console.log(addressComponent);
-            alert(addressComponent)
-            this.setState({
-                address:addressComponent.long_name
-            })
-        })
-        .catch(error => console.warn(error,"i am error"))
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: false,
+            locationData: [],
+        }
     }
 
     async componentDidMount() {
@@ -50,9 +21,7 @@ constructor(props) {
         if(!localStorage.getItem("key")){
             Actions.LoginScreen();
         }
-
-        let child_id = localStorage.getItem("child_id");
-        axios.get('http://192.168.43.133:3000/location/'+child_id+'/history',{
+        axios.get('http://192.168.43.133:3000/',{
             headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
@@ -102,7 +71,7 @@ constructor(props) {
                                         <Row data={state.headerData} widthArr={state.widthArr} style={styles.header} textStyle={styles.text}/>
                                     </Table>
                                     <ScrollView horizontal = {false} style={styles.dataWrapper}>
-                                        <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
+                                        {/* <Table borderStyle={{borderWidth: 1, borderColor: '#C1C0B9'}}>
                                             {this.state.locationData.map((appoints, i) => (
                                                 <TouchableOpacity onPress = {()  => this.getData(this.state.locationData[i][1],this.state.locationData[i][2])} >
                                                     <Text></Text>
@@ -115,7 +84,7 @@ constructor(props) {
                                                     />
                                                 </TouchableOpacity>
                                             ))}
-                                        </Table>
+                                        </Table> */}
                                     </ScrollView>
                                 </View>
                             </ScrollView>

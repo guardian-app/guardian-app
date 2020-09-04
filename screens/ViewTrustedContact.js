@@ -67,16 +67,6 @@ class ViewTrustedContactScreen extends Component {
         if(!localStorage.getItem("key")){
             Actions.LoginScreen();
         }
-
-        this.setState({
-            first_name: localStorage.getItem("first_name"),
-            last_name: localStorage.getItem("last_name"),
-            user_id: localStorage.getItem("user_id"),
-            phone_number: localStorage.getItem("phone_number"),
-            username: localStorage.getItem("username"),
-            address: localStorage.getItem("address"),
-        })
-
     }
 
     onAvatarPressed = (value) => {
@@ -158,7 +148,7 @@ class ViewTrustedContactScreen extends Component {
                 leftElement="arrow-back"
                 onLeftElementPress={() => {Actions.HomeScreen()}}
                 //onLeftElementPress={() => {}}
-                centerElement="Add Contact"
+                centerElement="Your Trusted Contact"
             />
         );
     }
