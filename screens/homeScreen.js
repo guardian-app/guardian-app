@@ -253,7 +253,7 @@ class Home extends Component {
                 
                     {text: 'Cancel', onPress: () => {},  style: 'cancel'},
                     {text: 'Add Contact', onPress: () => {Actions.ContactAddScreen()}},
-                    {text: 'View Contacts', onPress: () => {Actions.AddRadiusScreen()}},
+                    {text: 'View Contacts', onPress: () => {Actions.ViewTrustedContactScreen()}},
                 
                 ]
             )
