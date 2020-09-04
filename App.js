@@ -19,6 +19,7 @@ import RestScreen from './screens/resetScreen';
 import ChildRecordScreen from './screens/childRecordScreen';
 import ContactAddScreen from './screens/trustedContact';
 import AddRadiusScreen from './screens/addRadius';
+import ViewTrustedContactScreen from './screens/ViewTrustedContact';
 
 import Location1 from './screens/location1';
 import Location2 from './screens/location2';
@@ -123,6 +124,13 @@ export default function App() {
 
           <Scene key="AddRadiusScreen"
 	          component={AddRadiusScreen}
+	        	animation='fade'
+	          hideNavBar={true}
+	          
+	        />
+
+			<Scene key="ViewTrustedContactScreen"
+	          component={ViewTrustedContactScreen}
 	        	animation='fade'
 	          hideNavBar={true}
 	          
