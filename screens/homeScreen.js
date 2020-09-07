@@ -93,6 +93,22 @@ class Home extends Component {
         }
     }
 
+    removeChild = (child_id) =>{
+        let token = localStorage.getItem("key");
+        Axios.post("http://192.168.43.133:3000/"+child_id,{
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+token,
+            },
+        })
+        .then(res => {
+            Alert("Deleted");
+        }).catch(error => {
+            console.log("error ",error);
+        })
+    }
+
     onChild = (child_id) => {
         
         localStorage.setItem("child_id", child_id);
@@ -106,6 +122,7 @@ class Home extends Component {
               {text: 'Cancel', onPress: () => {},  style: 'cancel'},
               {text: 'Child location', onPress: () => {Actions.ChildLocation()}},
               {text: 'Today report', onPress: () => {Actions.ChildRecordScreen()}},
+              {text: 'Remove Child', onPress: () => {this.removeChild(child_id)}},
             
             ]
         )      
