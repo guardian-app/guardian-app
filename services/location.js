@@ -27,4 +27,12 @@ const selectTodayLocationHistory = (child_id) => {
         [child_id]
     );
 };
-module.exports = { insertLocationRecord, insertLocationRecordBatch, selectLatestLocation, selectTodayLocationHistory }
+
+const selectLocationHistoryByDate = (child_id, date) => {
+    return database.execute(
+        "SELECT DISTINCT `longitude`, `latitude`, `timestamp` FROM `location_record` WHERE DATE(`timestamp`) = ? AND `child_id` = ? ORDER BY `timestamp` DESC LIMIT 48",
+        [date, child_id]
+    );
+};
+
+module.exports = { insertLocationRecord, insertLocationRecordBatch, selectLatestLocation, selectTodayLocationHistory, selectLocationHistoryByDate }
