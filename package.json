@@ -14,9 +14,9 @@
     "express-bearer-token": "^2.4.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "~1.9.1",
-    "mysql2": "^2.1.0",
-    "nanoid": "^3.1.9",
-    "nodemailer": "^6.4.6",
+    "mysql2": "^2.2.5",
+    "nanoid": "^3.1.12",
+    "nodemailer": "^6.4.11",
     "passport": "^0.4.1"
   }
 }
