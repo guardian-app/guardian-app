@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import * as Location from 'expo-location';
 import { useSelector } from 'react-redux';
 import { Appbar, Menu, Divider } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
@@ -8,6 +9,7 @@ import { Snackbar } from 'react-native-paper';
 import MapView from 'react-native-maps';
 import { Text, Dimensions } from 'react-native';
 import { Marker, LatLng } from 'react-native-maps';
+import * as timeago from 'timeago.js';
 import { colors, theme } from '../styles';
 import {
     PlainBackground,
@@ -38,8 +40,10 @@ const ChildMap = ({ route, navigation }: Props) => {
     const child = useSelector((state: any) => state.childReducer.children.find((child: any) => child.user_id === user_id));
 
     const [dateSelection, setDateSelection] = useState<DateSelection>("real-time");
+    const [lastSeen, setLastSeen] = useState("unavailable");
     const [markers, setMarkers] = useState<Coords[]>([]);
-    const [snackbarVisible, setSnackbarVisible] = useState(false);
+    const [errorVisible, setErrorVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const [menuVisible, setMenuVisible] = useState(false);
 
     const openMenu = () => setMenuVisible(true);
@@ -47,6 +51,9 @@ const ChildMap = ({ route, navigation }: Props) => {
 
     useEffect(() => {
         (async () => {
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') return setErrorMessage('Permission to access location was denied');
+
             if (dateSelection === "real-time") {
                 try {
                     const token = await SecureStore.getItemAsync("token");
@@ -61,18 +68,25 @@ const ChildMap = ({ route, navigation }: Props) => {
                     const response = await request;
                     if (response.ok) {
                         const object = await response.json();
+
+                        const objectDate = new Date(object.timestamp);
+                        const objectLocation = {
+                            latitude: parseFloat(object.latitude),
+                            longitude: parseFloat(object.longitude)
+                        };
+                        const objectAddress = await Location.reverseGeocodeAsync(objectLocation);
+
+                        setLastSeen(timeago.format(objectDate));
                         setMarkers([{
-                            coordinate: {
-                                latitude: parseFloat(object.latitude),
-                                longitude: parseFloat(object.longitude)
-                            },
-                            title: new Date(object.timestamp).toDateString(),
-                            description: new Date(object.timestamp).toTimeString(),
+                            coordinate: objectLocation,
+                            title: `${objectAddress[0].name}, ${objectAddress[0].street}, ${objectAddress[0].city} (${timeago.format(objectDate)})`,
+                            description: `${objectDate.toDateString()} at ${objectDate.toLocaleTimeString()}`,
                             id: object.timestamp + object.longitude + object.latitude
                         }]);
                     } else {
                         setMarkers([]);
-                        setSnackbarVisible(true);
+                        setErrorMessage("No location data available at the moment. Make sure you setup the Guardian application on your child's mobile device.");
+                        setErrorVisible(true);
                     };
                 } catch (err) {
                     setMarkers([]);
@@ -93,19 +107,22 @@ const ChildMap = ({ route, navigation }: Props) => {
                     if (response.ok) {
                         const data: any[] = await response.json();
                         setMarkers(data.map((object: any) => {
+                            const objectDate = new Date(object.timestamp);
+
                             return {
                                 coordinate: {
                                     latitude: parseFloat(object.latitude),
                                     longitude: parseFloat(object.longitude)
                                 },
-                                title: new Date(object.timestamp).toDateString(),
-                                description: new Date(object.timestamp).toTimeString(),
-                                id: object.timestamp
+                                title: objectDate.toDateString(),
+                                description: `${objectDate.toLocaleTimeString()} (${timeago.format(objectDate)})`,
+                                id: object.timestamp + object.longitude + object.latitude
                             }
                         }));
                     } else {
                         setMarkers([]);
-                        setSnackbarVisible(true);
+                        setErrorMessage("No location data available for the selected date. Make sure you setup the Guardian application on your child's mobile device.");
+                        setErrorVisible(true);
                     };
                 } catch (err) {
                     setMarkers([]);
@@ -180,7 +197,7 @@ const ChildMap = ({ route, navigation }: Props) => {
                                 : dateSelection.getUTCDate() == (new Date(Date.now() - 864e5)).getUTCDate()
                                     ? "Yesterday"
                                     : dateSelection.toISOString().split('T')[0]}
-                        subtitle={'Last seen 1 hour ago'}
+                        subtitle={`Last seen ${lastSeen}`}
                     />
 
                     <Menu
@@ -199,13 +216,13 @@ const ChildMap = ({ route, navigation }: Props) => {
                 </Appbar>
 
                 <Snackbar
-                    visible={snackbarVisible}
-                    onDismiss={() => setSnackbarVisible(false)}
+                    visible={errorVisible}
+                    onDismiss={() => setErrorVisible(false)}
                     action={{
                         label: 'OK',
-                        onPress: () => setSnackbarVisible(false)
+                        onPress: () => setErrorVisible(false)
                     }}>
-                    {"No location data available at the moment. Make sure you setup the Guardian application on your child's mobile device."}
+                    {errorMessage}
                 </Snackbar>
             </PlainBackground>
             <StatusBar style="light" />
