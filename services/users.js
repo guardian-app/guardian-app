@@ -86,9 +86,6 @@ const updateUserPassword = (user_id, password) => {
 };
 
 const insertContact = (contact) => {
-    
-    console.log(contact);
-
     return database.execute(
         'INSERT INTO `trusted_contact` (`email_address`, `first_name`, `last_name`, `address`, `phone_number`,`relationship`, `parent_id`)  VALUES (?, ?, ?, ?, ?, ?,?)',
         [contact.email_address, contact.first_name, contact.last_name, contact.address, contact.phone_number,contact.relationship, contact.parent_id]
