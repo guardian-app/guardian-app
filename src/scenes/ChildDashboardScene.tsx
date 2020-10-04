@@ -30,11 +30,11 @@ const Dashboard = ({ navigation }: Props) => {
             try {
                 const token = await SecureStore.getItemAsync("token");
                 const user = await JSON.parse(await SecureStore.getItemAsync("user") || '');
-                
+
                 let { status } = await Location.requestPermissionsAsync();
                 if (status !== 'granted') setErrorMsg('Permission to access location was denied');
 
-                let location = await Location.getCurrentPositionAsync({});
+                let location = await Location.getCurrentPositionAsync({ accuracy: 4 });
                 await fetch(
                     `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/location/${user.user_id}`,
                     {
