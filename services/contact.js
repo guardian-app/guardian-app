@@ -28,4 +28,11 @@ const insertContact = (contact) => {
     );
 };
 
-module.exports = { selectByContactId, selectContactByParentId, insertContact };
+const removeContactById = (contact_id) => {
+    return database.execute(
+        'DELETE FROM `trusted_contact` WHERE contact_id = ?',
+        [contact_id]
+    );
+};
+
+module.exports = { selectByContactId, selectContactByParentId, insertContact, removeContactById };

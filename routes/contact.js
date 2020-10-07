@@ -5,8 +5,8 @@ const { isAdmin, validateToken } = require('../middleware/users');
 const { isParent } = require('../middleware/parents');
 
 router.post('/createContact',validateToken, isParent, createContact)
-router.get("/getContactByParentId", validateToken, isAdmin, getContactByParentId);
+router.get("/:parent_id/getContactByParentId", validateToken, isAdmin, getContactByParentId);
 router.post('/editContact', validateToken, isParent, editContact);
-router.post('/removeContact', validateToken, isParent, removeContact);
+router.get('/:contact_id/removeContact', validateToken, isParent, removeContact);
 
 module.exports = router;

@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { nanoid } = require('nanoid');
 const { selectContactByEmailAddress } = require('../services/users');
-const { insertContact, selectByContactId, selectContactByParentId } = require('../services/contact');
+const { insertContact, selectByContactId, selectContactByParentId, removeContactById } = require('../services/contact');
 
 const { jwtSecret } = require('../config/jwt');
 const { sendVerificationEmail } = require('../config/nodemailer');
@@ -49,9 +49,17 @@ const getContactByParentId = async (req, res) => {
 }
 
 const removeContact =async (req, res) => {
+    const { contact_id } = req.params;
+    try{
+        const [isRemoved] = await removeContactById(contact_id);
+        res.json(isRemoved);
+    }
+    catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
 
-
-}
+};
 
 const editContact = async (req, res) => {
 
