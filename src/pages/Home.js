@@ -2,8 +2,14 @@ import React, { Component } from "react";
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler,MDBRow,MDBCol, MDBCollapse, MDBNavItem, MDBNavLink, MDBContainer, MDBView, MDBMask,MDBCard,MDBCardBody, MDBModalFooter,MDBIcon,MDBCardHeader,MDBBtn,MDBInput } from 'mdbreact';
 import { BrowserRouter as Router } from 'react-router-dom';
 class Home extends React.Component{
+import logo from './logo.png'; // Tell webpack this JS file uses this image   
     
-
+    console.log(logo); // /logo.84287d09.png
+    function Header() {
+      // Import result is the URL of your image
+      return <img src={logo} alt="Logo" />;
+    }
+    export default Header;
 
     render(){
         return(
