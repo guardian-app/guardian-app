@@ -9,10 +9,10 @@ import About from './pages/About';
 import Contacts from './pages/Contacts';
 import Login from './pages/Login';
 import Register from './pages/Register';
-//import Navbar from './layouts/Navbar';
+import Navbar from './layouts/Navbar';
 import NotFound from './pages/NotFound';
 import dashboardHome from './pages/dashboardHome';
-import parents from './pages/parents';
+import parents from './pages/parents'; 
 import children from './pages/children';
 import contactss from './pages/contactss';
 import reports from './pages/reports';
@@ -31,10 +31,10 @@ function App() {
         <Route exact path="/contact" component={Contacts}/>
         <Route exact path="/login" component={Login}/>
         <Route exact path="/register" component={Register}/>
-        <Route exact path="/dashboard" component={Dashboard}/>
+        {/* <Route exact path="/dashboard" component={Dashboard}/> */}
         <Route exact path="/home" component={dashboardHome}/>
-        <Route exact path="/parents" component={parents}/>
-        <Route exact path="/children" component={children}/>
+        <Route exact path="/parentss" component={parents}/>
+        <Route exact path="/childrenn" component={children}/>
         <Route exact path="/contactss" component={contactss}/>
         <Route exact path="/reports" component={reports}/>
         <Route exact path="/stat" component={stat}/>

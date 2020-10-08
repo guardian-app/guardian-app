@@ -3,6 +3,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
+import { useHistory } from "react-router-dom";
+
 
 
 import Link from '@material-ui/core/Link';
@@ -13,6 +15,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles'; 
 import Container from '@material-ui/core/Container';
+
+window.$name = "testing" ;//global variable
+
 
 
 
@@ -39,8 +44,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 
+
+
 export default function SignIn() {
 
+  let history = useHistory();
  
 
 
@@ -56,9 +64,15 @@ export default function SignIn() {
   // render() {
 
     const classes = useStyles();
-
+    //let userRole=null;
+    //let token=null;
+    var userRole;
+    var token;
+    
     const [email_address, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    
+    //const [userRole,setuserRole] =useState("");
   
     function validateForm() {
       return email_address.length > 0 && password.length > 0;
@@ -75,16 +89,35 @@ export default function SignIn() {
     };
     fetch('http://localhost:3000/users/authenticate', requestOptions)
         .then(response => response.json())
-        .then(data => this.setState({ postId: data.id }))
+        //.then(data => console.log(data.user.role))
+        //.then(data => console.log(data.token))
+       // .then((data) => console.log('This is your data', data))
+         .then(data => userRole=data.user.role)
+        
+        // .then(data=>setuserRole(userRole.value))
+        //.then(data => token=data.token)
+        
+        
+        
         ;
 
+        //console.log(userRole);
+        //console.log(token);
+        //console.log(token);
+ 
+        //window.$name=userRole; 
         
-        
-    
-      
 
-      console.log(email_address)
-      console.log(password)
+        if(userRole=='admin'){
+          console.log("admin login");
+          history.push('/home')
+         
+
+        }
+        
+
+      // console.log(email_address)
+      // console.log(password)
 
       
  
@@ -93,6 +126,7 @@ export default function SignIn() {
     }
 
     return (
+    
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -155,6 +189,7 @@ export default function SignIn() {
               </Grid>
             </Grid>
           </form>
+      
          
         </div>
         {/* <Box mt={8}>
