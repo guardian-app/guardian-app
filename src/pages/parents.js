@@ -50,7 +50,8 @@ class parents extends Component{
     var { isLoaded, items }= this.state;
 
     if(!isLoaded){
-    return <div>loading</div>
+      const remember=localStorage.getItem('testing');
+    return <div>{remember}</div>
   
 
     

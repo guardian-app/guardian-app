@@ -16,7 +16,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles'; 
 import Container from '@material-ui/core/Container';
 
-window.$name = "testing" ;//global variable
+//window.$name = token ;//global variable
+
+
 
 
 
@@ -92,7 +94,10 @@ export default function SignIn() {
         //.then(data => console.log(data.user.role))
         //.then(data => console.log(data.token))
        // .then((data) => console.log('This is your data', data))
-         .then(data => userRole=data.user.role)
+         .then(data => {userRole=data.user.role
+                token=data.token
+        
+        })
         
         // .then(data=>setuserRole(userRole.value))
         //.then(data => token=data.token)
@@ -104,8 +109,10 @@ export default function SignIn() {
         //console.log(userRole);
         //console.log(token);
         //console.log(token);
+        console.log(token);
+        localStorage.setItem('testing',userRole);
  
-        //window.$name=userRole; 
+       //window.$name=token; 
         
 
         if(userRole=='admin'){
