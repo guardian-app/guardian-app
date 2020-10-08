@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { nanoid } = require('nanoid');
 const { selectContactByEmailAddress } = require('../services/users');
-const { insertContact, selectByContactId, selectContactByParentId, removeContactById, editContact } = require('../services/contact');
+const { insertContact, selectByContactId, selectContactByParentId, removeContactById, editContactById } = require('../services/contact');
 
 const { jwtSecret } = require('../config/jwt');
 const { sendVerificationEmail } = require('../config/nodemailer');
@@ -77,7 +77,7 @@ const editContact = async (req, res) => {
     };
 
     try{
-        await editContact(contact);
+        await editContactById(contact);
 
         const [contacts] = await selectContactByEmailAddress(email_address);
         console.log(contacts)

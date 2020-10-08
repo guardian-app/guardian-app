@@ -35,11 +35,11 @@ const removeContactById = (contact_id) => {
     );
 };
 
-const editContact = (contact) => {
+const editContactById = (contact) => {
     return database.execute(
         'UPDATE `trusted_contact` SET `email_address` = ?, `first_name` = ?, `last_name` =  ?, `address` = ?, `phone_number` = ?,`relationship` = ?, `parent_id` = ? WHERE `contact_id = ?`',
         [contact.email_address, contact.first_name, contact.last_name, contact.address, contact.phone_number,contact.relationship, contact.parent_id, contact.contact_id]
     );
 }
 
-module.exports = { selectByContactId, selectContactByParentId, insertContact, removeContactById, editContact };
+module.exports = { selectByContactId, selectContactByParentId, insertContact, removeContactById, editContactById };
