@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Alert from 'react-bootstrap/Alert'
 
 function Copyright() {
   // return (
@@ -70,6 +71,98 @@ export default function SignIn() {
     function handleSubmit(event) {
       console.log(email)
       console.log(password)
+
+      fetch("http://localhost:3000/",{
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email_address : email,
+        password: password
+      })
+    })
+      .then(function(response) {
+      
+        if(response.status == 404){
+        //   alert(
+        //    "Login Failed",
+        //    "E-mail address is not registered!",
+        //    [
+        //      { text: "OK", onPress: ()=> {}  }
+        //    ]
+        //  )
+       } 
+       if(response.status == 401){
+         console.log('failed2')
+        //  alert(
+        //    "Login Failed",
+        //    "Incorrect password!",
+        //    [
+        //      { text: "OK", onPress: ()=> {} }
+        //    ]
+        //  )
+       }
+       else{
+         return response;
+       }
+     }).then(function(response) {
+       return response.json();
+     }).then(function(json) {
+       console.log('Request succeeded with JSON response:', json.token);
+       console.log('Request succeeded with JSON response:', json.user);
+ 
+       if(json.user.role == "parent"){
+         console.log('pppppppppppppppppppppppppppp')
+         localStorage.setItem("key", json.token);
+         localStorage.setItem("user_id", json.user.user_id);
+         localStorage.setItem("role", json.user.role);
+         localStorage.setItem("first_name", json.user.first_name);
+         localStorage.setItem("last_name", json.user.last_name);
+         localStorage.setItem("username", json.user.email_address);
+         localStorage.setItem("address", json.user.address);
+         localStorage.setItem("phone_number", json.user.phone_number);
+       }
+       else{
+         localStorage.setItem("key2", json.token);
+         localStorage.setItem("user_id", json.user.user_id);
+         localStorage.setItem("role", json.user.role);
+         localStorage.setItem("first_name", json.user.first_name);
+         localStorage.setItem("last_name", json.user.last_name);
+         localStorage.setItem("username", json.user.email_address);
+         localStorage.setItem("address", json.user.address);
+         localStorage.setItem("phone_number", json.user.phone_number);
+       }
+         
+         let value = localStorage.getItem("key");
+         
+         try {
+           value = JSON.parse(value);
+           //this.setState({ [key]: value });
+           
+         } catch (e) {
+           
+         }
+         
+        //   alert(
+        //    "Login Successful",
+        //    "",
+        //    [
+        //      { text: "OK", onPress: ()=> {if(localStorage.getItem("key")){
+               
+        //      }else{
+               
+        //      }}  }
+        //    ]
+        //  )
+ 
+     }).catch(function(error) {
+       console.log('Request failed:', error);
+      
+
+    })
+
       event.preventDefault();
     }
 
@@ -114,6 +207,7 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
+            <Link to="/dashboard">
             <Button
               type="submit"
               fullWidth
@@ -123,6 +217,7 @@ export default function SignIn() {
             >
               Sign In
             </Button>
+            </Link>
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
