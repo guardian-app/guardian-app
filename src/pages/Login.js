@@ -110,7 +110,7 @@ export default function SignIn() {
         //console.log(token);
         //console.log(token);
         console.log(token);
-        localStorage.setItem('testing',userRole);
+        localStorage.setItem('testing',token);
  
        //window.$name=token; 
         

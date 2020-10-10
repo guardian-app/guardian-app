@@ -3,7 +3,7 @@ import Dashboard from './pages/Dashboard';
 
 import './App.css';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-//import "../node_modules/bootstrap/dist/css/bootstrap.css";
+import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import Home from './pages/Home';
 import About from './pages/About';
 import Contacts from './pages/Contacts';
@@ -17,11 +17,12 @@ import children from './pages/children';
 import contactss from './pages/contactss';
 import reports from './pages/reports';
 import stat from './pages/stat';
+import SignUp from './pages/addParent';
 
 function App() {
   return (
    <Router> 
-    {/* <div className="App"> */}
+    <div className="App">
       {/* <Navbar /> */}
       <Dashboard />
 
@@ -38,6 +39,7 @@ function App() {
         <Route exact path="/contactss" component={contactss}/>
         <Route exact path="/reports" component={reports}/>
         <Route exact path="/stat" component={stat}/>
+        <Route exact path="/addParent" component={SignUp}/>
 
         
         <Route exact path="/" component={Home}/>
@@ -45,7 +47,7 @@ function App() {
       </Switch>
       
       
-    {/* </div> */}
+    </div>
   </Router>  
   );
 }
