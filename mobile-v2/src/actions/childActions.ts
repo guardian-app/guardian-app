@@ -55,6 +55,30 @@ export const childAdd = (child: User) => {
     };
 };
 
+export const childDelete = (child: User) => {
+    return async (dispatch: Function) => {
+        try {
+            const token = await SecureStore.getItemAsync("token");
+            const request = fetch(
+                `http://${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/children/${child.user_id}`,
+                {
+                    method: "DELETE",
+                    headers: { 'Content-Type': 'application/json', Accept: 'application/json', Authorization: `Bearer ${token}` },
+                }
+            );
+
+            const response = await request;
+            if (response.ok) {
+                dispatch(childDelete_Complete(child));
+            } else {
+                console.warn("Unexpected error occured!")
+            };
+        } catch (err) {
+            console.warn(err);
+        };
+    };
+};
+
 const childFetch_Success = (children: User[]) => ({
     type: 'CHILD_FETCH_SUCCESS',
     children: children,
@@ -79,3 +103,8 @@ const childAdd_Failure = (error: string) => ({
     type: 'CHILD_ADD_FAILURE',
     error: error
 });
+
+const childDelete_Complete = (child: User) => ({
+    type: 'CHILD_DELETE_COMPLETE',
+    child: child
+})

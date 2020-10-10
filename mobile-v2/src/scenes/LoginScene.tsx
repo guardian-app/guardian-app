@@ -17,10 +17,10 @@ import {
     TextInput,
     BackButton
 } from '../components';
-import { theme } from '../styles';
 import { emailValidator, passwordValidator } from '../utils/validators';
 import { User, Navigation } from '../types';
 import { userAuthenticate } from '../actions';
+import { theme } from '../styles';
 
 export interface OwnProps {
     navigation: Navigation;

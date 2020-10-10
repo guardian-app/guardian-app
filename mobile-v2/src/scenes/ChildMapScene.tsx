@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useRef, createRef } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import * as Location from 'expo-location';
-import { useSelector } from 'react-redux';
-import { Appbar, Menu, Divider } from 'react-native-paper';
+import { useSelector, useDispatch } from 'react-redux';
+import { Appbar, Menu, Divider, Dialog, Paragraph, Portal, Snackbar } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, ScrollView, View } from 'react-native';
-import { Snackbar } from 'react-native-paper';
-import MapView from 'react-native-maps';
-import { Text, Dimensions } from 'react-native';
-import { Marker, Polyline, LatLng, EdgePadding } from 'react-native-maps';
+import { StyleSheet, ScrollView, View, Text, Dimensions } from 'react-native';
+import MapView, { Marker, Polyline, LatLng, EdgePadding } from 'react-native-maps';
 import * as timeago from 'timeago.js';
-import { colors, theme } from '../styles';
 import {
     PlainBackground,
     TextInput,
@@ -18,6 +14,8 @@ import {
 } from '../components';
 import { formatDate } from '../utils/formatters';
 import { User, Navigation } from '../types';
+import { childDelete } from '../actions';
+import { colors, theme } from '../styles';
 
 type Props = {
     navigation: Navigation;
@@ -48,11 +46,20 @@ const ChildMap = ({ route, navigation }: Props) => {
     const [errorVisible, setErrorVisible] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [menuVisible, setMenuVisible] = useState(false);
+    const [dateMenuVisible, setDateMenuVisible] = useState(false);
+    const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
 
     const mapRef = useRef<MapView>(null);
 
     const openMenu = () => setMenuVisible(true);
     const closeMenu = () => setMenuVisible(false);
+    const openDateMenu = () => setDateMenuVisible(true);
+    const closeDateMenu = () => setDateMenuVisible(false);
+    const showDialog = () => setDeleteDialogVisible(true);
+    const hideDialog = () => setDeleteDialogVisible(false);
+
+    const dispatch = useDispatch()
+    const _childDelete = (child: User) => dispatch(childDelete(child));
 
     useEffect(() => {
         if (mapRef.current) {
@@ -163,7 +170,7 @@ const ChildMap = ({ route, navigation }: Props) => {
             <Menu.Item
                 onPress={() => {
                     setDateSelection(currentDate);
-                    setMenuVisible(false);
+                    setDateMenuVisible(false);
                 }}
                 title={
                     i === 0
@@ -179,10 +186,37 @@ const ChildMap = ({ route, navigation }: Props) => {
 
     return (
         <>
+            <Portal>
+                <Dialog visible={deleteDialogVisible} onDismiss={hideDialog}>
+                    <Dialog.Title>Confirmation</Dialog.Title>
+                    <Dialog.Content>
+                        <Paragraph>Do you really want to remove this child? All location data will be deleted permanently.</Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={() => {
+                            _childDelete(child);
+                            hideDialog();
+                            navigation.goBack();
+                        }}>Delete</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
             <Appbar.Header>
                 <Appbar.BackAction onPress={navigation.goBack} />
-                <Appbar.Content title={`${child.first_name} ${child.last_name}`} />
-                <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
+                <Appbar.Content title={`${child && child.first_name || ''} ${child && child.last_name || ''}`} />
+                <Menu
+                    visible={menuVisible}
+                    onDismiss={closeMenu}
+                    anchor={<Appbar.Action icon="dots-vertical" color="white" onPress={openMenu} />
+                    }>
+                    <Menu.Item onPress={() => {
+                        closeMenu();
+                    }} title="Edit" />
+                    <Menu.Item onPress={() => {
+                        showDialog();
+                        closeMenu();
+                    }} title="Remove" />
+                </Menu>
             </Appbar.Header>
 
             <PlainBackground>
@@ -241,18 +275,18 @@ const ChildMap = ({ route, navigation }: Props) => {
                     />
 
                     <Menu
-                        visible={menuVisible}
-                        onDismiss={closeMenu}
-                        anchor={<Button onPress={openMenu}>Show menu</Button>}>
+                        visible={dateMenuVisible}
+                        onDismiss={closeDateMenu}
+                        anchor={<Button onPress={openDateMenu}>Show menu</Button>}>
                         <Menu.Item onPress={() => {
                             setDateSelection("real-time");
-                            setMenuVisible(false);
+                            setDateMenuVisible(false);
                         }} title="Real-time" />
                         <Divider />
                         {dateSelectionMenuItems}
                     </Menu>
 
-                    <Appbar.Action icon="dots-vertical" onPress={openMenu} />
+                    <Appbar.Action icon="clock" onPress={openDateMenu} />
                 </Appbar>
 
                 <Snackbar
