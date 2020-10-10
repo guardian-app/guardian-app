@@ -3,7 +3,6 @@ import { Appbar } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, ScrollView, View, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
-import { colors, theme } from '../styles';
 import {
     PlainBackground,
     TextInput,
@@ -19,6 +18,7 @@ import {
 } from '../utils/validators';
 import { childAdd } from '../actions';
 import { User, Navigation } from '../types';
+import { colors, theme } from '../styles';
 
 type Props = {
     navigation: Navigation;

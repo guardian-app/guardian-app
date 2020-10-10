@@ -1,7 +1,5 @@
 import React, { memo, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux'
-import { userLogout } from '../actions';
-import { PlainBackground } from '../components';
 import { Appbar } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 import {
@@ -9,9 +7,11 @@ import {
     Header,
     Paragraph,
     Button,
-    Background
+    Background,
+    PlainBackground
 } from '../components';
 import { Navigation } from '../types';
+import { userLogout } from '../actions';
 
 const ParentProfile = (props: { navigation: Navigation }) => {
     const currentUser = useSelector((state: any) => state.userReducer.currentUser);

@@ -1,3 +1,5 @@
+import { User } from '../types';
+
 const initialState = {
     error: '',
     message: '',
@@ -16,6 +18,8 @@ export default function reducer(state = initialState, action: any) {
             return { ...state, children: [...state.children, action.child], error: '', message: action.message }
         case 'CHILD_ADD_FAILURE':
             return { ...state, error: action.error, message: '' }
+        case 'CHILD_DELETE_COMPLETE':
+            return { ...state, children: state.children.filter((child: User) => child.user_id !== action.child.user_id) }
         default:
             return state;
     };

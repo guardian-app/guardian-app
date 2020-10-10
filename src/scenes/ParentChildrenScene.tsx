@@ -1,11 +1,17 @@
 import React, { memo, useCallback, useEffect } from 'react';
-import { Appbar } from 'react-native-paper';
-import { StatusBar } from 'expo-status-bar';
-import { List } from 'react-native-paper';
 import { useSelector, useDispatch } from 'react-redux'
-import { FAB, TouchableRipple } from 'react-native-paper';
+import {
+    FAB,
+    TouchableRipple,
+    Button,
+    Menu,
+    Divider,
+    Provider,
+    Appbar,
+    List
+} from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { colors } from '../styles';
+import { StatusBar } from 'expo-status-bar';
 import {
     PlainBackground,
     Background,
@@ -13,7 +19,8 @@ import {
     Paragraph
 } from '../components';
 import { User, Navigation } from '../types';
-import { childFetch } from '../actions';
+import { childFetch, userLogout } from '../actions';
+import { colors } from '../styles';
 
 type Props = {
     navigation: Navigation;
@@ -49,11 +56,21 @@ const ParentChildren = ({ navigation }: Props) => {
     const _handleSearch = () => console.log('Searching');
     const _handleMore = () => console.log('Shown more');
 
+    const [visible, setVisible] = React.useState(false);
+    const openMenu = () => setVisible(true);
+    const closeMenu = () => setVisible(false);
+
     const children = useSelector((state: any) => state.childReducer.children);
 
     const dispatch = useDispatch()
+
     const _childFetch = useCallback(
         () => dispatch(childFetch()),
+        [dispatch]
+    );
+
+    const logout = useCallback(
+        () => dispatch(userLogout()),
         [dispatch]
     );
 
@@ -66,8 +83,14 @@ const ParentChildren = ({ navigation }: Props) => {
             <Appbar.Header>
                 <Appbar.Content title="My Children" />
                 <Appbar.Action icon="magnify" onPress={_handleSearch} />
-                <Appbar.Action icon="dots-vertical" onPress={_handleMore} />
+                <Menu
+                    visible={visible}
+                    onDismiss={closeMenu}
+                    anchor={<Appbar.Action icon="dots-vertical" color="white" onPress={openMenu} />}>
+                    <Menu.Item onPress={logout} title="Logout" />
+                </Menu>
             </Appbar.Header>
+
             <PlainBackground>
                 <ChildrenList children={children} navigation={navigation} />
             </PlainBackground>
