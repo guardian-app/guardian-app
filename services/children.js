@@ -27,4 +27,11 @@ const insertChild = (child) => {
     );
 };
 
-module.exports = { selectChildren, selectChildById, selectChildParentById, insertChild };
+const deleteChildById = (child_id) => {
+    return database.execute(
+        'DELETE FROM `user` WHERE user_id=?',
+        [child_id]
+    );
+}
+
+module.exports = { selectChildren, selectChildById, selectChildParentById, insertChild, deleteChildById };

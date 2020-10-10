@@ -1,4 +1,4 @@
-const { selectChildren, selectChildById, selectChildParentById, insertChild } = require('../services/children');
+const { selectChildren, selectChildById, selectChildParentById, insertChild, deleteChildById } = require('../services/children');
 const { selectParentChildrenById } = require('../services/parents');
 const bcrypt = require('bcrypt');
 const { selectUserByEmailAddress } = require('../services/users');
@@ -79,4 +79,16 @@ const createChild = async (req, res) => {
     };
 };
 
-module.exports = { getChildren, getChildById, getChildParentById, createChild, getMyChildren };
+const deleteChild = async (req, res) => {
+    const { child_id } = req.params;
+
+    try {
+        await deleteChildById(child_id);
+        res.status(200).send('Success');
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
+};
+
+module.exports = { getChildren, getChildById, getChildParentById, createChild, getMyChildren, deleteChild };
