@@ -1,78 +1,179 @@
-import React from 'react';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import React, { Component } from 'react';
+import {Link} from "react-router-dom";
+import { BrowserRouter as Router } from 'react-router-dom';
+import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler,MDBRow,MDBCol, MDBCollapse, MDBNavItem, MDBNavLink, MDBContainer, MDBView, MDBMask,MDBCard,MDBCardBody, MDBModalFooter,MDBIcon,MDBCardHeader,MDBBtn,MDBInput } from 'mdbreact';
 
-const StyledTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  body: {
-    fontSize: 14,
-  },
-}))(TableCell);
+import Table from 'react-bootstrap/Table';
 
-const StyledTableRow = withStyles((theme) => ({
-  root: {
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
+
+
+class parents extends Component{
+
+  
+
+  constructor(props){
+    super(props);
+    this.state={
+      items:[],
+      isLoaded:false,
+    }
+
+
+  }
+
+ 
+
+  
+
+  componentDidMount(){
+
+
+      
+
+
+
+
+    var remember=localStorage.getItem('testing');
+
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json',
+                  'Authorization':'Bearer '+remember
+
+    
     },
-  },
-}))(TableRow);
+     
+  };
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+
+
+
+
+
+    fetch('http://localhost:3000/parents', requestOptions)
+    .then(res => res.json())
+    .then(json => {
+      this.setState({
+        isLoaded: true,
+        items:json,
+        firstName:json[0].first_name
+      })
+    })
+   
+    ;
+  }
+
+  render(){
+
+    var { isLoaded, firstName, items }= this.state;
+
+    
+
+  
+
+      return(
+
+        <div className="parents">
+         
+      {/* <h1>data is loaded role is {firstName}</h1> */}
+
+      <Router>
+                    <header>
+                    <MDBView src="https://cdn.hipwallpaper.com/i/95/98/mR7Bkc.jpg">
+          
+                        <MDBMask overlay="strong " className="  flex-center flex-column text-white text-center">
+                          
+                        <h2>Users</h2>
+                        <Link className="btn pos-right btn-outline-primary " to={'/addParent'}>Add Parent</Link>
+                           <table class="table border shadow" >
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Email Address</th>
+      <th scope="col">Phone Number</th>
+      <th scope="col">Address</th>
+      <th >Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  { this.state.items.map((item, index) => (
+    <tr key={index}>
+      <th scope="row">1</th>
+      <td>{item.user_id}</td>
+      <td>{item.email_address}</td>
+      <td>{item.first_name}</td>
+      <td>{item.last_name}</td>
+      <td>{item.phone_number}</td>
+      
+      <td>
+            <Link class="btn btn-primary mr-2">View</Link>
+            <Link class="btn btn-outline-primary mr-2">Update</Link>
+            <Link class="btn btn-danger mr-2">Delete</Link>
+      
+      </td>
+    </tr>
+
+))}
+    
+    
+  </tbody>
+</table>
+
+
+
+                        </MDBMask>
+           
+                    </MDBView>
+                    </header>
+                    </Router>
+
+      
+{/* 
+<Table striped bordered hover variant="dark" responsive="sm">
+  <thead>
+    <tr>
+      
+      <th>User Id</th>
+      <th>Email Address</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Phone Number</th>
+     
+    </tr>
+  </thead>
+  <tbody>
+
+  { this.state.items.map((item, index) => (
+   
+
+<tr key={index}>
+  <td>{item.user_id}</td>
+  <td>{item.email_address}</td>
+  <td>{item.first_name}</td>
+  <td>{item.last_name}</td>
+  <td>{item.phone_number}</td>
+    </tr>
+       
+    
+))}
+
+
+
+
+    
+  </tbody>
+</Table> */}
+        
+  
+        </div>
+
+      );
+
+  }
+
+
 }
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
-const useStyles = makeStyles({
-  table: {
-    minWidth: 700,
-  },
-});
-
-export default function CustomizedTables() {
-  const classes = useStyles();
-
-  return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Name</StyledTableCell>
-            <StyledTableCell align="right">User Id</StyledTableCell>
-            <StyledTableCell align="right">Email Address&nbsp;</StyledTableCell>
-            <StyledTableCell align="right">Phone Number&nbsp;</StyledTableCell>
-            <StyledTableCell align="right">Actions&nbsp;</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
+export default parents;
