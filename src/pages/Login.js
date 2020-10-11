@@ -3,7 +3,9 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
+import props from 'prop-types';
+//import { browserHistory } from 'react-router'
 
 
 
@@ -51,30 +53,13 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
 
   let history = useHistory();
- 
-
-
-
-
-  // constructor(){
-  //   this.state ={
-  //     username: "",
-  //     password: "",
-  //   }
-  // }
-   
-  // render() {
-
     const classes = useStyles();
-    //let userRole=null;
-    //let token=null;
-    var userRole;
-    var token;
     
     const [email_address, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    
-    //const [userRole,setuserRole] =useState("");
+    console.log('dddddddd');
+    console.log(email_address);
+    console.log('pppppppppppp')
   
     function validateForm() {
       return email_address.length > 0 && password.length > 0;
@@ -84,47 +69,75 @@ export default function SignIn() {
 
       const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email_address: email_address,
-                              password:password
+        headers: { 
+          'Content-Type': 'application/json' ,
+          'Accept': "application/json"
+          
+        },
+        body: JSON.stringify({ 
+          email_address: email_address,
+          password:password
        })
     };
     fetch('http://localhost:3000/users/authenticate', requestOptions)
-        .then(response => response.json())
-        //.then(data => console.log(data.user.role))
-        //.then(data => console.log(data.token))
-       // .then((data) => console.log('This is your data', data))
-         .then(data => {userRole=data.user.role
-                token=data.token
-        
-        })
-        
-        // .then(data=>setuserRole(userRole.value))
-        //.then(data => token=data.token)
-        
-        
-        
-        ;
+    .then(function(response) {
+      
+      if(response.status == 404){
+        return <Redirect to='/login'  />
+      } 
+      if(response.status == 401){
+        console.log('failed2')
+        return <Redirect to='/login'  />
+      }
+      else{
+        return response;
+      }
+    }).then(function(response) {
+      console.log(response);
+      return response.json();
+    }).then(function(json) {
+      console.log('Request succeeded with JSON response:', json.token);
+      console.log('Request succeeded with JSON response:', json.user);
 
-        //console.log(userRole);
-        //console.log(token);
-        //console.log(token);
-        console.log(token);
-        localStorage.setItem('testing',token);
- 
-       //window.$name=token; 
+      if(json.user.role == "parent"){
+        console.log('pppppppppppppppppppppppppppp')
+        localStorage.setItem("key", json.token);
+        localStorage.setItem("user_id", json.user.user_id);
+        localStorage.setItem("role", json.user.role);
+        localStorage.setItem("first_name", json.user.first_name);
+        localStorage.setItem("last_name", json.user.last_name);
+        localStorage.setItem("username", json.user.email_address);
+        localStorage.setItem("address", json.user.address);
+        localStorage.setItem("phone_number", json.user.phone_number);
+        history.push("/home");
+      }
+      else{
+        //this.props.history.push('/login');
+        // localStorage.setItem("key2", json.token);
+        // localStorage.setItem("user_id", json.user.user_id);
+        // localStorage.setItem("role", json.user.role);
+        // localStorage.setItem("first_name", json.user.first_name);
+        // localStorage.setItem("last_name", json.user.last_name);
+        // localStorage.setItem("username", json.user.email_address);
+        // localStorage.setItem("address", json.user.address);
+        // localStorage.setItem("phone_number", json.user.phone_number);
+        console.log('failed wrong user')
+        return <Redirect to='/login'  />
+      }
         
-
-        if(userRole=='admin'){
-          console.log("admin login");
-          history.push('/home')
-         
-
+        let value = localStorage.getItem("key");
+        
+        try {
+          value = JSON.parse(value);
+          //this.setState({ [key]: value });
+          
+        } catch (e) {
+          
         }
-        
 
-      // console.log(email_address)
-      // console.log(password)
+    }).catch(function(error) {
+      console.log('Request failed:', error);
+    });
 
       
  
