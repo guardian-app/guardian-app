@@ -13,7 +13,7 @@ import Delete from "./../assets/delete.png";
 import Update from "./../assets/updating.png";
 
 
-class children extends Component {
+class childReport extends Component {
   constructor(props){
 
     super(props);
@@ -21,22 +21,26 @@ class children extends Component {
     this.state={
 
       items:[],
+      first_name: '',
+      last_name: '',
 
       isLoaded:false,
 
     }
   }
 
-  onUpdate = () =>{
-    console.log("ooooooooooo")
-  }
-
-  onDelete = (_id) => {
-    console.log('delete');
-    console.log(_id);
-  }
-
     componentDidMount(){
+        console.log('pppppppppppffffffffffff')
+        const { params } = this.props.match;
+        console.log('pppppppppppffffffffffff')
+        console.log(params.id);
+        console.log(params.fName);
+        console.log(params.lName);
+
+        this.setState({
+            first_name: params.fName,
+            last_name: params.lName,
+        })
 
         var remember=localStorage.getItem('key');
     
@@ -83,7 +87,7 @@ class children extends Component {
 
             <Router>
 
-            <h1>Children</h1>
+            <h1>Child Today Report</h1>
 
             <div className="container1" style={container1}>
 
@@ -115,38 +119,27 @@ class children extends Component {
 
                                 <TableBody>
                                 
-                                    { this.state.items.map((item, index) => ( 
-                                    
-                                      <TableRow >
+                                    {/* { this.state.items.map((item, index) => ( 
 
-                                      <TableCell style={tablecell1} component="th" scope="row">{item.email_address}</TableCell>
+                                    <TableRow >
 
-                                      <TableCell style={tablecell1} >{item.first_name}</TableCell>
+                                    <TableCell style={tablecell1} component="th" scope="row">{item.email_address}</TableCell>
 
-                                      <TableCell style={tablecell1} >{item.last_name}</TableCell>
+                                    <TableCell style={tablecell1} >{item.first_name}</TableCell>
 
-                                      <TableCell style={tablecell1} >{item.address}</TableCell>
+                                    <TableCell style={tablecell1} >{item.last_name}</TableCell>
 
-                                      <TableCell style={tablecell1} >{item.phone_number}</TableCell>
+                                    <TableCell style={tablecell1} >{item.address}</TableCell>
 
-                                      <TableCell style={tablecell1} >
-                                        <button><img src={Update} alt="my image" onClick={this.onUpdate} /></button>
-                                        {/* <Link to={'/updatechild'}  ><img src={Update} /></Link> */}
-                                      </TableCell>
+                                    <TableCell style={tablecell1} >{item.phone_number}</TableCell>
 
-                                      <TableCell style={tablecell1} >
-                                      <button><img src={Delete} alt="my image" onClick={() => this.onDelete(item.user_id)} /></button>
-                                        {/* <Link to={'/deletechild'}><img src={Delete} /></Link> */}
-                                      </TableCell>
+                                    <TableCell style={tablecell1} ><Link to={'/updatechild'}><img src={Update} /></Link></TableCell>
 
-                                      <TableCell style={tablecell1} >
-                                      
-                                        <Link to={'/childReport/'+item.user_id+'/'+item.first_name+"/"+item.last_name}>Child Daily Report</Link> (Path: /childReport/id)
-                                      </TableCell>
+                                    <TableCell style={tablecell1} ><Link to={'/deletechild'}><img src={Delete} /></Link></TableCell>
 
-                                      </TableRow>
+                                    </TableRow>
 
-                                    ))} 
+                                    ))}  */}
 
                                 </TableBody>
 
@@ -214,7 +207,7 @@ const container = {
 
 
 
-export default children
+export default childReport
 
 
-// export default children
+

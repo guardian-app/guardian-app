@@ -2,6 +2,7 @@ import React from 'react';
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavbarToggler,MDBRow,MDBCol, MDBCollapse, MDBNavItem, MDBNavLink, MDBContainer, MDBView, MDBMask,MDBCard,MDBCardBody, MDBModalFooter,MDBIcon,MDBCardHeader,MDBBtn,MDBInput } from 'mdbreact';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {Link} from 'react-router-dom';
+import Update from "./../assets/updating.png";
 
 class FullPageIntroWithNonFixedNavbar extends React.Component {
     
@@ -33,29 +34,19 @@ class FullPageIntroWithNonFixedNavbar extends React.Component {
                             {/* <img src="D:/new guardian/guardian-web/public/Guardian Logo.png" className="rounded float-left" alt="aligment" /> */}
                         </MDBCol>
                     </MDBRow>
-                    <MDBNavbarBrand href="/">
-                      <strong>Guardian</strong>
-                    </MDBNavbarBrand>
+                    
                     
                     <MDBNavbarToggler onClick={this.onClick} />
                     <MDBCollapse isOpen={this.state.collapse} navbar>
                       <MDBNavbarNav left>
-                        <MDBNavItem >
-                          <MDBNavLink exact to="/">Home</MDBNavLink>
-                        </MDBNavItem>
-                        <MDBNavItem >
-                          <MDBNavLink exact to="/about">About Us</MDBNavLink>
-                        </MDBNavItem>
-                        <MDBNavItem>
-                          <MDBNavLink exact to="/contact">Contact Us</MDBNavLink>
-                        </MDBNavItem>
+                        
                       </MDBNavbarNav>
                       <MDBNavbarNav right>
                         <MDBNavItem >
-                        <MDBNavLink exact to="/register">Sign Up</MDBNavLink> 
+                        <MDBNavLink exact to="/register"></MDBNavLink> 
                         </MDBNavItem>
                         <MDBNavItem >
-                        <MDBNavLink exact to="/login">Login</MDBNavLink> 
+                        <MDBNavLink styles={h1} exact to="/login"><img src={Update} /></MDBNavLink> 
                         </MDBNavItem>
                       </MDBNavbarNav>
                     </MDBCollapse>
@@ -71,3 +62,12 @@ class FullPageIntroWithNonFixedNavbar extends React.Component {
 }
 }
 export default FullPageIntroWithNonFixedNavbar;
+
+const h1 = {
+
+    fontFamily: "Arial",
+    fontSize : "50px",
+    color : "#003f88",
+    textAlign: "center" ,
+    padding: "40px" 
+  };
