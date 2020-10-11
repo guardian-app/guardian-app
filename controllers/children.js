@@ -1,4 +1,4 @@
-const { selectChildren, selectChildById, selectChildParentById, insertChild, deleteChildById } = require('../services/children');
+const { selectChildren, selectChildById, selectChildParentById, insertChild, deleteChildById, updateChildById } = require('../services/children');
 const { selectParentChildrenById } = require('../services/parents');
 const bcrypt = require('bcrypt');
 const { selectUserByEmailAddress } = require('../services/users');
@@ -91,4 +91,30 @@ const deleteChild = async (req, res) => {
     };
 };
 
-module.exports = { getChildren, getChildById, getChildParentById, createChild, getMyChildren, deleteChild };
+const updateChild = async (req, res) => {
+    const { child_id } = req.params;
+
+    const oldChild = await selectChildById(child_id);
+    const newChild = req.body;
+
+    const child = {
+        email_address: oldChild.email_address,
+        first_name: newChild.first_name || oldChild.first_name,
+        last_name: newChild.last_name || oldChild.last_name,
+        address: newChild.address || oldChild.address,
+        phone_number: newChild.phone_number || oldChild.phone_number,
+        password: newChild.password != null ? await bcrypt.hash(newChild.password, await bcrypt.genSalt(10)) : undefined
+    };
+
+    try {
+        await updateChildById(child_id, child);
+
+        const { email_address, first_name, last_name, address, phone_number } = child;
+        res.json({ email_address, first_name, last_name, address, phone_number });
+    } catch (err) {
+        console.warn(`Generic: ${err}`);
+        res.status(500).send('Internal Server Error');
+    };
+};
+
+module.exports = { getChildren, getChildById, getChildParentById, createChild, getMyChildren, deleteChild, updateChild };

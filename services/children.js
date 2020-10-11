@@ -32,6 +32,23 @@ const deleteChildById = (child_id) => {
         'DELETE FROM `user` WHERE user_id=?',
         [child_id]
     );
-}
+};
 
-module.exports = { selectChildren, selectChildById, selectChildParentById, insertChild, deleteChildById };
+const updateChildById = async (child_id, child) => {
+    const tasks = [];
+
+    tasks.push(
+        database.execute(
+            'UPDATE `user` SET email_address = ?, first_name = ?, last_name = ?, address = ?, phone_number = ? WHERE user_id = ?',
+            [child.email_address, child.first_name, child.last_name, child.address, child.phone_number, child_id]
+        )
+    );
+
+    if (child.password == null) {
+        tasks.push(database.execute('UPDATE `user` SET password = ? WHERE user_id = ?', [child.password, user.user_id]));
+    };
+
+    return Promise.all(tasks);
+};
+
+module.exports = { selectChildren, selectChildById, selectChildParentById, insertChild, deleteChildById, updateChildById };
