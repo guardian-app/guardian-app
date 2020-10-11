@@ -3,7 +3,9 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
+import props from 'prop-types';
+//import { browserHistory } from 'react-router'
 
 
 
@@ -81,11 +83,11 @@ export default function SignIn() {
     .then(function(response) {
       
       if(response.status == 404){
-        
+        return <Redirect to='/login'  />
       } 
       if(response.status == 401){
         console.log('failed2')
-        
+        return <Redirect to='/login'  />
       }
       else{
         return response;
@@ -107,16 +109,20 @@ export default function SignIn() {
         localStorage.setItem("username", json.user.email_address);
         localStorage.setItem("address", json.user.address);
         localStorage.setItem("phone_number", json.user.phone_number);
+        history.push("/home");
       }
       else{
-        localStorage.setItem("key2", json.token);
-        localStorage.setItem("user_id", json.user.user_id);
-        localStorage.setItem("role", json.user.role);
-        localStorage.setItem("first_name", json.user.first_name);
-        localStorage.setItem("last_name", json.user.last_name);
-        localStorage.setItem("username", json.user.email_address);
-        localStorage.setItem("address", json.user.address);
-        localStorage.setItem("phone_number", json.user.phone_number);
+        //this.props.history.push('/login');
+        // localStorage.setItem("key2", json.token);
+        // localStorage.setItem("user_id", json.user.user_id);
+        // localStorage.setItem("role", json.user.role);
+        // localStorage.setItem("first_name", json.user.first_name);
+        // localStorage.setItem("last_name", json.user.last_name);
+        // localStorage.setItem("username", json.user.email_address);
+        // localStorage.setItem("address", json.user.address);
+        // localStorage.setItem("phone_number", json.user.phone_number);
+        console.log('failed wrong user')
+        return <Redirect to='/login'  />
       }
         
         let value = localStorage.getItem("key");

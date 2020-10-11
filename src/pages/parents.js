@@ -1,86 +1,116 @@
 import React, { Component } from 'react';
-
-
+import Table from 'react-bootstrap/Table';
 class parents extends Component{
 
-  
-
   constructor(props){
+
     super(props);
+
     this.state={
+
       items:[],
+
       isLoaded:false,
+
     }
-
-
   }
 
   componentDidMount(){
 
-   const name = window.$name;
+    var remember=localStorage.getItem('key');
 
- 
-    console.log(name); // 'king'
+    const requestOptions = {
 
-  //   const requestOptions = {
-  //     method: 'GET',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify({ email_address: email_address,
-  //                           password:password
-  //    })
-  // };
+      method: 'GET',
 
+      headers: { 
+        "Accept": "application/json",
+        'Content-Type': 'application/json',
+        'Authorization':'Bearer '+remember,
+      },
 
+  };
+    fetch('http://localhost:3000/parents', requestOptions)
 
-
-
-
-    fetch('http://localhost:3000/parents')
     .then(res => res.json())
+
     .then(json => {
+
       this.setState({
+
         isLoaded: true,
+
         items:json,
+
+        firstName:json[0].first_name
+
       })
+
     });
+
   }
 
   render(){
-
-    var { isLoaded, items }= this.state;
-
-    if(!isLoaded){
-      const remember=localStorage.getItem('testing');
-    return <div>{remember}</div>
-  
-
-    
-      //console.log(name);
-
-    }
-
-    else{
-
+    var { isLoaded, firstName, items }= this.state;
       return(
-
         <div className="parents">
-         
-          data has been loaded
-  
+      {/* <h1>data is loaded role is {firstName}</h1> */}
+
+
+          <Table striped bordered hover variant="dark" responsive="sm">
+
+            <thead>
+
+              <tr>
+
+                <th>User Id</th>
+
+                <th>Email Address</th>
+
+                <th>First Name</th>
+
+                <th>Last Name</th>
+
+                <th>Phone Number</th>
+
+                <th>Actions</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+            { this.state.items.map((item, index) => (
+
+          <tr key={index}>
+
+            <td>{item.user_id}</td>
+
+            <td>{item.email_address}</td>
+
+            <td>{item.first_name}</td>
+
+            <td>{item.last_name}</td>
+
+            <td>{item.phone_number}</td>
+
+              </tr>   
+
+          ))}
+            </tbody>
+
+          </Table>
         </div>
-  
-  
       );
-
-    }
-
-    
-
-
-
   }
+}
 
 
+const tableStyle = {
+  margin: "40px",
+  border: "5px solid pink",
+  fontSize: "15px",
 }
 
 export default parents;
