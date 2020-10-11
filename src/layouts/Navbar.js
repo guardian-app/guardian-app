@@ -22,6 +22,9 @@ class FullPageIntroWithNonFixedNavbar extends React.Component {
 
       render() {
     return(
+      <div>
+      <Router>
+      <header>
       
             <MDBNavbar color="black" fixed="top" dark expand="md">
                 <MDBContainer>
@@ -59,9 +62,10 @@ class FullPageIntroWithNonFixedNavbar extends React.Component {
                   </MDBContainer>
                 </MDBNavbar>
                 
-  
-    
-
+                
+                </header>
+                </Router>
+                </div>
             
     );
 }
