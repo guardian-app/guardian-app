@@ -27,15 +27,6 @@ class children extends Component {
     }
   }
 
-  onUpdate = () =>{
-    console.log("ooooooooooo")
-  }
-
-  onDelete = (_id) => {
-    console.log('delete');
-    console.log(_id);
-  }
-
     componentDidMount(){
 
         var remember=localStorage.getItem('key');
@@ -116,30 +107,24 @@ class children extends Component {
                                 <TableBody>
                                 
                                     { this.state.items.map((item, index) => ( 
-                                    
-                                      <TableRow >
 
-                                      <TableCell style={tablecell1} component="th" scope="row">{item.email_address}</TableCell>
+                                    <TableRow >
 
-                                      <TableCell style={tablecell1} >{item.first_name}</TableCell>
+                                    <TableCell style={tablecell1} component="th" scope="row">{item.email_address}</TableCell>
 
-                                      <TableCell style={tablecell1} >{item.last_name}</TableCell>
+                                    <TableCell style={tablecell1} >{item.first_name}</TableCell>
 
-                                      <TableCell style={tablecell1} >{item.address}</TableCell>
+                                    <TableCell style={tablecell1} >{item.last_name}</TableCell>
 
-                                      <TableCell style={tablecell1} >{item.phone_number}</TableCell>
+                                    <TableCell style={tablecell1} >{item.address}</TableCell>
 
-                                      <TableCell style={tablecell1} >
-                                        <button><img src={Update} alt="my image" onClick={this.onUpdate} /></button>
-                                        {/* <Link to={'/updatechild'}  ><img src={Update} /></Link> */}
-                                      </TableCell>
+                                    <TableCell style={tablecell1} >{item.phone_number}</TableCell>
 
-                                      <TableCell style={tablecell1} >{item.user_id}
-                                      <button><img src={Delete} alt="my image" onClick={() => this.onDelete(item.user_id)} /></button>
-                                        {/* <Link to={'/deletechild'}><img src={Delete} /></Link> */}
-                                      </TableCell>
+                                    <TableCell style={tablecell1} ><Link to={'/updatechild'}><img src={Update} /></Link></TableCell>
 
-                                      </TableRow>
+                                    <TableCell style={tablecell1} ><Link to={'/deletechild'}><img src={Delete} /></Link></TableCell>
+
+                                    </TableRow>
 
                                     ))} 
 
@@ -212,4 +197,4 @@ const container = {
 export default children
 
 
-// export default children
+
