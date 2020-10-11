@@ -16,6 +16,7 @@ class Home extends React.Component{
                             
                             <h1>Make Sure Your Child is safe</h1>
                             <h2>Welcome to Guardian !</h2>
+                            
                         </MDBMask>
            
                     </MDBView>
