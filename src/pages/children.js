@@ -110,7 +110,7 @@ class children extends Component {
 
                                     <TableCell style={tablecell1} ><Link to={'/updatechild'}><img src={Update} /></Link></TableCell>
 
-                                    <TableCell style={tablecell1} ><Link to={'/home'}><img src={Delete} /></Link></TableCell>
+                                    <TableCell style={tablecell1} ><Link to={'/deletechild'}><img src={Delete} /></Link></TableCell>
 
                                     {/* </TableRow>
 

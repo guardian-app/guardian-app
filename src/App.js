@@ -18,6 +18,8 @@ import contactss from './pages/contactss';
 import reports from './pages/reports';
 import stat from './pages/stat';
 import updatechild from './pages/Updatechild';
+import deletechild from './pages/Deletechild';
+
 import SignUp from './pages/addParent';
 
 function App() {
@@ -42,6 +44,8 @@ function App() {
         <Route exact path="/stat" component={stat}/>
         <Route exact path="/addParent" component={SignUp}/>
         <Route exact path="/updatechild" component={updatechild}/>
+        <Route exact path="/deletechild" component={deletechild}/>
+
         <Route exact path="/" component={Home}/>
         <Route component={NotFound} />
       </Switch>
