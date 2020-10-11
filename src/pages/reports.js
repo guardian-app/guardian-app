@@ -1,12 +1,12 @@
-import React from 'react'
+// import React from 'react'
 
-function reports() {
-    return (
-        <div className='reports'>
-            <h1>Reports</h1>
+// function reports() {
+//     return (
+//         <div className='reports'>
+//             <h1>Reports</h1>
             
-        </div>
-    )
-}
+//         </div>
+//     )
+// }
 
-export default reports
+// export default reports
