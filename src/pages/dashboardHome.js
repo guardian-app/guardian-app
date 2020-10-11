@@ -1,16 +1,16 @@
-// import React from 'react';
-// import './Dashboard';
-// import Dashboard from './Dashboard';
+import React from 'react';
+
+;
 
 
-// function dashboardHome() {
-//     return (
-//         <div className='home'>
+function dashboardHome() {
+    return (
+        <div className='home'>
           
-//             <h1>Home</h1>
+            <h1>Home</h1>
             
-//         </div>
-//     )
-// }
+        </div>
+    )
+}
 
-// export default dashboardHome
+export default dashboardHome
