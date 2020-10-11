@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useHistory } from "react-router-dom";
 
-
+import props from 'prop-types';
 
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
@@ -20,11 +20,6 @@ import Container from '@material-ui/core/Container';
 import Alert from 'react-bootstrap/Alert'
 
 //window.$name = token ;//global variable
-
-
-
-
-
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function SignIn() {
+export default function SignIn(props) {
 
   let history = useHistory();
     const classes = useStyles();
@@ -70,7 +65,7 @@ export default function SignIn() {
       console.log(email_address)
       console.log(password)
 
-      fetch("http://localhost:3000/",{
+      fetch("http://localhost:3000/users/authenticate",{
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -84,23 +79,11 @@ export default function SignIn() {
       .then(function(response) {
       
         if(response.status == 404){
-        //   alert(
-        //    "Login Failed",
-        //    "E-mail address is not registered!",
-        //    [
-        //      { text: "OK", onPress: ()=> {}  }
-        //    ]
-        //  )
+          history.push('/login');
        } 
        if(response.status == 401){
          console.log('failed2')
-        //  alert(
-        //    "Login Failed",
-        //    "Incorrect password!",
-        //    [
-        //      { text: "OK", onPress: ()=> {} }
-        //    ]
-        //  )
+         history.push('/login');
        }
        else{
          return response;
@@ -121,16 +104,18 @@ export default function SignIn() {
          localStorage.setItem("username", json.user.email_address);
          localStorage.setItem("address", json.user.address);
          localStorage.setItem("phone_number", json.user.phone_number);
+         history.push('/home');
        }
        else{
-         localStorage.setItem("key2", json.token);
-         localStorage.setItem("user_id", json.user.user_id);
-         localStorage.setItem("role", json.user.role);
-         localStorage.setItem("first_name", json.user.first_name);
-         localStorage.setItem("last_name", json.user.last_name);
-         localStorage.setItem("username", json.user.email_address);
-         localStorage.setItem("address", json.user.address);
-         localStorage.setItem("phone_number", json.user.phone_number);
+        history.push('/login');
+        //  localStorage.setItem("key2", json.token);
+        //  localStorage.setItem("user_id", json.user.user_id);
+        //  localStorage.setItem("role", json.user.role);
+        //  localStorage.setItem("first_name", json.user.first_name);
+        //  localStorage.setItem("last_name", json.user.last_name);
+        //  localStorage.setItem("username", json.user.email_address);
+        //  localStorage.setItem("address", json.user.address);
+        //  localStorage.setItem("phone_number", json.user.phone_number);
        }
          
          let value = localStorage.getItem("key");
@@ -143,95 +128,12 @@ export default function SignIn() {
            
          }
          
-        //   alert(
-        //    "Login Successful",
-        //    "",
-        //    [
-        //      { text: "OK", onPress: ()=> {if(localStorage.getItem("key")){
-               
-        //      }else{
-               
-        //      }}  }
-        //    ]
-        //  )
+        
  
      }).catch(function(error) {
        console.log('Request failed:', error);
-      
-
     })
 
-
-      const requestOptions = {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json' ,
-          'Accept': "application/json"
-          
-        },
-        body: JSON.stringify({ 
-          email_address: email_address,
-          password:password
-       })
-    };
-    fetch('http://localhost:3000/users/authenticate', requestOptions)
-    .then(function(response) {
-      
-      if(response.status == 404){
-        
-      } 
-      if(response.status == 401){
-        console.log('failed2')
-        
-      }
-      else{
-        return response;
-      }
-    }).then(function(response) {
-      console.log(response);
-      return response.json();
-    }).then(function(json) {
-      console.log('Request succeeded with JSON response:', json.token);
-      console.log('Request succeeded with JSON response:', json.user);
-
-      if(json.user.role == "parent"){
-        console.log('pppppppppppppppppppppppppppp')
-        localStorage.setItem("key", json.token);
-        localStorage.setItem("user_id", json.user.user_id);
-        localStorage.setItem("role", json.user.role);
-        localStorage.setItem("first_name", json.user.first_name);
-        localStorage.setItem("last_name", json.user.last_name);
-        localStorage.setItem("username", json.user.email_address);
-        localStorage.setItem("address", json.user.address);
-        localStorage.setItem("phone_number", json.user.phone_number);
-      }
-      else{
-        localStorage.setItem("key2", json.token);
-        localStorage.setItem("user_id", json.user.user_id);
-        localStorage.setItem("role", json.user.role);
-        localStorage.setItem("first_name", json.user.first_name);
-        localStorage.setItem("last_name", json.user.last_name);
-        localStorage.setItem("username", json.user.email_address);
-        localStorage.setItem("address", json.user.address);
-        localStorage.setItem("phone_number", json.user.phone_number);
-      }
-        
-        let value = localStorage.getItem("key");
-        
-        try {
-          value = JSON.parse(value);
-          //this.setState({ [key]: value });
-          
-        } catch (e) {
-          
-        }
-
-    }).catch(function(error) {
-      console.log('Request failed:', error);
-    });
-
-      
- 
       event.preventDefault();
 
     }

@@ -7,7 +7,8 @@ import {Link} from "react-router-dom";
 import back from "./../assets/back.png";
 
 
-
+import './Dashboard';
+import Dashboard from './Dashboard';
 
 function dashboardHome() {
     return (

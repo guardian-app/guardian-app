@@ -18,7 +18,6 @@ class Home extends React.Component{
                             <h2>Welcome to Guardian !</h2>
                             </div>
                         </MDBMask>
-           
                     </MDBView>
                     </header>
                     </Router>

@@ -14,7 +14,18 @@ import Update from "./../assets/updating.png";
 
 
 class children extends Component {
+  constructor(props){
 
+    super(props);
+
+    this.state={
+
+      items:[],
+
+      isLoaded:false,
+
+    }
+  }
 
     componentDidMount(){
 
@@ -39,14 +50,14 @@ class children extends Component {
         .then(res => res.json())
     
         .then(json => {
-    
+          console.log('dkwopfkerjifoiw')
+          console.log(json);
           this.setState({
     
             isLoaded: true,
     
             items:json,
-    
-    
+  
             firstName:json[0].first_name
     
           })
@@ -95,27 +106,27 @@ class children extends Component {
 
                                 <TableBody>
                                 
-                                    {/* { this.state.items.map((item, index) => ( 
+                                    { this.state.items.map((item, index) => ( 
 
-                                        <TableRow key={index}> */}
+                                    <TableRow >
 
-                                    <TableCell style={tablecell1} component="th" scope="row">hdfd</TableCell>
+                                    <TableCell style={tablecell1} component="th" scope="row">{item.email_address}</TableCell>
 
-                                    <TableCell style={tablecell1} >kdfdjshfjsd</TableCell>
+                                    <TableCell style={tablecell1} >{item.first_name}</TableCell>
 
-                                    <TableCell style={tablecell1} >hdsjsk</TableCell>
+                                    <TableCell style={tablecell1} >{item.last_name}</TableCell>
 
-                                    <TableCell style={tablecell1} >nkxc</TableCell>
+                                    <TableCell style={tablecell1} >{item.address}</TableCell>
 
-                                    <TableCell style={tablecell1} >jfdk</TableCell>
+                                    <TableCell style={tablecell1} >{item.phone_number}</TableCell>
 
                                     <TableCell style={tablecell1} ><Link to={'/updatechild'}><img src={Update} /></Link></TableCell>
 
                                     <TableCell style={tablecell1} ><Link to={'/deletechild'}><img src={Delete} /></Link></TableCell>
 
-                                    {/* </TableRow>
+                                    </TableRow>
 
-                                    ))} */}
+                                    ))} 
 
                                 </TableBody>
 
