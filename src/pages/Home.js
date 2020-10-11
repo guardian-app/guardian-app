@@ -16,12 +16,8 @@ class Home extends React.Component{
                             <div className = "container" style = {container}>
                             <h1 style = {h1}>Make Sure Your Child is safe</h1>
                             <h2>Welcome to Guardian !</h2>
-
-
                             </div>
-
                         </MDBMask>
-           
                     </MDBView>
                     </header>
                     </Router>
