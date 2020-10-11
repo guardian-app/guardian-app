@@ -13,10 +13,13 @@ class Home extends React.Component{
                     <MDBView src="https://images.pexels.com/photos/4145355/pexels-photo-4145355.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940">
           
                         <MDBMask overlay="black-strong " className="  flex-center flex-column text-white text-center">
-                            
-                            <h1>Make Sure Your Child is safe</h1>
+                            <div className = "container" style = {container}>
+                            <h1 style = {h1}>Make Sure Your Child is safe</h1>
                             <h2>Welcome to Guardian !</h2>
-                            
+
+
+                            </div>
+
                         </MDBMask>
            
                     </MDBView>
@@ -39,3 +42,21 @@ class Home extends React.Component{
 
 
 export default Home;
+
+const container = {
+
+    fontFamily: "Arial",
+    fontSize : "50px",
+    color : "#FFFFF",
+    textAlign: "center" ,
+    padding: "80px" 
+  };
+
+  const h1 = {
+
+    fontFamily: "Arial",
+    fontSize : "50px",
+    color : "white",
+    textAlign: "center" ,
+    padding: "50px" 
+  };
