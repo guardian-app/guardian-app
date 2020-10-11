@@ -134,9 +134,14 @@ class children extends Component {
                                         {/* <Link to={'/updatechild'}  ><img src={Update} /></Link> */}
                                       </TableCell>
 
-                                      <TableCell style={tablecell1} >{item.user_id}
+                                      <TableCell style={tablecell1} >
                                       <button><img src={Delete} alt="my image" onClick={() => this.onDelete(item.user_id)} /></button>
                                         {/* <Link to={'/deletechild'}><img src={Delete} /></Link> */}
+                                      </TableCell>
+
+                                      <TableCell style={tablecell1} >
+                                      
+                                        <Link to={'/childReport/'+item.user_id+'/'+item.first_name+"/"+item.last_name}>Child Daily Report</Link> (Path: /childReport/id)
                                       </TableCell>
 
                                       </TableRow>

@@ -13,7 +13,7 @@ import Delete from "./../assets/delete.png";
 import Update from "./../assets/updating.png";
 
 
-class children extends Component {
+class childReport extends Component {
   constructor(props){
 
     super(props);
@@ -21,6 +21,8 @@ class children extends Component {
     this.state={
 
       items:[],
+      first_name: '',
+      last_name: '',
 
       isLoaded:false,
 
@@ -28,6 +30,17 @@ class children extends Component {
   }
 
     componentDidMount(){
+        console.log('pppppppppppffffffffffff')
+        const { params } = this.props.match;
+        console.log('pppppppppppffffffffffff')
+        console.log(params.id);
+        console.log(params.fName);
+        console.log(params.lName);
+
+        this.setState({
+            first_name: params.fName,
+            last_name: params.lName,
+        })
 
         var remember=localStorage.getItem('key');
     
@@ -74,7 +87,7 @@ class children extends Component {
 
             <Router>
 
-            <h1>Children</h1>
+            <h1>Child Today Report</h1>
 
             <div className="container1" style={container1}>
 
@@ -106,7 +119,7 @@ class children extends Component {
 
                                 <TableBody>
                                 
-                                    { this.state.items.map((item, index) => ( 
+                                    {/* { this.state.items.map((item, index) => ( 
 
                                     <TableRow >
 
@@ -126,7 +139,7 @@ class children extends Component {
 
                                     </TableRow>
 
-                                    ))} 
+                                    ))}  */}
 
                                 </TableBody>
 
@@ -194,7 +207,7 @@ const container = {
 
 
 
-export default children
+export default childReport
 
 
 
