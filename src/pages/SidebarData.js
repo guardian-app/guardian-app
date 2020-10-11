@@ -19,7 +19,7 @@ export const SidebarData= [
     },
     {
         title: 'Children',
-        path: '/children',
+        path: '/childrenn',
         icon: <RiIcons.RiUserSmileLine/>,
         cName: 'nav-text'
     },
